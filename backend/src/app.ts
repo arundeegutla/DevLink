@@ -2,6 +2,7 @@ import express from 'express';
 import testRouter from './routes/test';
 import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
+import { dbTest } from './services/test';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(errorMiddleware);
 
 // Start the server
 app.listen(env.PORT, () => {
+  dbTest();
   console.log(`Server listening on port ${env.PORT}`);
 });
 
