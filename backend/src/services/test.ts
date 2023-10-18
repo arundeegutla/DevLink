@@ -8,5 +8,11 @@ export const throwError = () => {
 };
 
 export const dbTest = async () => {
-  console.log(db.collection('Users'));
+  const firstName = "Michael";
+  const q = await db.collection("Users")
+          .where("FirstName", ">=", `${firstName}`)
+          .where("FirstName", "<=", `${firstName}` + "z")
+          .get();
+
+  console.log(q.docs.map(doc => doc.data()))
 };
