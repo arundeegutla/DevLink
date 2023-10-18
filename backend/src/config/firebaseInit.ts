@@ -7,6 +7,6 @@ const firebaseConfig = {
     credential: admin.credential.cert(serviceAccount),
 };
 
-const app = admin.initializeApp(firebaseConfig);
+export const fb = admin.initializeApp(firebaseConfig);
 
-export const db = app.firestore();
+export const db = fb.firestore();
