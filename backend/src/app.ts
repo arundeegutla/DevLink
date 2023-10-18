@@ -29,7 +29,6 @@ app.use(errorMiddleware);
 
 // Start the server
 app.listen(env.PORT, () => {
-  dbTest();
   console.log(`Server listening on port ${env.PORT}`);
 });
 

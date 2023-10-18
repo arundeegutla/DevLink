@@ -1,6 +1,7 @@
 // Example Code
 import express, { Router } from 'express';
 import { getTestHome, getAbout } from '../controllers/test';
+import { getUserbyId } from '../controllers/user';
 
 // Create a new router instance
 const router: Router = express.Router();
