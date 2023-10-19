@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { getUserbyId, getUserByName } from '../controllers/user';
+import { getUserbyId, getUserByName, createUserProfile } from '../controllers/user';
 
 // Create a new router instance
 const router: Router = express.Router();
@@ -8,9 +8,11 @@ const router: Router = express.Router();
 // router.post('/login', userLogin);
 
 // Get user ID route
-router.get('/:id', getUserbyId);
 
 // Get user name route
 router.get('/search/:name', getUserByName);
 
+router.post('/createProfile', createUserProfile);
+
+router.get('/get/:id', getUserbyId);
 export default router;

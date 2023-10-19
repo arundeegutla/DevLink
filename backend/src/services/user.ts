@@ -34,3 +34,12 @@ export const queryUserbyName = async (queryName: string): Promise<User[] | undef
         throw error;
     }
 };
+
+export const createProfile = async (user: User, uid: string) => {
+    try {
+        await db.collection("Users").doc(uid).create(user);
+    } catch (error) {
+        console.log(`Error creating document for ${uid}:`, error);
+        throw error;
+    }
+}
