@@ -22,9 +22,8 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package*.json ./
 
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 COPY --from=builder /usr/src/app/dist ./dist
 
-EXPOSE 8080
 CMD [ "node", "dist/app.js" ]
