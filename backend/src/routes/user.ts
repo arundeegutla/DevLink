@@ -1,3 +1,4 @@
+
 import express, { Router } from 'express';
 import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '../controllers/user';
 
@@ -95,6 +96,7 @@ const router: Router = express.Router();
  */
 router.get("/search/:name", getUserByName);
 
+
 /**
  * @swagger
  * /user/createProfile:
@@ -125,4 +127,6 @@ router.get("/get/:id", getUserbyId);
 
 // Edit profile route
 router.post('/editProfile', editUserProfile);
+
+
 export default router;
