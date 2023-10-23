@@ -1,9 +1,5 @@
-import express, { Router, Request, Response } from "express";
-import {
-  getUserbyId,
-  getUserByName,
-  createUserProfile,
-} from "../controllers/user";
+import express, { Router } from 'express';
+import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '../controllers/user';
 
 /**
  * @swagger
@@ -126,4 +122,7 @@ router.get("/search/:name", getUserByName);
 router.post("/createProfile", createUserProfile);
 
 router.get("/get/:id", getUserbyId);
+
+// Edit profile route
+router.post('/editProfile', editUserProfile);
 export default router;
