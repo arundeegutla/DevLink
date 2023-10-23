@@ -43,3 +43,12 @@ export const createProfile = async (user: User, uid: string) => {
         throw error;
     }
 }
+
+export const editProfile = async (user: User, uid: string) => {
+    try {
+        await db.collection("Users").doc(uid).update(user);
+    } catch (error) {
+        console.log(`Error creating document for ${uid}:`, error);
+        throw error;
+    }
+}
