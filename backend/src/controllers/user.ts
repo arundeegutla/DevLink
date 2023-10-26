@@ -26,7 +26,7 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = {Frameworks: [], Languages: []}}: User = req.body;
+    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = []}: User = req.body;
     const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
     const uid: string = res.locals.user.uid;
     try {
@@ -38,8 +38,21 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 }
 
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = {Frameworks: [], Languages: []}}: User = req.body;
-    const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
+    const {FirstName, LastName, ContactInfo, Skills}: User = req.body;
+    const user: Partial<User> = {};
+    
+    if (FirstName !== undefined) {
+        user.FirstName = FirstName;
+    }
+    if (LastName !== undefined) {
+        user.LastName = LastName;
+    }
+    if (ContactInfo !== undefined) {
+        user.ContactInfo = ContactInfo;
+    }
+    if (Skills !== undefined) {
+        user.Skills = Skills;
+    }
     const uid: string = res.locals.user.uid;
     try {
         await editProfile(user, uid);

@@ -6,5 +6,5 @@ export type User = {
   FirstName: string;
   LastName: string;
   Groups: DocumentReference[];
-  Skills: { Frameworks: string[]; Languages: string[] };
+  Skills: string[];
 };

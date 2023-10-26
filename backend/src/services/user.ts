@@ -44,7 +44,7 @@ export const createProfile = async (user: User, uid: string) => {
     }
 }
 
-export const editProfile = async (user: User, uid: string) => {
+export const editProfile = async (user: Partial<User>, uid: string) => {
     try {
         await db.collection("Users").doc(uid).update(user);
     } catch (error) {
