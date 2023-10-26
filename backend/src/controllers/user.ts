@@ -40,7 +40,7 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
     const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = {Frameworks: [], Languages: []}}: User = req.body;
     const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
-    const uid: string = "56gwQBFxi9PAO5DwYg8k2cMFfMf1"; // Edit dummy profile
+    const uid: string = res.locals.user.uid;
     try {
         await editProfile(user, uid);
         res.send({message: "User profile edited!"});
