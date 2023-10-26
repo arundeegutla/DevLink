@@ -1,6 +1,6 @@
 // Example Code
 import express, { Router } from 'express';
-import { getTestHome, getAbout } from '../controllers/test';
+import { getTestHome, verifyAuthTest } from '../controllers/test';
 import { getUserbyId } from '../controllers/user';
 
 // Create a new router instance
@@ -10,6 +10,6 @@ const router: Router = express.Router();
 router.get('/', getTestHome);
 
 // About page route.
-router.get('/about', getAbout);
+router.get('/verifyAuth', verifyAuthTest);
 
 export default router;
