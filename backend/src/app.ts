@@ -26,7 +26,6 @@ app.use('/test', testRouter);
 // Set up error handling middleware
 app.use(errorMiddleware);
 
-
 // Start the server
 app.listen(env.PORT, () => {
   console.log(`Server listening on port ${env.PORT}`);
