@@ -1,10 +1,10 @@
 import { DocumentReference } from "@google-cloud/firestore";
 
 export type User = {
-  Connections: DocumentReference[];
-  ContactInfo: { Email: string; Github: string };
-  FirstName: string;
-  LastName: string;
-  Groups: DocumentReference[];
-  Skills: string[];
+  connections: DocumentReference[];
+  contactInfo: { email: string; github: string };
+  firstName: string;
+  lastName: string;
+  groups: DocumentReference[];
+  skills: string[];
 };

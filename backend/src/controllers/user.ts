@@ -26,8 +26,8 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = []}: User = req.body;
-    const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
+    const {firstName = "", lastName = "", contactInfo = {email: "", github: ""}, skills = []}: User = req.body;
+    const user: User = { firstName, lastName, contactInfo, skills, connections: [], groups: [] };
     const uid: string = res.locals.user.uid;
     try {
         await createProfile(user, uid);
@@ -38,20 +38,20 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 }
 
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName, LastName, ContactInfo, Skills}: User = req.body;
+    const {firstName, lastName, contactInfo, skills}: User = req.body;
     const user: Partial<User> = {};
     
-    if (FirstName !== undefined) {
-        user.FirstName = FirstName;
+    if (firstName !== undefined) {
+        user.firstName = firstName;
     }
-    if (LastName !== undefined) {
-        user.LastName = LastName;
+    if (lastName !== undefined) {
+        user.lastName = lastName;
     }
-    if (ContactInfo !== undefined) {
-        user.ContactInfo = ContactInfo;
+    if (contactInfo !== undefined) {
+        user.contactInfo = contactInfo;
     }
-    if (Skills !== undefined) {
-        user.Skills = Skills;
+    if (skills !== undefined) {
+        user.skills = skills;
     }
     const uid: string = res.locals.user.uid;
     try {

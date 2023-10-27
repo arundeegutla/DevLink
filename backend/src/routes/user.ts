@@ -9,27 +9,27 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *     User:
  *       type: object
  *       required:
- *         - FirstName
- *         - LastName
- *         - ContactInfo
- *         - Skills
+ *         - firstName
+ *         - lastName
+ *         - contactInfo
+ *         - skills
  *       properties:
- *         FirstName:
+ *         firstName:
  *           type: string
  *           description: First name of the user
- *         LastName:
+ *         lastName:
  *           type: string
  *           description: Last name of the user
- *         ContactInfo:
+ *         contactInfo:
  *           type: object
  *           properties:
- *             Email:
+ *             email:
  *               type: string
- *               description: Email of the user
- *             Github:
+ *               description: email of the user
+ *             github:
  *               type: string
- *               description: Github of the user
- *         Skills:
+ *               description: github of the user
+ *         skills:
  *           type: object
  *           properties:
  *             Frameworks:
@@ -42,27 +42,27 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *               items:
  *                 type: string
  *                 description: Languages of the user
- *         Connections:
+ *         connections:
  *           type: array
  *           items:
  *             type: string
- *             description: Connections of the user
- *         Groups:
+ *             description: connections of the user
+ *         groups:
  *           type: array
  *           items:
  *             type: string
- *             description: Groups of the user
+ *             description: groups of the user
  *       example:
- *         FirstName: John
- *         LastName: Doe
- *         ContactInfo:
- *           Email: johndoe@gmail.com
- *           Github: johndoe
- *         Skills:
+ *         firstName: John
+ *         lastName: Doe
+ *         contactInfo:
+ *           email: johndoe@gmail.com
+ *           github: johndoe
+ *         skills:
  *           Frameworks: [React, Angular]
  *           Languages: [Javascript, Typescript]
- *         Connections: [123, 456]
- *         Groups: [123, 456]
+ *         connections: [123, 456]
+ *         groups: [123, 456]
  */
 
 // Create a new router instance
