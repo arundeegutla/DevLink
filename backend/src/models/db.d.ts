@@ -9,6 +9,6 @@ export type User = {
 };
 
 export type contactInfo = {
-  email: string;
-  github: string;
+  email?: string;
+  github?: string;
 };

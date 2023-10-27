@@ -49,6 +49,8 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
     const {firstName, lastName, contactInfo, skills}: User = req.body;
     const {email, github} = contactInfo;
+
+    // Checks for undefined and inserts them into user object
     const user: Partial<User> = {
         ...(firstName && { firstName }),
         ...(lastName && { lastName }),
