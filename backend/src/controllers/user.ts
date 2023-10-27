@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { queryUserbyId, queryUserbyName, createProfile, editProfile } from "../services/user";
 import { User } from "../models/db";
+import { validateNewUser, validateEdit } from "../utils/user";
 
 export const getUserbyId = async (req: Request, res: Response, next: NextFunction) => {
     const queryID: string = req.params.id;
@@ -26,8 +27,15 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = {Frameworks: [], Languages: []}}: User = req.body;
-    const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
+    const {firstName = "", lastName = "", email = "", github = "", skills = []}: User = req.body;
+    const user: User = { firstName, lastName, email, github, skills, groups: [] };
+
+    // Validates request body
+    try {
+        validateNewUser(user);
+    } catch (error) {
+        res.status(400).send({error: error.message});
+    }
     const uid: string = res.locals.user.uid;
     try {
         await createProfile(user, uid);
@@ -38,8 +46,22 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 }
 
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {FirstName = "", LastName = "", ContactInfo = {Email: "", Github: ""}, Skills = {Frameworks: [], Languages: []}}: User = req.body;
-    const user: User = { FirstName, LastName, ContactInfo, Skills, Connections: [], Groups: [] };
+    const {firstName, lastName, email, github, skills}: User = req.body;
+
+    // Checks for undefined and inserts them into user object
+    const user: Partial<User> = {
+        ...(firstName && { firstName }),
+        ...(lastName && { lastName }),
+        ...(email && { email }),
+        ...(github && { github }),
+        ...(skills && { skills }),
+    };
+    try {
+        validateEdit(user);
+    } catch (error) {
+        res.status(400).send({error: error.message});
+    }
+
     const uid: string = res.locals.user.uid;
     try {
         await editProfile(user, uid);

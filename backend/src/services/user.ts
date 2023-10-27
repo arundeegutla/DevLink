@@ -1,54 +1,77 @@
 import { db } from "../config/firebaseInit";
-import { User } from "../models/db";
+import { Group, User, UserPage, condensedGroup } from "../models/db";
 
-export const queryUserbyId = async (queryID: string): Promise<User | undefined> => {
-    try {
-        const doc = await db.collection("Users").doc(queryID).get();
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-            return doc.data() as User;
-        } else {
-            console.log("No such document!");
-            return undefined;
-        }
-    } catch (error) {
-        console.log("Error getting document:", error);
-        throw error;
+export const queryUserbyId = async (
+  queryID: string
+): Promise<UserPage | undefined> => {
+  try {
+    const doc = await db.collection("Users").doc(queryID).get();
+    if (doc.exists) {
+      const userGroupsData = await Promise.all(
+        doc.data()?.groups.map(async (groupRef) => {
+          const groupDoc = await groupRef.get();
+          if (groupDoc.exists) {
+            const groupData = groupDoc.data() as Group;
+            return {
+              id: groupDoc.id,
+              description: groupData.description,
+              name: groupData.name,
+            } as condensedGroup;
+          } else return;
+        })
+      );
+      return { ...doc.data(), groups: userGroupsData } as UserPage;
+    } else {
+      console.log("No such document!");
+      return undefined;
     }
+  } catch (error) {
+    console.log("Error getting document:", error);
+    throw error;
+  }
 };
 
-export const queryUserbyName = async (queryName: string): Promise<User[] | undefined> => {
-    try {
-        queryName = queryName.toLowerCase();
+export const queryUserbyName = async (
+  queryName: string
+): Promise<User[] | undefined> => {
+  try {
+    queryName = queryName.toLowerCase();
 
-        const doc = await db.collection("Users")
-        .where("LowerFirstName", ">=", `${queryName}`)
-        .where("LowerFirstName", "<", `${queryName}` + "z")
-        .get();
+    const doc = await db
+      .collection("Users")
+      .where("LowerFirstName", ">=", `${queryName}`)
+      .where("LowerFirstName", "<", `${queryName}` + "z")
+      .get();
 
-        const usersData = doc.docs.map(doc => doc.data() as User);
+    const usersData = doc.docs.map((doc) => doc.data() as User);
 
-        return usersData;
-    } catch (error) {
-        console.log("Error getting document:", error);
-        throw error;
-    }
+    return usersData;
+  } catch (error) {
+    console.log("Error getting document:", error);
+    throw error;
+  }
 };
 
-export const createProfile = async (user: User, uid: string) => {
-    try {
-        await db.collection("Users").doc(uid).create(user);
-    } catch (error) {
-        console.log(`Error creating document for ${uid}:`, error);
-        throw error;
-    }
-}
+export const createProfile = async (
+  user: User,
+  uid: string
+): Promise<void | undefined> => {
+  try {
+    await db.collection("Users").doc(uid).create(user);
+  } catch (error) {
+    console.log(`Error creating document for ${uid}:`, error);
+    throw error;
+  }
+};
 
-export const editProfile = async (user: User, uid: string) => {
-    try {
-        await db.collection("Users").doc(uid).update(user);
-    } catch (error) {
-        console.log(`Error creating document for ${uid}:`, error);
-        throw error;
-    }
-}
+export const editProfile = async (
+  user: Partial<User>,
+  uid: string
+): Promise<void | undefined> => {
+  try {
+    await db.collection("Users").doc(uid).update(user);
+  } catch (error) {
+    console.log(`Error creating document for ${uid}:`, error);
+    throw error;
+  }
+};
