@@ -37,7 +37,7 @@ export const queryUserbyName = async (queryName: string): Promise<User[] | undef
 
 export const createProfile = async (user: User, uid: string) => {
     try {
-        await db.collection("Users").doc(uid).create(user);
+        await db.collection("Users").doc(uid).create({...user, lowerFirstName: user.firstName.toLowerCase(), lowerLastName: user.lastName.toLowerCase()});
     } catch (error) {
         console.log(`Error creating document for ${uid}:`, error);
         throw error;

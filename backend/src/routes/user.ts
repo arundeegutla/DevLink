@@ -129,6 +129,4 @@ router.get('/get/:id', getUserbyId);
 // Edit profile route
 router.post('/editProfile', editUserProfile);
 
-// Edit profile route
-router.post('/editProfile', editUserProfile);
 export default router;
