@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { queryUserbyId, queryUserbyName, createProfile, editProfile } from "../services/user";
-import { User, contactInfo } from "../models/db";
+import { User } from "../models/db";
 import { validateNewUser, validateEdit } from "../utils/user";
 
 export const getUserbyId = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,9 +27,8 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {firstName = "", lastName = "", contactInfo, skills = []}: User = req.body;
-    const {email = "", github = ""} = contactInfo;
-    const user: User = { firstName, lastName, contactInfo: {email, github}, skills, groups: [] };
+    const {firstName = "", lastName = "", email = "", github = "", skills = []}: User = req.body;
+    const user: User = { firstName, lastName, email, github, skills, groups: [] };
 
     // Validates request body
     try {
@@ -47,14 +46,14 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 }
 
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {firstName, lastName, contactInfo, skills}: User = req.body;
-    const {email, github} = contactInfo;
+    const {firstName, lastName, email, github, skills}: User = req.body;
 
     // Checks for undefined and inserts them into user object
     const user: Partial<User> = {
         ...(firstName && { firstName }),
         ...(lastName && { lastName }),
-        contactInfo: ({ ...(email && { email }), ...(github && { github })}),
+        ...(email && { email }),
+        ...(github && { github }),
         ...(skills && { skills }),
     };
     try {
