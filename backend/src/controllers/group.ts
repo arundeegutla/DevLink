@@ -9,9 +9,7 @@ export const createInitialGroup = async (
   next: NextFunction
 ) => {
   const { name = "", description = "" }: Group = req.body;
-  const group: Group = { name, description, members: [], posts: [] };
-
-  console.log("DING");
+  const group: Group = { name, description, members: [], posts: []};
 
   // Validates request body
   try {

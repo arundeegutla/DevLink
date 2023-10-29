@@ -5,52 +5,59 @@ import { createInitialGroup, editExistingGroup } from "../controllers/group";
  * @swagger
  * components:
  *   schemas:
- *     User:
+ *     Group:
  *       type: object
  *       required:
- *         - firstName
- *         - lastName
- *         - contactInfo
- *         - skills
+ *         - name
+ *         - description
  *       properties:
- *         firstName:
+ *         name:
  *           type: string
- *           description: First name of the user
- *         lastName:
+ *           description: Name of the group
+ *         description:
  *           type: string
- *           description: Last name of the user
- *         email:
- *          type: string
- *          description: Email of the user
- *         github:
- *          type: string
- *          description: Github username of the user
- *         skills:
- *           type: array
- *           items:
- *             type: string
- *             description: skills of the user
- *         groups:
+ *           description: Description of the group
+ *         members:
  *           type: array
  *           items:
  *             type: object
  *             properties:
- *               id:
+ *               firstName:
  *                 type: string
- *                 description: ID of the group
- *               name:
+ *                 description: First name of the user
+ *               lastName:
  *                 type: string
- *                 description: Name of the group
- *               description:
+ *                 description: Last name of the user
+ *               email:
  *                 type: string
- *                 description: Description of the group
+ *                 description: Email of the user
+ *               github:
+ *                 type: string
+ *                 description: Github username of the user
+ *               skills:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   description: skills of the user
+ *         posts:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Title of the post
+ *               body:
+ *                 type: string
+ *                 description: Body of the post
+ *               skillsWanted:
+ *                 type: Array
+ *                 description: Email of the user
  *       example:
- *         firstName: John
- *         lastName: Doe
- *         email: johndoe@gmail.com
- *         github: johndoe
- *         skills: [React, Angular, Javascript, Typescript]
- *         groups: [{ id: "123", name: "My Group", description: "A cool group!" }]
+ *         name: DevLink
+ *         description: This is our group
+ *         members: [{ id: "123", firstName: "John", lastName: "Smith", email: "johnsmith@gmail.com", github: "github.com", skills: [JavaScript] }]
+ *         posts: [{ title: "Post Title", body: "Post Body", skillsWanted: [Python] }]
  */
 
 // Create a new router instance
