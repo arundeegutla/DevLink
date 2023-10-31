@@ -39,7 +39,7 @@ const options = {
       bearerAuth: []
     }],
   },
-  apis: process.env.NODE_ENV === 'production' ? ['./dist/routes/user.{ts,js}'] : ['./src/routes/user.{ts,js}'],
+  apis: process.env.NODE_ENV === 'production' ? ['./dist/routes/*.{ts,js}'] : ['./src/routes/*.{ts,js}'],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
