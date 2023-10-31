@@ -1,6 +1,7 @@
 import express from 'express';
 import testRouter from './routes/test';
 import userRouter from './routes/user'
+import groupRouter from './routes/group'
 import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
 import { dbTest } from './services/test';
@@ -38,7 +39,7 @@ const options = {
       bearerAuth: []
     }],
   },
-  apis: process.env.NODE_ENV === 'production' ? ['./dist/routes/user.{ts,js}'] : ['./src/routes/user.{ts,js}'],
+  apis: process.env.NODE_ENV === 'production' ? ['./dist/routes/*.{ts,js}'] : ['./src/routes/*.{ts,js}'],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
@@ -62,6 +63,7 @@ app.use(authenticateJWT);
 
 // Set up routes
 app.use('/user', userRouter);
+app.use('/group', groupRouter);
 app.use('/test', testRouter);
 
 // TODO: Finish Error Middleware

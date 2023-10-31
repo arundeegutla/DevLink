@@ -30,7 +30,7 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *           type: array
  *           items:
  *             type: string
- *             description: skills of the user
+ *             description: Skills of the user
  *         groups:
  *           type: array
  *           items:
@@ -115,7 +115,7 @@ router.get("/search/:name", getUserByName);
  *                 type: array
  *                 items:
  *                   type: string
- *                   description: skills of the user
+ *                   description: Skills of the user
  *             example:
  *               firstName: John
  *               lastName: Doe
