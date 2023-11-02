@@ -36,12 +36,12 @@ export default function LoginPage() {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Login</Text>
-      <Text style={styles.label}>Username</Text>
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
         value={email}
-        placeholder="Enter your username"
+        placeholder="Enter your email"
       />
 
       <Text style={styles.label}>Password</Text>
