@@ -3,30 +3,50 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function LoginPage() {
+export default function RegistrationPage() {
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const router = useRouter();
 
-  const handleLogin = () => {
-    // Your login logic here
-    if (username === 'yourUsername' && password === 'yourPassword') {
-      // Successful login action
-      console.log('Login successful');
+  const handleRegister = () => {
+    // Your registration logic here
+    if (password === confirmPassword) {
+      // Successful registration action
+      console.log('Registration successful');
     } else {
-      // Failed login action
-      console.log('Login failed');
+      // Passwords do not match
+      console.log('Passwords do not match');
     }
   };
 
-  const navigateToRegistration = () => {
-    router.push("/register"); // Navigate to the Registration screen
+  const navigateToLogin = () => {
+    router.push("/login"); // Navigate back to the Login screen
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Login</Text>
+      <Text style={styles.heading}>Registration</Text>
+
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setEmail}
+        value={email}
+        placeholder="Enter your email"
+      />
+
+      <Text style={styles.label}>Phone Number</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setPhoneNumber}
+        value={phoneNumber}
+        placeholder="Enter your phone number"
+      />
+
       <Text style={styles.label}>Username</Text>
       <TextInput
         style={styles.input}
@@ -43,25 +63,22 @@ export default function LoginPage() {
         placeholder="Enter your password"
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+
+      <Text style={styles.label}>Confirm Password</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        placeholder="Confirm your password"
+        secureTextEntry
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
-      <Text style={styles.orText}>Login with:</Text>
-      <View style={styles.socialButtons}>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="github" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="linkedin" size={30} color="#0072b1" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="google" size={30} color="#EA4335" />
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity style={styles.signUpButton} onPress={navigateToRegistration}>
-        <Text style={styles.signUpText}>Don't have an Account? Sign Up</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
+        <Text style={styles.loginText}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
@@ -78,7 +95,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 45,
     paddingBottom: 30,
-    textAlign: 'center', // Center the text
+    textAlign: 'center',
   },
   label: {
     fontSize: 16,
@@ -105,28 +122,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
   },
-  orText: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 40,
-  },
-  socialButtons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 5,
-  },
-  socialButton: {
-    backgroundColor: '#FFFFFF',
-    padding: 10,
-    borderRadius: 30,
-    margin: 10,
-  },
-  signUpButton: {
+  loginButton: {
     marginTop: 20,
     alignItems: 'center',
   },
-  signUpText: {
+  loginText: {
     color: '#FFFFFF',
     fontSize: 16,
     textDecorationLine: 'underline',
