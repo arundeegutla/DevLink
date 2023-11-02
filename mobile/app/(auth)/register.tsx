@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { auth } from '../../src/firebase/clientApp';
 import {
   signInWithPopup,
   GoogleAuthProvider,
