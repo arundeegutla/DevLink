@@ -2,22 +2,31 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { auth } from 'firebase/clientApp';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const router = useRouter();
 
-  const handleLogin = () => {
-    // Your login logic here
-    if (username === 'yourUsername' && password === 'yourPassword') {
-      // Successful login action
-      console.log('Login successful');
-    } else {
-      // Failed login action
-      console.log('Login failed');
-    }
+  const loginManually = async () => {
+    if (!email || !password) return;
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        router.push('/index');
+      })
+      .catch((error) => {
+        return;
+      });
   };
 
   const navigateToRegistration = () => {
@@ -30,8 +39,8 @@ export default function LoginPage() {
       <Text style={styles.label}>Username</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setUsername}
-        value={username}
+        onChangeText={setEmail}
+        value={email}
         placeholder="Enter your username"
       />
 
@@ -43,7 +52,7 @@ export default function LoginPage() {
         placeholder="Enter your password"
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <TouchableOpacity style={styles.button} onPress={loginManually}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 

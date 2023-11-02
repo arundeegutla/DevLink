@@ -1,26 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+
 
 export default function RegistrationPage() {
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const router = useRouter();
 
-  const handleRegister = () => {
-    // Your registration logic here
-    if (password === confirmPassword) {
-      // Successful registration action
-      console.log('Registration successful');
-    } else {
-      // Passwords do not match
-      console.log('Passwords do not match');
-    }
+  const signUpManually = async () => {
+    if (!email || !password) return;
+    const loginAuth = getAuth();
+    createUserWithEmailAndPassword(loginAuth, email, password)
+      .then(async function (result) {
+        await updateProfile(result.user, {
+          displayName: fname + lname,
+          photoURL: 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
+        });
+        router.push('/index');
+      })
+      .catch(function (error) {
+        console.log(error);
+        router.push('/auth');
+        return;
+      });
   };
 
   const navigateToLogin = () => {
@@ -39,22 +50,6 @@ export default function RegistrationPage() {
         placeholder="Enter your email"
       />
 
-      <Text style={styles.label}>Phone Number</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setPhoneNumber}
-        value={phoneNumber}
-        placeholder="Enter your phone number"
-      />
-
-      <Text style={styles.label}>Username</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setUsername}
-        value={username}
-        placeholder="Enter your username"
-      />
-
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
@@ -64,16 +59,7 @@ export default function RegistrationPage() {
         secureTextEntry
       />
 
-      <Text style={styles.label}>Confirm Password</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={setConfirmPassword}
-        value={confirmPassword}
-        placeholder="Confirm your password"
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+      <TouchableOpacity style={styles.button} onPress={signUpManually}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
