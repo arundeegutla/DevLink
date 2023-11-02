@@ -22,7 +22,7 @@ export default function LoginPage() {
     if (!email || !password) return;
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        router.push('/index');
+        router.push('/home');
       })
       .catch((error) => {
         return;

@@ -21,17 +21,12 @@ export default function RegistrationPage() {
     if (!email || !password) return;
     const loginAuth = getAuth();
     createUserWithEmailAndPassword(loginAuth, email, password)
-      .then(async function (result) {
-        await updateProfile(result.user, {
-          displayName: fname + lname,
-          photoURL: 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
-        });
-        router.push('/index');
+      .then(() => {
+        router.push('/home'); // Redirect after successful registration
       })
       .catch(function (error) {
         console.log(error);
         router.push('/auth');
-        return;
       });
   };
 
