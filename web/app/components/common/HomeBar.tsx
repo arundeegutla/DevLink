@@ -4,7 +4,7 @@ import Image from 'next/image';
 import logo from '@images/logo2-white.png';
 import { usePathname } from 'next/navigation';
 
-export default function NavBarBasic() {
+export default function HomeBar() {
   const current = usePathname();
 
   {

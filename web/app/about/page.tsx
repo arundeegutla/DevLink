@@ -3,10 +3,13 @@
  * Maybe include a "Creators" section.
  */
 
+import HomeBar from '@components/common/HomeBar';
+
 export default function About() {
   return (
-    <main>
-        
-    </main>
+    <>
+      <HomeBar />
+      <main></main>
+    </>
   );
 }

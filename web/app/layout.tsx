@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import './globals.css';
-import NavBarBasic from '@components/common/NavBar-Basic';
+import HomeBar from '@components/common/HomeBar';
 
 export const metadata = {
   title: 'DevLink',
@@ -19,10 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <NavBarBasic />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
