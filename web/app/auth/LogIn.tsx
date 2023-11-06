@@ -22,8 +22,8 @@ import { FaGithub } from 'react-icons/fa';
 
 // components
 import TextField from '../components/common/TextField';
-import SubmitBtn from './SubmitBtn';
-import Error from './Alert';
+import SubmitBtn from '../components/common/SubmitBtn';
+import Error from '../components/common/Alert';
 
 export default function LogIn({
   changeScreen,
