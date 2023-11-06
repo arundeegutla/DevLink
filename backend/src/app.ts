@@ -2,6 +2,7 @@ import express from 'express';
 import testRouter from './routes/test';
 import userRouter from './routes/user'
 import groupRouter from './routes/group'
+import postRouter from './routes/post'
 import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
 import { dbTest } from './services/test';
@@ -64,6 +65,7 @@ app.use(authenticateJWT);
 // Set up routes
 app.use('/user', userRouter);
 app.use('/group', groupRouter);
+app.use('/post', postRouter);
 app.use('/test', testRouter);
 
 // TODO: Finish Error Middleware

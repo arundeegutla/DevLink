@@ -26,3 +26,10 @@ export type Group = {
   members: DocumentReference[];
   posts: DocumentReference[];
 };
+
+export type Post = {
+  title: string;
+  body: string;
+  owner: DocumentReference[];
+  skillsWanted: string[];
+};
