@@ -23,23 +23,38 @@ import { FaGithub } from 'react-icons/fa';
 // components
 import TextField from '../components/common/TextField';
 import SubmitBtn from './SubmitBtn';
-import Error from './Error';
+import Error from './Alert';
 
-export default function LogIn({ toggle }: { toggle: () => void }) {
+export default function LogIn({
+  changeScreen,
+}: {
+  changeScreen: (screen: number) => void;
+}) {
   const googleAuth = new GoogleAuthProvider();
   const router = useRouter();
 
-  const [email, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [authError, setAuthError] = useState('');
+
+  const updateEmail = (val: string) => {
+    setEmail(val);
+    setEmailError('');
+    setAuthError('');
+  };
+
+  const updatePassword = (val: string) => {
+    setPassword(val);
+    setPasswordError('');
+    setAuthError('');
+  };
 
   const loginGoogle = async () => {
     await signInWithPopup(auth, googleAuth)
       .then((result) => {
-        if (result.user.displayName) {
-          router.push('/dev/home');
-          return;
-        }
+        // signed in.
       })
       .catch((error) => {
         var msg =
@@ -48,19 +63,35 @@ export default function LogIn({ toggle }: { toggle: () => void }) {
       });
   };
 
-  const loginManually = async () => {
-    if (!(email && password)) {
-      setAuthError('Please fill in all fields');
-      return;
+  const validate = () => {
+    var allgood = true;
+    if (!email) {
+      setEmailError('Required');
+      allgood = false;
     }
+    if (!email) {
+      setEmailError('Required');
+      allgood = false;
+    } else if (!email.includes('@') || !email.includes('.')) {
+      setEmailError('Enter valid email');
+      allgood = false;
+    }
+    if (!password) {
+      setPasswordError('Required');
+      allgood = false;
+    }
+    return allgood;
+  };
+  const loginManually = async () => {
+    if (!validate()) return;
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        router.push('/dev/home');
+        // signed in.
       })
       .catch((error) => {
         var msg =
           errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
-        setAuthError(msg ?? 'User Not Found');
+        setAuthError(msg ?? 'Incorrect Username or Password');
       });
   };
   return (
@@ -78,32 +109,52 @@ export default function LogIn({ toggle }: { toggle: () => void }) {
           role="link"
           aria-label="Sign up here"
           className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer"
-          onClick={toggle}>
+          onClick={() => {
+            setAuthError('');
+            changeScreen(1);
+          }}>
           {' '}
           Sign up here
         </span>
       </p>
       <div className="flex flex-col justify-between mt-3">
+        {authError.length > 0 ? <Error>{authError}</Error> : ''}
+
         <TextField
           label="Email"
-          setValue={setUserName}
+          setValue={updateEmail}
           name="email"
           type="text"
+          autoComplete="username"
+          errorMsg={emailError}
+          className="mt-3"
         />
 
         <TextField
           label="Password"
-          setValue={setPassword}
-          name="new-password"
-          autoComplete="new-password"
+          setValue={updatePassword}
+          name="current-password"
+          autoComplete="current-password"
           type="password"
           eye={true}
+          errorMsg={passwordError}
+          className="mt-3"
         />
       </div>
+      <div
+        tabIndex={0}
+        role="link"
+        aria-label="Sign up here"
+        className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer mt-3 w-fit"
+        onClick={() => {
+          setAuthError('');
+          changeScreen(2);
+        }}>
+        {' '}
+        Forgot Password?
+      </div>
 
-      {authError.length > 0 ? <Error>{authError}</Error> : ''}
-
-      <SubmitBtn label="Log In" onClick={loginManually} />
+      <SubmitBtn label="Log In" onClick={loginManually} className="mt-3" />
 
       <div className="w-full flex items-center justify-between py-5">
         <hr className="w-full bg-gray-400" />

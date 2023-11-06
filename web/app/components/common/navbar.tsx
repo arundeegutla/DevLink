@@ -8,24 +8,28 @@ import { useState } from 'react';
 // Icons
 import logo from '@images/icon-link-white.png';
 import { GoHomeFill } from 'react-icons/go';
-import { FaSearch } from 'react-icons/fa';
+import { BiSearch } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
+import { BiLogOut } from 'react-icons/bi';
+import { LuMessageSquare } from 'react-icons/lu';
+import { BsPeopleFill } from 'react-icons/bs';
+import { IoSettingsSharp } from 'react-icons/io5';
 
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ReactNode } from 'react';
-import { BsPeopleFill } from 'react-icons/bs';
 
 const navigation = [
   { name: 'Home', href: '/dev/home', icon: GoHomeFill },
-  { name: 'Search', href: '/dev/search' },
-  { name: 'Inbox', href: '/dev/inbox' },
+  { name: 'Search', href: '/dev/search', icon: BiSearch },
+  { name: 'Inbox', href: '/dev/inbox', icon: LuMessageSquare },
+  { name: 'Profile', href: '/dev/account', isProfile: true },
 ];
 
 export default function NavBar() {
-  const current = usePathname();
+  const currentPath = usePathname();
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
 
@@ -41,40 +45,19 @@ export default function NavBar() {
       });
   };
 
-  const getFirstWord = (str: string) => {
-    const words = str.split(' ');
-    if (words.length > 0) {
-      return words[0];
-    } else {
-      return 'Guest';
-    }
-  };
-
-  const getStrippedName = () => {
-    if (!user) return 'undefined';
-    var count = 10;
-    const name: string = user?.displayName
-      ? getFirstWord(user.displayName)
-      : '';
-    var result = name.slice(0, count) + (name.length > count ? '...' : '');
-    return result;
-  };
-
   const getProfilePic = () => {
     if (!user) {
       return (
-        <FaUser className="h-9 w-auto border-2 border-[#747474] rounded-xl" />
+        <FaUser className="h-auto w-11 mr-2 border-2 border-[#747474] rounded-xl" />
       );
     }
-    console.log(user.photoURL);
-    console.log(user);
     return (
       <img
         src={
           user.photoURL ??
           'https://s3-symbol-logo.tradingview.com/alphabet--600.png'
         }
-        className="h-9 w-auto border-2 border-[#747474] rounded-xl"
+        className="h-auto w-8 border-2 border-[#4e4e4e] rounded-xl"
         alt="test"
       />
     );
@@ -85,7 +68,7 @@ export default function NavBar() {
   }
   return (
     <div className="z-10 h-full p-4">
-      <div className="flex flex-col items-center justify-between rounded-3xl p-1 h-full border-2 border-[#747474]">
+      <div className="relative flex flex-col items-center justify-between rounded-3xl p-1 h-full border-2 bg-[#000000] border-[#747474]">
         <div className="flex flex-col items-center justify-between">
           {/* logo */}
           <div className="mt-5">
@@ -94,32 +77,40 @@ export default function NavBar() {
             </Link>
           </div>
           {/* navlinks */}
-          <div className="flex flex-col items-center mt-20 w-full">
-            <Link href="/dev/home">
-              <button className="flex flex-row items-center my-button p-2 px-4 bg-[#404040] rounded-xl font-normal text-sm">
-                <GoHomeFill className="text-[25px] mr-2" />
-                Home
-              </button>
-            </Link>
-            <Link href="/dev/home">
-              <button className="flex flex-row items-center my-button p-2 px-4 bg-[#40404000] rounded-lg font-normal mt-2 text-sm">
-                <FaSearch className="text-[20px] mr-2" />
-                Search
-              </button>
-            </Link>
-            <Link href="/dev/home">
-              <button className="flex flex-row items-center my-button p-2 px-4 bg-[#40404000] rounded-lg font-normal mt-2 text-sm">
-                <BsPeopleFill className="text-[20px] mr-2" />
-                People
-              </button>
-            </Link>
+          <div className="flex flex-col items-center mt-14 w-full p-2">
+            {navigation.map((item) => (
+              <Link href={item.href} className="w-full">
+                <div
+                  className={`navlink ${
+                    currentPath.includes(item.href) ? 'active' : ''
+                  }`}>
+                  <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
+                    {item.isProfile ? (
+                      getProfilePic()
+                    ) : (
+                      <item.icon className="text-[1.5rem] text-gray-300" />
+                    )}
+                  </div>
+                  {item.name}
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
-        <div
-          onClick={signOut}
-          className="flex flex-row items-center w-36 rounded-2xl p-1 border-2 border-[#747474] hover:bg-slate-800 hover:cursor-pointer">
-          <div className="mr-1">{getProfilePic()}</div>
-          <div className="text-lg">{getStrippedName()}</div>
+          {/* Log out */}
+          <div className="absolute bottom-0 flex flex-col items-center mb-2 w-full p-2">
+            <div className="navlink">
+              <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
+                <IoSettingsSharp className="text-[1.5rem] text-gray-300" />
+              </div>
+              Settings
+            </div>
+            <div onClick={signOut} className="navlink">
+              <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
+                <BiLogOut className="text-[1.5rem] text-gray-300" />
+              </div>
+              Log Out
+            </div>
+          </div>
         </div>
       </div>
     </div>
