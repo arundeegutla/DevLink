@@ -11,6 +11,7 @@ import Loading from '@components/common/Loading';
 import { use, useState } from 'react';
 import LogIn from './LogIn';
 import SignUp from './SignUp';
+import ForgotPassword from './ForgotPassword';
 
 // auth
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -18,7 +19,8 @@ import { auth } from '@/firebase/clientApp';
 
 export default function AuthScreen() {
   const router = useRouter();
-  const [showLogin, setShowLogin] = useState(true);
+  const [screenType, setScreenType] = useState(0);
+
   const [user, loading, error] = useAuthState(auth);
   if (user && user.displayName) {
     router.push('/dev/home');
@@ -28,10 +30,14 @@ export default function AuthScreen() {
   } else {
     console.log('no user signed in');
   }
-
-  const toggle = () => {
-    setShowLogin(!showLogin);
+  const changeScreen = (num: number) => {
+    setScreenType(num);
   };
+  const screens = [
+    <LogIn changeScreen={changeScreen} />,
+    <SignUp changeScreen={changeScreen} />,
+    <ForgotPassword changeScreen={changeScreen} />,
+  ];
 
   return (
     <>
@@ -42,7 +48,17 @@ export default function AuthScreen() {
             <div>Unlock the</div> Developer Network.
           </div>
           <div className="flex flex-col items-center w-[50%]">
-            {showLogin ? <LogIn toggle={toggle} /> : <SignUp toggle={toggle} />}
+            {screens.map((screen, index) => (
+              <div
+                key={index}
+                className={`${
+                  screenType === index
+                    ? 'animated animatedFadeInUp fadeInUp'
+                    : 'hidden'
+                }`}>
+                {screen}
+              </div>
+            ))}
           </div>
         </div>
       </main>

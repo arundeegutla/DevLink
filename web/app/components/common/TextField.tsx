@@ -1,3 +1,5 @@
+// icons
+import { MdError } from 'react-icons/md';
 // react
 import { ChangeEvent, useState } from 'react';
 
@@ -9,6 +11,8 @@ interface TextFieldProps {
   className?: string;
   eye?: boolean;
   autoComplete?: string;
+  errorMsg?: string;
+  errSwitch?: boolean;
 }
 
 export default function TextField({
@@ -19,6 +23,8 @@ export default function TextField({
   className = '',
   eye = false,
   autoComplete,
+  errorMsg,
+  errSwitch,
 }: TextFieldProps) {
   const [eyeToggle, setEyeToggle] = useState(false);
 
@@ -28,17 +34,23 @@ export default function TextField({
   };
 
   return (
-    <div className={`input-group mt-3 ${className}`}>
+    <div className={`input-group ${className}`}>
       <input
         onChange={handleInputChange}
         type={!eye || !eyeToggle ? type : 'text'}
         name={name}
-        autoComplete={autoComplete || ''}
-        className={`${eye ? 'mr-7' : ''}`}
+        className={`${eye ? 'mr-9' : ''}`}
+        autoComplete={autoComplete ?? ''}
         required
       />
       <label>{label}</label>
-      <span className="tooltiptext left">Required</span>
+      <span
+        className={`${errorMsg ? 'flex' : 'hidden'} tooltiptext ${
+          errSwitch ? '' : 'left'
+        }`}>
+        <MdError className="text-2xl" />
+        {errorMsg ?? 'Required'}
+      </span>
       {eye ? (
         <div
           onClick={() => setEyeToggle(!eyeToggle)}
