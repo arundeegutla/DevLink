@@ -23,7 +23,7 @@ import { FaGithub } from 'react-icons/fa';
 // components
 import TextField from '../components/common/TextField';
 import SubmitBtn from '../components/common/SubmitBtn';
-import Error from '../components/common/Alert';
+import Alert from '../components/common/Alert';
 
 export default function LogIn({
   changeScreen,
@@ -31,7 +31,6 @@ export default function LogIn({
   changeScreen: (screen: number) => void;
 }) {
   const googleAuth = new GoogleAuthProvider();
-  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -118,7 +117,11 @@ export default function LogIn({
         </span>
       </p>
       <div className="flex flex-col justify-between mt-3">
-        {authError.length > 0 ? <Error>{authError}</Error> : ''}
+        {authError.length > 0 ? (
+          <Alert className="mx-auto">{authError}</Alert>
+        ) : (
+          ''
+        )}
 
         <TextField
           label="Email"

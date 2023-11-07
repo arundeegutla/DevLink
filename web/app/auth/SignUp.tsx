@@ -26,7 +26,7 @@ import { FaRegCircleXmark } from 'react-icons/fa6';
 // components
 import TextField from '../components/common/TextField';
 import SubmitBtn from '../components/common/SubmitBtn';
-import Error from '../components/common/Alert';
+import Alert from '../components/common/Alert';
 
 export default function SignUp({
   changeScreen,
@@ -162,7 +162,11 @@ export default function SignUp({
           Log in
         </span>
       </p>
-      {authError.length > 0 ? <Error>{authError}</Error> : ''}
+      {authError.length > 0 ? (
+        <Alert className="mx-auto">{authError}</Alert>
+      ) : (
+        ''
+      )}
 
       <div className="">
         <div className="flex flex-row w-full">

@@ -15,13 +15,7 @@ import Alert from '../../components/common/Alert';
 // auth
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  sendEmailVerification,
-} from 'firebase/auth';
+import { sendEmailVerification } from 'firebase/auth';
 import { errorMsg } from '@/firebase/authErrors';
 
 export default function Home() {
