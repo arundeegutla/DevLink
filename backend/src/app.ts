@@ -1,10 +1,48 @@
 import express from 'express';
 import testRouter from './routes/test';
 import userRouter from './routes/user'
+import groupRouter from './routes/group'
 import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
 import { dbTest } from './services/test';
 import { authenticateJWT } from './middleware/auth';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+const options = {
+  definition: {
+  openapi: '3.0.1',
+    info: {
+      title: 'DevLink API',
+      version: '0.3.1',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Development server',
+      },
+      {
+        url: 'https://api.devlink.com',
+        description: 'Production server',
+      }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }],
+  },
+  apis: process.env.NODE_ENV === 'production' ? ['./dist/routes/*.{ts,js}'] : ['./src/routes/*.{ts,js}'],
+};
+
+const openapiSpecification = swaggerJsdoc(options);
 
 const app = express();
 
@@ -12,20 +50,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(authenticateJWT);
+// Docs Setup
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
-// Set up routes
+// Test Landing Page
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+// Auth Middleware
+app.use(authenticateJWT);
+
+// Set up routes
 app.use('/user', userRouter);
+app.use('/group', groupRouter);
 app.use('/test', testRouter);
 
 // TODO: Finish Error Middleware
 // Set up error handling middleware
 app.use(errorMiddleware);
-
 
 // Start the server
 app.listen(env.PORT, () => {

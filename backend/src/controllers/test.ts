@@ -6,14 +6,8 @@ export const getTestHome = (req: Request, res: Response, next: NextFunction) => 
   res.send("Test home page");
 };
 
-export const getAbout = (req: Request, res: Response, next: NextFunction) => {
-    try {
-        throwError();
-        res.send("Test about page");
-    } catch (err) {
-        console.log("Hit");
-        next(err);
-    }
+export const verifyAuthTest = (req: Request, res: Response, next: NextFunction) => {
+        res.send({ message: "User is logged in", user: res.locals.user});
 };
 
 // export const registerUser = (req: Request, res: Response, next: NextFunction) => {
