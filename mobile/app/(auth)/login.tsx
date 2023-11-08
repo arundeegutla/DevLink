@@ -21,10 +21,10 @@ export default function LoginPage() {
   const loginManually = async () => {
     if (!email || !password) return;
     await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then((userCredential: any) => {
         router.push('/home');
       })
-      .catch((error) => {
+      .catch((error: any) => {
         return;
       });
   };

@@ -22,9 +22,9 @@ export default function RegistrationPage() {
     const loginAuth = getAuth();
     createUserWithEmailAndPassword(loginAuth, email, password)
       .then(() => {
-        router.push('/home'); // Redirect after successful registration
+        router.push('/dev/home'); // Redirect after successful registration
       })
-      .catch(function (error) {
+      .catch(function (error: any) {
         console.log(error);
         router.push('/auth');
       });
