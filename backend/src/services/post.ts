@@ -19,7 +19,18 @@ export const editPost = async (
   try {
     await db.collection("Posts").doc(postId).update(post);
   } catch (error) {
-    console.log(`Error creating document for ${postId}:`, error);
+    console.log(`Error editing document for ${postId}:`, error);
+    throw error;
+  }
+};
+
+export const deletePost = async (
+  postId: string
+): Promise<void | undefined> => {
+  try {
+    await db.collection("Posts").doc(postId).delete();
+  } catch (error) {
+    console.log(`Error deleteing document for ${postId}:`, error);
     throw error;
   }
 };

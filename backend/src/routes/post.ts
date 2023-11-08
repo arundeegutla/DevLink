@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createInitialPost, editExistingPost } from "../controllers/post";
+import { createInitialPost, editExistingPost, deleteExistingPost } from "../controllers/post";
 
 /**
  * @swagger
@@ -101,10 +101,10 @@ router.post("/createPost", createInitialPost);
  *             properties:
  *               title:
  *                 type: string
- *                 required: false
+ *                 required: true
  *               body:
  *                 type: string
- *                 required: false
+ *                 required: true
  *             example:
  *               title: DevLink Post
  *               body: This is our post
@@ -119,5 +119,36 @@ router.post("/createPost", createInitialPost);
  *         description: Forbidden
  */
 router.put("/editPost", editExistingPost);
+
+/**
+ * @swagger
+ * /user/deletePost:
+ *   delete:
+ *     summary: Delete a post
+ *     description: Delete a post
+ *     requestBody:
+ *       description: Post object to delete
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               postId:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               postId: a1b2c3
+ *     responses:
+ *       '200':
+ *         description: Post deleted successfully
+ *       '400':
+ *         description: Bad request
+ *       '401':
+ *         description: Unauthorized
+ *       '403':
+ *         description: Forbidden
+ */
+router.delete("/deletePost", deleteExistingPost);
 
 export default router;

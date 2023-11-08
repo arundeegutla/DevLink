@@ -19,7 +19,7 @@ export const editGroup = async (
   try {
     await db.collection("Groups").doc(groupId).update(group);
   } catch (error) {
-    console.log(`Error creating document for ${groupId}:`, error);
+    console.log(`Error editing document for ${groupId}:`, error);
     throw error;
   }
 };

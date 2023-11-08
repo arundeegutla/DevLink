@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { createPost, editPost } from "../services/post";
+import { createPost, editPost, deletePost } from "../services/post";
 import { Post } from "../models/db";
-import { validateNewPost, validateEdit } from "../utils/post";
+import { validateNewPost, validateEdit, validateDelete } from "../utils/post";
 
 export const createInitialPost = async (
   req: Request,
@@ -36,6 +36,7 @@ export const editExistingPost = async (
   const post: Partial<Post> = {
     ...(title && { title }),
     ...(body && { body }),
+    ...(postId && { postId }),
   };
   try {
     validateEdit(post);
@@ -46,6 +47,31 @@ export const editExistingPost = async (
   try {
     await editPost(post, postId);
     res.send({ message: "Post edited!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteExistingPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { postId }: Post = req.body;
+
+  // Checks for undefined and inserts them into user object
+  const post: Partial<Post> = {
+    ...(postId && { postId }),
+  };
+  try {
+    validateDelete(post);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+
+  try {
+    await deletePost(postId);
+    res.send({ message: "Post deleted!" });
   } catch (error) {
     next(error);
   }
