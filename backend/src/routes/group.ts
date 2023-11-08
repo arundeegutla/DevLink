@@ -98,7 +98,7 @@ const router: Router = express.Router();
  *       '403':
  *         description: Forbidden
  */
-router.put("/createGroup", createInitialGroup);
+router.post("/createGroup", createInitialGroup);
 
 /**
  * @swagger

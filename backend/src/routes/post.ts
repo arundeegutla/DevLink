@@ -83,7 +83,7 @@ const router: Router = express.Router();
  *       '403':
  *         description: Forbidden
  */
-router.put("/createPost", createInitialPost);
+router.post("/createPost", createInitialPost);
 
 /**
  * @swagger

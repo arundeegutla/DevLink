@@ -85,7 +85,6 @@ const router: Router = express.Router();
  */
 router.get("/search/:name", getUserByName);
 
-
 /**
  * @swagger
  * /user/createProfile:
@@ -132,7 +131,7 @@ router.get("/search/:name", getUserByName);
  *       '403':
  *         description: Forbidden
  */
-router.put("/createProfile", createUserProfile);
+router.post("/createProfile", createUserProfile);
 
 // Get user ID route
 /**
