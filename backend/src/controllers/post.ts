@@ -19,7 +19,6 @@ export const createInitialPost = async (
   }
   try {
     await createPost(post);
-    console.log(res.locals);
     res.send({ message: "Post created!" });
   } catch (error) {
     next(error);
