@@ -88,7 +88,7 @@ router.get("/search/:name", getUserByName);
 /**
  * @swagger
  * /user/createProfile:
- *   put:
+ *   post:
  *     summary: Create a new user profile
  *     description: Create a new user profile
  *     requestBody:

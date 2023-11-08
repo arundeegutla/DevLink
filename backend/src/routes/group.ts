@@ -69,7 +69,7 @@ const router: Router = express.Router();
 /**
  * @swagger
  * /user/createGroup:
- *   put:
+ *   post:
  *     summary: Create a new group
  *     description: Create a new group
  *     requestBody:

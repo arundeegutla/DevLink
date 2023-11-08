@@ -54,7 +54,7 @@ const router: Router = express.Router();
 /**
  * @swagger
  * /user/createPost:
- *   put:
+ *   post:
  *     summary: Create a new post
  *     description: Create a new post
  *     requestBody:
