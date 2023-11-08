@@ -23,6 +23,15 @@ export type condensedGroup = {
 export type Group = {
   name: string;
   description: string;
+  groupId: string;
   members: DocumentReference[];
   posts: DocumentReference[];
+};
+
+export type Post = {
+  title: string;
+  body: string;
+  postId: string;
+  owner: DocumentReference[];
+  skillsWanted: string[];
 };

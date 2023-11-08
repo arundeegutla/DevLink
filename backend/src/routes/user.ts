@@ -85,7 +85,6 @@ const router: Router = express.Router();
  */
 router.get("/search/:name", getUserByName);
 
-
 /**
  * @swagger
  * /user/createProfile:
@@ -167,7 +166,7 @@ router.get('/get/:id', getUserbyId);
 /**
  * @swagger
  * /user/editProfile:
- *   post:
+ *   put:
  *     summary: Edit user profile
  *     description: Edit a user's profile information, only pass the user's fields you want to update
  *     requestBody:
@@ -211,6 +210,6 @@ router.get('/get/:id', getUserbyId);
  *       '403':
  *         description: Forbidden
  */
-router.post('/editProfile', editUserProfile);
+router.put('/editProfile', editUserProfile);
 
 export default router;
