@@ -2,25 +2,24 @@ import { db } from "../config/firebaseInit";
 import { Group } from "../models/db";
 
 export const createGroup = async (
-  group: Group,
-  uid: string
+  group: Group
 ): Promise<void | undefined> => {
   try {
-    await db.collection("Groups").doc(uid).create(group);
+    await db.collection("Groups").doc().create(group);
   } catch (error) {
-    console.log(`Error creating document for ${uid}:`, error);
+    console.log("Error creating document", error);
     throw error;
   }
 };
 
 export const editGroup = async (
   group: Partial<Group>,
-  uid: string
+  groupId: string
 ): Promise<void | undefined> => {
   try {
-    await db.collection("Groups").doc(uid).update(group);
+    await db.collection("Groups").doc(groupId).update(group);
   } catch (error) {
-    console.log(`Error creating document for ${uid}:`, error);
+    console.log(`Error creating document for ${groupId}:`, error);
     throw error;
   }
 };

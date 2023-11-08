@@ -2,25 +2,24 @@ import { db } from "../config/firebaseInit";
 import { Post } from "../models/db";
 
 export const createPost = async (
-  post: Post,
-  uid: string
+  post: Post
 ): Promise<void | undefined> => {
   try {
-    await db.collection("Posts").doc(uid).create(post);
+    await db.collection("Posts").doc().create(post);
   } catch (error) {
-    console.log(`Error creating document for ${uid}:`, error);
+    console.log("Error creating document", error);
     throw error;
   }
 };
 
 export const editPost = async (
   post: Partial<Post>,
-  uid: string
+  postId: string
 ): Promise<void | undefined> => {
   try {
-    await db.collection("Posts").doc(uid).update(post);
+    await db.collection("Posts").doc(postId).update(post);
   } catch (error) {
-    console.log(`Error creating document for ${uid}:`, error);
+    console.log(`Error creating document for ${postId}:`, error);
     throw error;
   }
 };

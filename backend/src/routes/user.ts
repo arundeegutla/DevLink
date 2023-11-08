@@ -89,7 +89,7 @@ router.get("/search/:name", getUserByName);
 /**
  * @swagger
  * /user/createProfile:
- *   post:
+ *   put:
  *     summary: Create a new user profile
  *     description: Create a new user profile
  *     requestBody:
@@ -132,7 +132,7 @@ router.get("/search/:name", getUserByName);
  *       '403':
  *         description: Forbidden
  */
-router.post("/createProfile", createUserProfile);
+router.put("/createProfile", createUserProfile);
 
 // Get user ID route
 /**
@@ -167,7 +167,7 @@ router.get('/get/:id', getUserbyId);
 /**
  * @swagger
  * /user/editProfile:
- *   post:
+ *   put:
  *     summary: Edit user profile
  *     description: Edit a user's profile information, only pass the user's fields you want to update
  *     requestBody:
@@ -211,6 +211,6 @@ router.get('/get/:id', getUserbyId);
  *       '403':
  *         description: Forbidden
  */
-router.post('/editProfile', editUserProfile);
+router.put('/editProfile', editUserProfile);
 
 export default router;

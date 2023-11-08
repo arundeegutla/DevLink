@@ -54,7 +54,7 @@ const router: Router = express.Router();
 /**
  * @swagger
  * /user/createPost:
- *   post:
+ *   put:
  *     summary: Create a new post
  *     description: Create a new post
  *     requestBody:
@@ -83,12 +83,12 @@ const router: Router = express.Router();
  *       '403':
  *         description: Forbidden
  */
-router.post("/createPost", createInitialPost);
+router.put("/createPost", createInitialPost);
 
 /**
  * @swagger
  * /user/editPost:
- *   post:
+ *   put:
  *     summary: Edit a post
  *     description: Edit a post's information, only pass the post's fields you want to update
  *     requestBody:
@@ -118,6 +118,6 @@ router.post("/createPost", createInitialPost);
  *       '403':
  *         description: Forbidden
  */
-router.post("/editPost", editExistingPost);
+router.put("/editPost", editExistingPost);
 
 export default router;

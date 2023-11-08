@@ -17,6 +17,9 @@ import { createInitialGroup, editExistingGroup } from "../controllers/group";
  *         description:
  *           type: string
  *           description: Description of the group
+ *         postId:
+ *           type: string
+ *           description: Id of the post
  *         members:
  *           type: array
  *           items:
@@ -66,7 +69,7 @@ const router: Router = express.Router();
 /**
  * @swagger
  * /user/createGroup:
- *   post:
+ *   put:
  *     summary: Create a new group
  *     description: Create a new group
  *     requestBody:
@@ -95,12 +98,12 @@ const router: Router = express.Router();
  *       '403':
  *         description: Forbidden
  */
-router.post("/createGroup", createInitialGroup);
+router.put("/createGroup", createInitialGroup);
 
 /**
  * @swagger
  * /user/editGroup:
- *   post:
+ *   put:
  *     summary: Edit a group
  *     description: Edit a group's information, only pass the group's fields you want to update
  *     requestBody:
@@ -130,6 +133,6 @@ router.post("/createGroup", createInitialGroup);
  *       '403':
  *         description: Forbidden
  */
-router.post("/editGroup", editExistingGroup);
+router.put("/editGroup", editExistingGroup);
 
 export default router;
