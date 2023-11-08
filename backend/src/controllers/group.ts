@@ -36,6 +36,7 @@ export const editExistingGroup = async (
   const group: Partial<Group> = {
     ...(name && { name }),
     ...(description && { description }),
+    ...(groupId && { groupId }),
   };
   try {
     validateEdit(group);

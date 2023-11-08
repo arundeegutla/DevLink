@@ -19,3 +19,10 @@ export const validateEdit = (post: Partial<Post>) => {
     if (postId !== undefined && typeof postId !== "string")
         throw new Error("Post ID must be a string!");
 };
+
+export const validateDelete = (post: Partial<Post>) => {
+    // Checks types for group fields
+    const { postId } = post;
+    if (postId !== undefined && typeof postId !== "string")
+        throw new Error("Post ID must be a string!");
+};
