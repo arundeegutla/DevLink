@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, ImageBackground, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const WelcomeScreen = () => {
+  const router = useRouter();
+
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -10,15 +14,18 @@ const WelcomeScreen = () => {
       >
         <View style={styles.logoContainer}>
           <Image source={require('./../assets/images/logo.png')} style={styles.logoImage} /> 
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                // Navigate to the login page using router.push
+                router.push('/login');  
+              }}
+            >
+              <Text style={styles.buttonText}>Get Started</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            // Navigate to the login page here.
-          }}
-        >
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
@@ -36,6 +43,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   logoContainer: {
+    marginTop: 200,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -44,16 +52,21 @@ const styles = StyleSheet.create({
     width: 300, 
     height: 50, 
   },
+  buttonContainer: {
+    marginTop: 300, 
+  },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 19,
-    borderRadius: 20,
-    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 35,
+    borderColor: 'black',
+    borderWidth: 1,
   },
   buttonText: {
-    color: 'white',
-    fontSize: 18,
+    color: 'black',
+    fontSize: 25,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
