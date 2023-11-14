@@ -59,9 +59,11 @@ const router: Router = express.Router();
 
 /**
  * @swagger
- * /user/search/{name}:
+ * /users/search/{name}:
  *   get:
  *     summary: Get user by name
+ *     tags:
+ *      - Users
  *     description: Retrieve a user by their name
  *     parameters:
  *       - in: path
@@ -87,9 +89,11 @@ router.get("/search/:name", getUserByName);
 
 /**
  * @swagger
- * /user/createProfile:
+ * /users/createProfile:
  *   post:
  *     summary: Create a new user profile
+ *     tags:
+ *      - Users
  *     description: Create a new user profile
  *     requestBody:
  *       required: true
@@ -136,9 +140,11 @@ router.post("/createProfile", createUserProfile);
 // Get user ID route
 /**
  * @swagger
- * /user/get/{id}:
+ * /users/get/{id}:
  *   get:
  *     summary: Get user by ID
+ *     tags:
+ *      - Users
  *     description: Retrieve a user by their ID
  *     parameters:
  *       - in: path
@@ -165,9 +171,11 @@ router.get('/get/:id', getUserbyId);
 
 /**
  * @swagger
- * /user/editProfile:
+ * /users/editProfile:
  *   put:
  *     summary: Edit user profile
+ *     tags:
+ *      - Users
  *     description: Edit a user's profile information, only pass the user's fields you want to update
  *     requestBody:
  *       description: User object to update

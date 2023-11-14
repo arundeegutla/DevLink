@@ -54,7 +54,7 @@ Join us on this exciting journey to make DevLink even better!
 
 Meet the dedicated individuals behind DevLink:
 
-- **[Austin Robertson](https://github.com/Usdiez)** - Project Manager
+- **[Austin Robertson](https://github.com/Usdiez)** - API / Project Manager
 - **[Arun Deegutla](https://github.com/arundeegutla/)** - Web
 - **[Brennan Cleland](https://github.com/eternal-dx)** - Web
 - **[Rahul Mohan](https://github.com/rahulmohan126)** - Web
@@ -62,12 +62,5 @@ Meet the dedicated individuals behind DevLink:
 - **[Sanya Wadhwa](https://github.com/SanyaW29)** - Mobile
 - **[Laila El Banna](https://github.com/xlaila)** - Mobile
 
-## Contact
-
-Got questions, ideas, or feedback? We'd love to hear from you! Contact us at [contact@thedevlink.com](mailto:contact@thedevlink.com).
 
 [Join DevLink Now](https://thedevlink.com)
-
----
-
-Happy coding! 🚀

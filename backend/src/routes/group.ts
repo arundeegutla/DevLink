@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createInitialGroup, editExistingGroup } from "../controllers/group";
+import { createInitialGroup, editExistingGroup, requestToJoinGroup, handleGroupJoinRequest } from "../controllers/group";
 
 /**
  * @swagger
@@ -68,9 +68,11 @@ const router: Router = express.Router();
 
 /**
  * @swagger
- * /user/createGroup:
+ * /groups/createGroup:
  *   post:
  *     summary: Create a new group
+ *     tags:
+ *      - Groups
  *     description: Create a new group
  *     requestBody:
  *       required: true
@@ -102,9 +104,11 @@ router.post("/createGroup", createInitialGroup);
 
 /**
  * @swagger
- * /user/editGroup:
+ * /groups/editGroup:
  *   put:
  *     summary: Edit a group
+ *     tags:
+ *      - Groups
  *     description: Edit a group's information, only pass the group's fields you want to update
  *     requestBody:
  *       description: Group object to update
@@ -134,5 +138,79 @@ router.post("/createGroup", createInitialGroup);
  *         description: Forbidden
  */
 router.put("/editGroup", editExistingGroup);
+
+/**
+ * @swagger
+ * /groups/requestJoin:
+ *   post:
+ *     summary: Request to join a group
+ *     tags:
+ *      - Groups
+ *     description: Request to join a group
+ *     requestBody:
+ *       description: Group id to join
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               groupId:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               groupId: 123
+ *     responses:
+ *       '200':
+ *         description: Request sent successfully
+ *       '400':
+ *         description: Bad request
+ *       '401':
+ *         description: Unauthorized
+ *       '403':
+ *         description: Forbidden
+ */
+router.post("/requestJoin", requestToJoinGroup);
+
+/**
+ * @swagger
+ * /groups/handleJoinRequest:
+ *   post:
+ *     summary: Handle a group join request
+ *     tags:
+ *      - Groups
+ *     description: Handle a group join request
+ *     requestBody:
+ *       description: Group id to join
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *              groupId:
+ *                 type: string
+ *                 required: true
+ *              accept:
+ *                 type: boolean
+ *                 required: true
+ *              requestedUserId:
+ *                 type: string
+ *                 required: true
+ *             example:
+ *               groupId: 123
+ *               accept: true
+ *               requestedUserId: 2323Ah3ud
+ *     responses:
+ *       '200':
+ *         description: Request sent successfully
+ *       '400':
+ *         description: Bad request
+ *       '401':
+ *         description: Unauthorized
+ *       '403':
+ *         description: Forbidden
+ */
+router.post("/handleJoinRequest", handleGroupJoinRequest);
 
 export default router;

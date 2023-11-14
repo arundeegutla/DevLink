@@ -1,5 +1,20 @@
 import { db } from "../config/firebaseInit";
 import { Group, User, UserPage, condensedGroup } from "../models/db";
+import { DocumentReference } from "@google-cloud/firestore";
+
+export const getUserDoc = async (uid: string): Promise<DocumentReference | undefined> => {
+  try {
+      const doc = await db.collection("Users").doc(uid).get();
+      if (doc.exists) {
+          return db.collection("Users").doc(uid);
+      } else {
+          return undefined;
+      }
+  } catch (error) {
+      console.log("Error getting document:", error);
+      throw error;
+  }
+};
 
 export const queryUserbyId = async (
   queryID: string

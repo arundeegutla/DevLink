@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { fb } from "../config/firebaseInit";
+import { getUserDoc } from '../services/user';
 
 export const authenticateJWT = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -9,8 +10,9 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
       fb
         .auth()
         .verifyIdToken(idToken)
-        .then(function (decodedToken) {
+        .then(async function (decodedToken) {
             res.locals.user = decodedToken;
+            res.locals.userRef = await getUserDoc(decodedToken.uid);
           return next();
         })
         .catch(function (error) {

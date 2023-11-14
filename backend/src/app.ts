@@ -63,9 +63,9 @@ app.get('/', (req, res) => {
 app.use(authenticateJWT);
 
 // Set up routes
-app.use('/user', userRouter);
-app.use('/group', groupRouter);
-app.use('/post', postRouter);
+app.use('/users', userRouter);
+app.use('/groups', groupRouter);
+app.use('/posts', postRouter);
 app.use('/test', testRouter);
 
 // TODO: Finish Error Middleware

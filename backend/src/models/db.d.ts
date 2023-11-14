@@ -23,8 +23,9 @@ export type condensedGroup = {
 export type Group = {
   name: string;
   description: string;
-  groupId: string;
+  owner: DocumentReference;
   members: DocumentReference[];
+  userQueue: DocumentReference[];
   posts: DocumentReference[];
 };
 
