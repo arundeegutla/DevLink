@@ -168,7 +168,7 @@ export default function SignUp({
         ''
       )}
 
-      <div className="">
+      <div>
         <div className="flex flex-row w-full">
           <TextField
             label="First Name"
@@ -209,7 +209,7 @@ export default function SignUp({
             eye={true}
             errorMsg={passwordError}
           />
-          <div className="flex flex-row items-center justify-around text-sm px-3 py-2">
+          <div className="flex flex-row items-center justify-around text-sm px-3 py-2 space-x-1">
             <div
               className={`flex flex-row items-center rounded-xl blur-20 ${
                 sixLettersReq ? 'bg-green-700' : 'bg-gray-700'

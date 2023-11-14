@@ -1,9 +1,9 @@
 'use client';
+
 // React
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
 
 // Icons
 import logo from '@images/icon-link-white.png';
@@ -12,14 +12,12 @@ import { BiSearch } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
 import { LuMessageSquare } from 'react-icons/lu';
-import { BsPeopleFill } from 'react-icons/bs';
 import { IoSettingsSharp } from 'react-icons/io5';
 
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { ReactNode } from 'react';
 
 const navigation = [
   { name: 'Home', href: '/dev/home', icon: GoHomeFill },

@@ -4,6 +4,9 @@ import Image from 'next/image';
 import logo from '@images/logo2-white.png';
 import { usePathname } from 'next/navigation';
 
+// icons
+import { BsArrowUpRight } from 'react-icons/bs';
+
 export default function HomeBar() {
   const current = usePathname();
 
@@ -15,13 +18,14 @@ export default function HomeBar() {
       <Link href="/">
         <Image src={logo} alt="Logo" className="h-7 w-auto logo" />
       </Link>
-      <div>
-        <Link href="/about" className="font-normal mx-5 hover:opacity-70">
-          About
+      <div className="flex flex-row items-center">
+        <Link href="/auth" className="font-normal mx-5 hover:opacity-70">
+          Log In
         </Link>
         <Link href="/auth">
-          <button className="my-button p-2 px-4 bg-[#32778C] rounded-lg font-normal hover:">
+          <button className="my-button flex flex-row items-center p-2 px-4 border-2 border-gray-500 rounded-lg transition-[2s] font-normal hover:bg-white hover:text-black ">
             Get Started
+            <BsArrowUpRight className="ml-2" />
           </button>
         </Link>
       </div>
