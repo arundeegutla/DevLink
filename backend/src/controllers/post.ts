@@ -16,6 +16,7 @@ export const createInitialPost = async (
     validateNewPost(post);
   } catch (error) {
     res.status(400).send({ error: error.message });
+    return;
   }
   try {
     await createPost(post);
@@ -42,6 +43,7 @@ export const editExistingPost = async (
     validateEdit(post);
   } catch (error) {
     res.status(400).send({ error: error.message });
+    return;
   }
 
   try {
