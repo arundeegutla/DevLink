@@ -53,9 +53,11 @@ const router: Router = express.Router();
 
 /**
  * @swagger
- * /user/createPost:
+ * /posts/createPost:
  *   post:
  *     summary: Create a new post
+ *     tags:
+ *      - Posts
  *     description: Create a new post
  *     requestBody:
  *       required: true
@@ -87,9 +89,11 @@ router.post("/createPost", createInitialPost);
 
 /**
  * @swagger
- * /user/editPost:
+ * /posts/editPost:
  *   put:
  *     summary: Edit a post
+ *     tags:
+ *      - Posts
  *     description: Edit a post's information, only pass the post's fields you want to update
  *     requestBody:
  *       description: Post object to update
@@ -122,9 +126,11 @@ router.put("/editPost", editExistingPost);
 
 /**
  * @swagger
- * /user/deletePost:
+ * /posts/deletePost:
  *   delete:
  *     summary: Delete a post
+ *     tags:
+ *      - Posts
  *     description: Delete a post
  *     requestBody:
  *       description: Post object to delete
