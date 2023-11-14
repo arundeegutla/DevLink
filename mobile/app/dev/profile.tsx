@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Avatar, Button, TextInput, Switch } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -11,6 +11,7 @@ const ProfileScreen: React.FC = () => {
   const [github, setGithub] = useState<string>('https://github.com/johndoe');
   const [skills, setSkills] = useState<string>('React Native, TypeScript, Expo');
   const [contactSharing, setContactSharing] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const pickImage = async () => {
     let result = (await ImagePicker.launchImageLibraryAsync({
@@ -19,7 +20,7 @@ const ProfileScreen: React.FC = () => {
       aspect: [4, 3],
       quality: 1,
     })) as ImagePicker.ImagePickerResult & { uri?: string };
-  
+
     if (!result.canceled && result.uri) {
       setImage(result.uri);
     }
@@ -30,52 +31,77 @@ const ProfileScreen: React.FC = () => {
   };
 
   const handleEditProfile = () => {
-    // Handle edit profile logic here
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveProfile = () => {
+    // Save profile logic here
+    setIsEditing(false);
+  };
+
+  const renderEditableField = (
+    label: string,
+    value: string,
+    onChangeText: (text: string) => void,
+    placeholder: string
+  ) => {
+    return (
+      <View>
+        {label && <Text style={styles.label}>{label}</Text>}
+        {isEditing ? (
+          <TextInput
+            style={[styles.input, { backgroundColor: '#fff' }]}
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            underlineColorAndroid="transparent"
+          />
+        ) : (
+          <Text style={styles.input}>{value}</Text>
+        )}
+      </View>
+    );
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.profileHeader}>
+     <View style={styles.profileHeader}>
         <TouchableOpacity onPress={pickImage}>
           <Avatar.Image size={120} source={image ? { uri: image } : require('../../assets/images/earth.png')} />
         </TouchableOpacity>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.email}>{email}</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills</Text>
-        <TextInput
-          style={styles.input}
-          value={skills}
-          onChangeText={(text) => setSkills(text)}
-          mode="outlined"
-          placeholder="Enter your skills"
-        />
+        {isEditing ? (
+          renderEditableField(null, name, setName, "Enter your name")
+        ) : (
+          <Text style={[styles.input, { marginTop: 10 }]}>{name}</Text>
+        )}
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Personal Information</Text>
-        <TextInput
-          style={styles.input}
-          value={linkedin}
-          onChangeText={(text) => setLinkedin(text)}
-          mode="outlined"
-          placeholder="LinkedIn URL"
-        />
-        <TextInput
-          style={styles.input}
-          value={github}
-          onChangeText={(text) => setGithub(text)}
-          mode="outlined"
-          placeholder="GitHub URL"
-        />
+        {renderEditableField("Email", email, setEmail, "Enter your email")}
+        {renderEditableField("LinkedIn", linkedin, setLinkedin, "LinkedIn URL")}
+        {renderEditableField("GitHub", github, setGithub, "GitHub URL")}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Skills</Text>
+        {isEditing ? (
+          <TextInput
+            style={[styles.input, { backgroundColor: '#fff' }]}
+            value={skills}
+            onChangeText={(text) => setSkills(text)}
+            placeholder="Enter your skills"
+            underlineColorAndroid="transparent"
+          />
+        ) : (
+          <Text style={styles.input}>{skills}</Text>
+        )}
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Account Settings</Text>
-        <TouchableOpacity onPress={handleEditProfile}>
-          <Text style={styles.link}>Edit Profile</Text>
+        <TouchableOpacity onPress={isEditing ? handleSaveProfile : handleEditProfile}>
+          <Text style={styles.link}>{isEditing ? "Save Profile" : "Edit Profile"}</Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.link}>Change Password</Text>
@@ -108,15 +134,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  name: {
+  label: {
     color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  email: {
-    color: '#ddd',
     fontSize: 14,
+    marginBottom: 5,
+  },
+  input: {
+    marginBottom: 10,
+    padding: 8,
+    borderRadius: 4,
+    color: '#fff', // Text color
+    height: '80%', // Adjust the width as needed
   },
   section: {
     marginBottom: 20,
@@ -125,10 +153,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: '#fff',
     marginBottom: 10,
   },
   link: {
