@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome from @expo/vector-icons
 
 export default function HomePage() {
@@ -11,6 +11,14 @@ export default function HomePage() {
     ref.current.scrollTo({ y: scrollY, animated: false });
   };
 
+  const redirectToHome = () => {
+    Linking.openURL('http://localhost:8081/dev/home');
+  };
+
+  const redirectToProfile = () => {
+    Linking.openURL('http://localhost:8081/dev/profile');
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -20,18 +28,13 @@ export default function HomePage() {
         
         {/* Icons */}
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-          {/* Chat button */}
-          <TouchableOpacity style={styles.button}>
-            <FontAwesome name="comments" size={30} color="#FFFFFF" />
-          </TouchableOpacity>
-
           {/* Home button */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={redirectToHome}>
             <FontAwesome name="home" size={30} color="#FFFFFF" />
           </TouchableOpacity>
 
           {/* Profile button */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={redirectToProfile}>
             <FontAwesome name="user-circle" size={30} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
