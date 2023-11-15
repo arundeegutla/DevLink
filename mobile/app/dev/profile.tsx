@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import { Avatar, Button, TextInput, Switch } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import { FontAwesome } from '@expo/vector-icons';
 
-const ProfileScreen: React.FC = () => {
+  const ProfileScreen: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [name, setName] = useState<string>('John Doe');
   const [email, setEmail] = useState<string>('john.doe@example.com');
@@ -39,6 +40,14 @@ const ProfileScreen: React.FC = () => {
     setIsEditing(false);
   };
 
+  const redirectToHome = () => {
+    Linking.openURL('http://localhost:8081/dev/home');
+  };
+
+  const redirectToProfile = () => {
+    Linking.openURL('http://localhost:8081/dev/profile');
+  };
+
   const renderEditableField = (
     label: string,
     value: string,
@@ -65,7 +74,17 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-     <View style={styles.profileHeader}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.button} onPress={redirectToHome}>
+          <FontAwesome name="home" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={redirectToProfile}>
+          <FontAwesome name="user-circle" size={30} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.profileHeader}>
         <TouchableOpacity onPress={pickImage}>
           <Avatar.Image size={120} source={image ? { uri: image } : require('../../assets/images/earth.png')} />
         </TouchableOpacity>
@@ -130,6 +149,15 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 16,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  button: {
+    padding: 5,
+  },
   profileHeader: {
     alignItems: 'center',
     marginBottom: 20,
@@ -143,8 +171,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderRadius: 4,
-    color: '#fff', // Text color
-    height: '80%', // Adjust the width as needed
+    color: '#fff',
+    height: '80%',
   },
   section: {
     marginBottom: 20,
