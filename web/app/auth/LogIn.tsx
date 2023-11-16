@@ -31,6 +31,7 @@ export default function LogIn({
   changeScreen: (screen: number) => void;
 }) {
   const googleAuth = new GoogleAuthProvider();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -86,6 +87,7 @@ export default function LogIn({
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // signed in.
+        router.push('/dev/home');
       })
       .catch((error) => {
         var msg =
@@ -94,7 +96,7 @@ export default function LogIn({
       });
   };
   return (
-    <div className="bg-white shadow rounded-3xl w-full p-8 max-w-lg">
+    <div className="bg-white shadow rounded-3xl w-fit p-8">
       <p
         tabIndex={0}
         aria-label="Login to your account"
@@ -116,13 +118,12 @@ export default function LogIn({
           Sign up here
         </span>
       </p>
-      <div className="flex flex-col justify-between mt-3">
-        {authError.length > 0 ? (
-          <Alert className="mx-auto">{authError}</Alert>
-        ) : (
-          ''
-        )}
-
+      {authError.length > 0 ? (
+        <Alert className="mx-auto max-w-[350px]">{authError}</Alert>
+      ) : (
+        ''
+      )}
+      <div className="min-w-[350px]">
         <TextField
           label="Email"
           setValue={updateEmail}

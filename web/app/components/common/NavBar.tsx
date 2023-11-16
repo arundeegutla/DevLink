@@ -1,9 +1,9 @@
 'use client';
+
 // React
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
 
 // Icons
 import logo from '@images/icon-link-white.png';
@@ -12,19 +12,23 @@ import { BiSearch } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
 import { LuMessageSquare } from 'react-icons/lu';
-import { BsPeopleFill } from 'react-icons/bs';
 import { IoSettingsSharp } from 'react-icons/io5';
+import { MdSpaceDashboard } from 'react-icons/md';
+import { BiSolidMessageSquareDetail } from 'react-icons/bi';
+import { PiTerminalWindowFill } from 'react-icons/pi';
+import { MdExplore } from 'react-icons/md';
+import { IoEarthOutline } from 'react-icons/io5';
 
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { ReactNode } from 'react';
 
 const navigation = [
-  { name: 'Home', href: '/dev/home', icon: GoHomeFill },
-  { name: 'Search', href: '/dev/search', icon: BiSearch },
-  { name: 'Inbox', href: '/dev/inbox', icon: LuMessageSquare },
+  { name: 'Dashboard', href: '/dev/home', icon: MdSpaceDashboard },
+  // { name: 'Projects', href: '/dev/projects', icon: PiTerminalWindowFill },
+  { name: 'Messages', href: '/dev/inbox', icon: BiSolidMessageSquareDetail },
+  { name: 'Explore', href: '/dev/search', icon: MdExplore },
   { name: 'Profile', href: '/dev/account', isProfile: true },
 ];
 
@@ -77,18 +81,20 @@ export default function NavBar() {
             </Link>
           </div>
           {/* navlinks */}
-          <div className="flex flex-col items-center mt-14 w-full p-2">
+          <div className="flex flex-col items-start mt-14 w-full p-2">
             {navigation.map((item) => (
               <Link href={item.href} className="w-full">
                 <div
                   className={`navlink ${
-                    currentPath.includes(item.href) ? 'active' : ''
-                  }`}>
+                    currentPath.includes(item.href)
+                      ? 'active text-[#dedede]'
+                      : 'text-[#adadad]'
+                  } `}>
                   <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
                     {item.isProfile ? (
                       getProfilePic()
                     ) : (
-                      <item.icon className="text-[1.5rem] text-gray-300" />
+                      <item.icon className="text-[1.5rem]" />
                     )}
                   </div>
                   {item.name}
@@ -96,17 +102,35 @@ export default function NavBar() {
               </Link>
             ))}
           </div>
-          {/* Log out */}
+
+          {/* Bottom */}
           <div className="absolute bottom-0 flex flex-col items-center mb-2 w-full p-2">
-            <div className="navlink">
+            <hr className="my-1 border-t w-full border-[#3b3b3b]" />
+            <div
+              className={`navlink ${
+                currentPath.includes('settings')
+                  ? 'active text-[#dedede]'
+                  : 'text-[#adadad]'
+              } `}>
               <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
-                <IoSettingsSharp className="text-[1.5rem] text-gray-300" />
+                <IoEarthOutline className="text-[1.5rem]" />
+              </div>
+              Feedback
+            </div>
+            <div
+              className={`navlink ${
+                currentPath.includes('settings')
+                  ? 'active text-[#dedede]'
+                  : 'text-[#adadad]'
+              } `}>
+              <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
+                <IoSettingsSharp className="text-[1.5rem]" />
               </div>
               Settings
             </div>
-            <div onClick={signOut} className="navlink">
-              <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
-                <BiLogOut className="text-[1.5rem] text-gray-300" />
+            <div onClick={signOut} className="navlink text-[#adadad]">
+              <div className="w-8 h-8 flex flex-row items-center justify-center mr-2 ">
+                <BiLogOut className="text-[1.5rem]" />
               </div>
               Log Out
             </div>
