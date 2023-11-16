@@ -1,6 +1,6 @@
 'use client';
 /**
- * Page with community feed as focal point. Inbox and project list on the side.
+ * Page with current projects of the user.
  */
 
 //react
@@ -8,11 +8,63 @@ import { useRouter } from 'next/navigation';
 
 // components
 import Loading from '@components/common/Loading';
+import { ProjectCardProps } from '@components/common/ProjectCard';
+import ProjectCard from '@components/common/ProjectCard';
 
 // auth
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
-import PostCard from '@components/common/PostCard';
+
+const tempProjects: ProjectCardProps[] = [
+  {
+    id: '1',
+    title: 'Alg0Run',
+    color: 'red',
+    role: 'Front-End Engineer',
+  },
+  {
+    id: '2',
+    title: 'Social Media App',
+    color: 'blue',
+    role: 'Frontend Developer',
+  },
+  {
+    id: '3',
+    title: 'Task Management System',
+    color: 'orange',
+    role: 'Backend Developer',
+  },
+  {
+    id: '4',
+    title: 'Portfolio Website',
+    color: 'purple',
+    role: 'UI/UX Designer',
+  },
+  {
+    id: '10',
+    title: 'Travel Buddy App',
+    color: 'teal',
+    role: 'Mobile App Developer',
+  },
+  {
+    id: '11',
+    title: 'AI-driven Chatbot',
+    color: 'purple',
+    role: 'Machine Learning Engineer',
+  },
+  {
+    id: '12',
+    title: 'Virtual Reality Experience',
+    color: 'orange',
+    role: 'VR/AR Developer',
+  },
+  {
+    id: '16',
+    title: 'Fitness Tracking App',
+    color: 'pink',
+    role: 'HealthTech Developer',
+  },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -28,27 +80,15 @@ export default function Home() {
     return <Loading />;
   }
   return (
-    <div className="m-4 w-full flex flex-row">
-      {/* feed */}
-      <div className="relative flex flex-col w-[60%] h-[100vh] mx-4">
-        <div className="black-blur absolute top-0 left-0 rounded-lg bg-black p-3 w-full">
-          <h1 className="text-3xl font-semibold">Community</h1>
-        </div>
-        <div className="overflow-auto p-10 pt-14">
-          {Array.from({ length: 100 }, (_, index) => (
-            <PostCard
-              key={index}
-              user={`User ${index + 1}`}
-              setLike={() => {}}
-              description={`Description ${index + 1}`}
-              time={`${index + 1} hrs ago`}
-              userphoto="https://cdn-icons-png.flaticon.com/512/147/147142.png"
-            />
-          ))}
-        </div>
+    <div className="w-full flex flex-col mt-4">
+      <div className="mb-4 text-4xl font-semibold text-[#cccccc]">
+        Dashboard
       </div>
-      <div className="flex flex-col w-[40%]">
-        <h1 className="text-3xl">Projects</h1>
+      {/* Current Projects */}
+      <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out">
+        {tempProjects.map((item, indx) => (
+          <ProjectCard {...item} />
+        ))}
       </div>
     </div>
   );

@@ -22,9 +22,9 @@ export default function RootLayout({
     return <Loading />;
   }
   return (
-    <div className="flex flex-row h-screen bg-[#171717] overflow-hidden">
+    <div className="relative flex flex-row h-screen bg-[#151515] overflow-hidden">
       <NavBar />
-      <div className="flex-grow h-full">{children}</div>
+      <div className="flex-grow h-[100vh] overflow-scroll">{children}</div>
     </div>
   );
 }
