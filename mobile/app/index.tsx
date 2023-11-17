@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ImageBackground, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 
-const WelcomeScreen = () => {
+const LandingScreen = () => {
   const router = useRouter();
 
 
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeScreen;
+export default LandingScreen;
