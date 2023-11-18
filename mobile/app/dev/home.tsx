@@ -20,6 +20,11 @@ export default function HomePage() {
     // Logic to filter and display projects based on the selected tab
   };
 
+  const handleScroll = (ref, event) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    ref.current.scrollTo({ y: scrollY, animated: false });
+  };
+
   // Sample data for My Projects and Project Invitations
   const myProjects = [
     { id: 1, title: 'Project A', description: 'Description for Project A', status: 'In Progress' },
