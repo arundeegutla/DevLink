@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth } from '../../src/firebase/clientApp';
@@ -33,8 +33,15 @@ export default function LoginPage() {
     router.push("/register"); // Navigate to the Registration screen
   };
 
+  const navigateToForgotPassword = () => {
+    router.push("/forgotPassword");
+  };
+
   return (
     <View style={styles.container}>
+      {/* Logo at the top-left corner */}
+      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+
       <Text style={styles.heading}>Login</Text>
       <Text style={styles.label}>Email</Text>
       <TextInput
@@ -52,6 +59,10 @@ export default function LoginPage() {
         placeholder="Enter your password"
         secureTextEntry
       />
+      <TouchableOpacity onPress={navigateToForgotPassword}>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={loginManually}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -60,9 +71,6 @@ export default function LoginPage() {
       <View style={styles.socialButtons}>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="github" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="linkedin" size={30} color="#0072b1" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="google" size={30} color="#EA4335" />
@@ -83,6 +91,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
   },
+  logo: {
+    width: 120, 
+    height: 20,
+    position: 'absolute',
+    top: 15,
+    left: 10,
+  },
   heading: {
     color: '#FFFFFF',
     fontSize: 45,
@@ -102,6 +117,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 8,
     borderRadius: 10,
+  },
+  forgotPassword: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'left',
+    textDecorationLine: 'underline',
+    marginTop: 10,
   },
   button: {
     backgroundColor: '#114E7A',

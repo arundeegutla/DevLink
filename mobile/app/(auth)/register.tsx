@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -36,6 +38,7 @@ export default function RegistrationPage() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.heading}>Registration</Text>
 
       <Text style={styles.label}>Email</Text>
@@ -59,6 +62,16 @@ export default function RegistrationPage() {
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
+      <Text style={styles.orText}>Signup with:</Text>
+      <View style={styles.socialButtons}>
+        <TouchableOpacity style={styles.socialButton}>
+          <Icon name="github" size={30} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Icon name="google" size={30} color="#EA4335" />
+        </TouchableOpacity>
+      </View>
+
       <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
         <Text style={styles.loginText}>Already have an account? Login</Text>
       </TouchableOpacity>
@@ -72,6 +85,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#23292D',
     justifyContent: 'center',
     padding: 16,
+  },
+  logo: {
+    width: 120, 
+    height: 20,
+    position: 'absolute',
+    top: 15,
+    left: 10,
   },
   heading: {
     color: '#FFFFFF',
@@ -109,6 +129,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textDecorationLine: 'underline',
+  },
+  orText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 40,
+  },
+  socialButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 5,
+  },
+  socialButton: {
+    backgroundColor: '#FFFFFF',
+    padding: 10,
+    borderRadius: 30,
+    margin: 10,
+  },
+  signUpButton: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  signUpText: {
     color: '#FFFFFF',
     fontSize: 16,
     textDecorationLine: 'underline',
