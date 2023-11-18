@@ -25,7 +25,7 @@ const WelcomeScreen = () => {
               router.push('/dev/profile');
             }}
           >
-            <Text style={styles.buttonText}>Make a Profile</Text>
+            <Text style={styles.buttonText}>Make a Profile</Text> 
           </TouchableOpacity>
         </View>
       </ImageBackground>
