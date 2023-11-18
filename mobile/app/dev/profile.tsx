@@ -1,207 +1,192 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { Avatar, Button, TextInput, Switch } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { FontAwesome } from '@expo/vector-icons';
 
-  const ProfileScreen: React.FC = () => {
-  const [image, setImage] = useState<string | null>(null);
-  const [name, setName] = useState<string>('John Doe');
-  const [email, setEmail] = useState<string>('john.doe@example.com');
-  const [linkedin, setLinkedin] = useState<string>('https://www.linkedin.com/in/johndoe');
-  const [github, setGithub] = useState<string>('https://github.com/johndoe');
-  const [skills, setSkills] = useState<string>('React Native, TypeScript, Expo');
-  const [contactSharing, setContactSharing] = useState<boolean>(true);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+const Profile = () => {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [githubUrl, setGithubUrl] = useState('');
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [skills, setSkills] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    // Ask for permission to access the camera roll
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permission Denied',
+          'Sorry, we need camera roll permissions to make this work!'
+        );
+      }
+    })();
+  }, []);
 
   const pickImage = async () => {
-    let result = (await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    })) as ImagePicker.ImagePickerResult & { uri?: string };
+    });
 
-    if (!result.canceled && result.uri) {
-      setImage(result.uri);
+    if (!result.cancelled && result.uri) {
+      setProfileImage(result.uri);
     }
   };
 
-  const handleLogout = () => {
-    // Handle logout logic here
+  const saveProfile = () => {
+    // save the profile, including the profile image URI
+    Alert.alert('Profile Saved', 'Your profile has been saved successfully.');
   };
 
-  const handleEditProfile = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const handleSaveProfile = () => {
-    // Save profile logic here
-    setIsEditing(false);
-  };
-
-  const redirectToHome = () => {
-    Linking.openURL('http://localhost:8081/dev/home');
-  };
-
-  const redirectToProfile = () => {
-    Linking.openURL('http://localhost:8081/dev/profile');
-  };
-
-  const renderEditableField = (
-    label: string,
-    value: string,
-    onChangeText: (text: string) => void,
-    placeholder: string
-  ) => {
-    return (
-      <View>
-        {label && <Text style={styles.label}>{label}</Text>}
-        {isEditing ? (
-          <TextInput
-            style={[styles.input, { backgroundColor: '#fff' }]}
-            value={value}
-            onChangeText={onChangeText}
-            placeholder={placeholder}
-            underlineColorAndroid="transparent"
-          />
-        ) : (
-          <Text style={styles.input}>{value}</Text>
-        )}
-      </View>
-    );
+  const logout = () => {
+    // logic to handle logout
+    Alert.alert('Logout', 'You have been logged out.');
+    // navigate to the login screen
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.button} onPress={redirectToHome}>
-          <FontAwesome name="home" size={30} color="#FFFFFF" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={redirectToProfile}>
-          <FontAwesome name="user-circle" size={30} color="#FFFFFF" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.profileHeader}>
-        <TouchableOpacity onPress={pickImage}>
-          <Avatar.Image size={120} source={image ? { uri: image } : require('../../assets/images/earth.png')} />
-        </TouchableOpacity>
-        {isEditing ? (
-          renderEditableField(null, name, setName, "Enter your name")
-        ) : (
-          <Text style={[styles.input, { marginTop: 10 }]}>{name}</Text>
-        )}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Personal Information</Text>
-        {renderEditableField("Email", email, setEmail, "Enter your email")}
-        {renderEditableField("LinkedIn", linkedin, setLinkedin, "LinkedIn URL")}
-        {renderEditableField("GitHub", github, setGithub, "GitHub URL")}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills</Text>
-        {isEditing ? (
-          <TextInput
-            style={[styles.input, { backgroundColor: '#fff' }]}
-            value={skills}
-            onChangeText={(text) => setSkills(text)}
-            placeholder="Enter your skills"
-            underlineColorAndroid="transparent"
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={pickImage}
+        style={styles.profileImageContainer}
+      >
+        {profileImage ? (
+          <Image
+            source={{ uri: profileImage }}
+            style={styles.profileImage}
           />
         ) : (
-          <Text style={styles.input}>{skills}</Text>
+          <View style={styles.profileImagePlaceholder}>
+            <Text style={styles.profileImageText}>Upload Picture</Text>
+          </View>
         )}
+      </TouchableOpacity>
+
+      <View style={styles.section}>
+        <Text style={styles.label}>Personal Information</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Full Name"
+          placeholderTextColor="#A9A9A9"
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#A9A9A9"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="GitHub URL"
+          placeholderTextColor="#A9A9A9"
+          value={githubUrl}
+          onChangeText={(text) => setGithubUrl(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="LinkedIn URL"
+          placeholderTextColor="#A9A9A9"
+          value={linkedinUrl}
+          onChangeText={(text) => setLinkedinUrl(text)}
+        />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Settings</Text>
-        <TouchableOpacity onPress={isEditing ? handleSaveProfile : handleEditProfile}>
-          <Text style={styles.link}>{isEditing ? "Save Profile" : "Edit Profile"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.link}>Change Password</Text>
-        </TouchableOpacity>
-        <View style={styles.switchContainer}>
-          <Text style={styles.switchLabel}>Enable Contact Sharing</Text>
-          <Switch value={contactSharing} onValueChange={() => setContactSharing(!contactSharing)} />
-        </View>
+        <Text style={styles.label}>Skills</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your skills"
+          placeholderTextColor="#A9A9A9"
+          multiline
+          value={skills}
+          onChangeText={(text) => setSkills(text)}
+        />
       </View>
 
-      <View style={styles.logoutButtonContainer}>
-        <Button mode="outlined" onPress={handleLogout} color="#fff" style={styles.logoutButton}>
-          Logout
-        </Button>
-      </View>
-    </ScrollView>
+      <TouchableOpacity style={styles.button} onPress={saveProfile}>
+        <Text style={styles.buttonText}>Save Profile</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={logout}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
+
+      {/* Logo at the bottom */}
+      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     backgroundColor: '#23292D',
+    alignItems: 'center',
   },
-  contentContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+  profileImageContainer: {
     alignItems: 'center',
     marginBottom: 20,
   },
-  button: {
-    padding: 5,
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
-  profileHeader: {
+  profileImagePlaceholder: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#2C3840',
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
   },
-  label: {
-    color: '#fff',
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  input: {
-    marginBottom: 10,
-    padding: 8,
-    borderRadius: 4,
-    color: '#fff',
-    height: '80%',
+  profileImageText: {
+    color: '#87CEEB',
   },
   section: {
     marginBottom: 20,
+    width: '100%',
   },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  label: {
+    color: 'white',
     marginBottom: 10,
   },
-  link: {
-    color: '#61dafb',
+  input: {
+    backgroundColor: '#2C3840',
+    color: '#87CEEB',
+    padding: 10,
+    borderRadius: 5,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#2C3840',
   },
-  switchContainer: {
-    flexDirection: 'row',
+  button: {
+    backgroundColor: '#3498DB',
+    padding: 15,
+    borderRadius: 5,
     alignItems: 'center',
     marginBottom: 10,
+    width: '100%',
   },
-  switchLabel: {
-    color: '#fff',
-    flex: 1,
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
-  logoutButtonContainer: {
+  logo: {
     marginTop: 20,
-  },
-  logoutButton: {
-    borderColor: '#fff',
+    width: 200,
+    height: 35,
   },
 });
 
-export default ProfileScreen;
+export default Profile;
