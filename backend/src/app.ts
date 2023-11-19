@@ -23,7 +23,7 @@ const options = {
         description: 'Development server',
       },
       {
-        url: 'https://api.devlink.com',
+        url: 'https://api.thedevlink.com',
         description: 'Production server',
       }
     ],
