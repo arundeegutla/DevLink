@@ -1,6 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons
+import { Ionicons } from '@expo/vector-icons';
+
+const PANEL_COMMON_STYLE = {
+  backgroundColor: 'rgba(217, 217, 217, 0.65)',
+  borderRadius: 20,
+  elevation: 4,
+  padding: 10,
+  marginBottom: 20,
+  position: 'relative',
+};
 
 export default function HomePage() {
   const myProjectsScrollView = useRef(null);
@@ -25,7 +34,6 @@ export default function HomePage() {
     ref.current.scrollTo({ y: scrollY, animated: false });
   };
 
-  // Sample data for My Projects and Project Invitations
   const myProjects = [
     { id: 1, title: 'Project A', description: 'Description for Project A', status: 'In Progress' },
     { id: 2, title: 'Project B', description: 'Description for Project B', status: 'Completed' },
@@ -34,9 +42,9 @@ export default function HomePage() {
   ];
 
   const projectInvitations = [
-    { id: 1, title: 'Invitation 1', description: 'Description for Invitation 1' },
-    { id: 2, title: 'Invitation 2', description: 'Description for Invitation 2' },
-    { id: 3, title: 'Invitation 3', description: 'Description for Invitation 3' },
+    { id: 1, title: 'Invitation 1'},
+    { id: 2, title: 'Invitation 2'},
+    { id: 3, title: 'Invitation 3'},
     // Add more invitation items as needed
   ];
 
@@ -72,7 +80,7 @@ export default function HomePage() {
       <Text style={styles.sectionTitle}>My Projects</Text>
 
       {/* My Projects Panel */}
-      <View style={styles.panel}>
+      <View style={[styles.panel, { flex: 3 / 5 }, PANEL_COMMON_STYLE]}>
         {/* Tabs for project statuses */}
         <View style={styles.tabsContainer}>
           <TouchableOpacity
@@ -115,14 +123,13 @@ export default function HomePage() {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <View style={styles.scrollbar} />
       </View>
 
       {/* Title: Project Invitations */}
       <Text style={styles.sectionTitle}>Project Invitations</Text>
 
       {/* Project Invitations Panel */}
-      <View style={styles.panel}>
+      <View style={[styles.panel, { flex: 2 / 5 }, PANEL_COMMON_STYLE]}>
         <ScrollView
           contentContainerStyle={styles.panelContent}
           ref={projectInvitationsScrollView}
@@ -132,7 +139,6 @@ export default function HomePage() {
             <TouchableOpacity key={invitation.id} style={styles.invitationItem}>
               <View>
                 <Text style={styles.invitationTitle}>{invitation.title}</Text>
-                <Text style={styles.invitationDescription}>{invitation.description}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.iconButton}>
@@ -145,7 +151,6 @@ export default function HomePage() {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <View style={styles.scrollbar} />
       </View>
     </View>
   );
@@ -177,15 +182,10 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 10,
   },
-  panel: {
-    flex: 1,
-    backgroundColor: '#D9D9D9',
-    borderRadius: 8,
-    elevation: 4,
-    padding: 10,
-    marginBottom: 20,
-    position: 'relative',
-  },
+  // panel: {
+  //   flex: 1,
+  //   ...PANEL_COMMON_STYLE,
+  // },
   tabsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -207,31 +207,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#26A8D1',
-    textAlign: 'center',
     marginBottom: 10,
   },
   panelContent: {
     flexGrow: 1,
     paddingBottom: 10, // Adjusted paddingBottom
   },
-  scrollbar: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    width: 5,
-    backgroundColor: '#ccc',
-    borderRadius: 2.5,
-  },
   projectItem: {
-    marginBottom: 15,
-    padding: 10,
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
+    ...PANEL_COMMON_STYLE,
+    flex: 3 / 5,
   },
   projectTitle: {
     fontSize: 18,
@@ -243,14 +232,13 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   invitationItem: {
-    marginBottom: 15, // Adjust the spacing between each invitation
-    padding: 10,
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
-    flexDirection: 'row', // Set flexDirection to 'row' to align elements horizontally
-    justifyContent: 'space-between', // Add space between title/description and icons
-    alignItems: 'center', // Align items vertically in the center
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    ...PANEL_COMMON_STYLE,
+    flex: 2 / 5,
   },
   invitationTitle: {
     fontSize: 18,
