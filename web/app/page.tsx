@@ -26,13 +26,13 @@ const infoBlock = [
     label: 'Discover Top Talent',
     className: 'from-[#5279B7] to-[#4299DC]',
     icon: IoDiamond,
-    info: 'Connect with top-tier talent across Frontend, Backend, and Mobile roles. Elevate your projects by tapping into our vibrant community of highly skilled developers',
+    info: 'Connect with top-tier talent across a variety of development roles. Expand your projects by tapping into our vibrant community of highly skilled developers.',
   },
   {
     label: 'Real-time Collaboration',
     className: 'from-[#D4C15D] to-[#FFFDEF]',
     icon: PiPaperPlaneTiltFill,
-    info: 'Seamless collaboration with code sharing, instant messaging, and efficient teamwork across locations and time zones.',
+    info: 'Seamless collaboration with code sharing and instant messaging enables efficient teamwork across the world.',
   },
   {
     label: 'About Our Team',

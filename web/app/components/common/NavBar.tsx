@@ -82,8 +82,8 @@ export default function NavBar() {
           </div>
           {/* navlinks */}
           <div className="flex flex-col items-start mt-14 w-full p-2">
-            {navigation.map((item) => (
-              <Link href={item.href} className="w-full">
+            {navigation.map((item, index) => (
+              <Link href={item.href} key={index} className="w-full">
                 <div
                   className={`navlink ${
                     currentPath.includes(item.href)

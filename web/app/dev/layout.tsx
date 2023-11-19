@@ -6,6 +6,12 @@ import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Loading from '@components/common/Loading';
 
+/*
+  POSSIBLE FIX FOR REACT HYDRATION WARNING:
+  import dynamic from 'next/dynamic';
+  const NavBar = dynamic(() => import('@components/common/NavBar'), { ssr: false });
+*/
+
 export default function RootLayout({
   children,
 }: {

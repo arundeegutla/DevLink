@@ -25,9 +25,7 @@ export default function Profile() {
 
   return (
     <div className="w-full h-full flex flex-row items-center justify-center">
-      <div className="bg-black p-10 rounded-xl m-4 max-w-lg">
-        <h1 className="text-2xl">TODO: User Profile View</h1>
-      </div>
+      
     </div>
   );
 }
