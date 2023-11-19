@@ -1,8 +1,15 @@
 // External Components
 import Tilt from 'react-parallax-tilt';
+import InfoBlock from './InfoBlock';
 
 // Icons
-import { FaUser } from 'react-icons/fa';
+import {
+  FaUser,
+  FaPhoneAlt,
+  FaLinkedin,
+  FaGithub,
+} from 'react-icons/fa';
+import { IoMdMail } from "react-icons/io";
 
 interface UserProfile {
   isSelfProfile: boolean;
@@ -55,17 +62,12 @@ export default function UserProfile({
             <h3 className="text-2xl font-medium mt-2">ROLE / PROFILE DESCRIPTION</h3>
           </div>
         </div>
-        {
-        /*
-        TODO: change to div and include images/link accessibility for email, phone, linkedin, github 
-              remove email and phone if on other user profile
-        */
-        }
-        <div className="w-1/3 h-full flex flex-col justify-between bg-[#1f1f1f] rounded-xl p-4">
-          <h1>EMAIL</h1>
-          <h1>PHONE#</h1>
-          <h1>LINKEDIN</h1>
-          <h1>GITHUB</h1>
+        {/* Info block to hold user's information */}
+        <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
+          { isSelfProfile && <InfoBlock infoLink="put ur email here" Icon={IoMdMail}/> }
+          { isSelfProfile && <InfoBlock infoLink="put ur phone# here" Icon={FaPhoneAlt}/> }
+          <InfoBlock infoLink="put ur linkedin here" Icon={FaLinkedin}/>
+          <InfoBlock infoLink="put ur github here" Icon={FaGithub}/>
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}
