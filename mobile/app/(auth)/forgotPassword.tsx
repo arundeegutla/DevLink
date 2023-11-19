@@ -2,22 +2,51 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { errorMsg } from '../../src/firebase/authErrors';
 
-export default function ForgotPassword() {
+
+
+export default function ForgotPassword({
+  changeScreen,
+}: {
+  changeScreen: (screen: number) => void;
+}) {
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [alert, setAlert] = useState('');
   const router = useRouter();
 
-  const resetPassword = async () => {
-    // if (!email) return;
+  const updateEmail = (val: string) => {
+    setEmail(val);
+    setEmailError('');
+    setAlert('');
+  };
 
-    // try {
-    //   // Add code to send a password reset email
-    //   await auth.sendPasswordResetEmail(email);
-    //   // add a success message or navigate to a confirmation page here
-    // } catch (error) {
-    //   // Handle error, e.g., display an error message to the user
-    //   console.error('Error sending password reset email:', error.message);
-    // }
+  const validate = () => {
+    var allgood = true;
+    if (!email) {
+      setEmailError('Required');
+      allgood = false;
+    } else if (!email.includes('@') || !email.includes('.')) {
+      setEmailError('Enter valid email');
+      allgood = false;
+    }
+    return allgood;
+  };
+  const sendEmail = async () => {
+    if (!validate()) return;
+    await sendPasswordResetEmail(auth, email)
+      .then((e) => {
+        //sent
+        setAlert('Sent Reset Instructions');
+      })
+      .catch((error) => {
+        // error
+        var msg =
+          errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
+        setAlert(msg ?? 'User Not Found');
+      });
   };
 
   const navigateToLogin = () => {
@@ -37,7 +66,7 @@ export default function ForgotPassword() {
         placeholder="Enter your email"
       />
 
-      <TouchableOpacity style={styles.button} onPress={resetPassword}>
+      <TouchableOpacity style={styles.button} onPress={sendEmail}>
         <Text style={styles.buttonText}>Reset Password</Text>
       </TouchableOpacity>
 
