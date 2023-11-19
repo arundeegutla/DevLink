@@ -32,7 +32,7 @@ const infoBlock = [
     label: 'Real-time Collaboration',
     className: 'from-[#D4C15D] to-[#FFFDEF]',
     icon: PiPaperPlaneTiltFill,
-    info: 'Seamless collaboration with code sharing and instant messaging enables efficient teamwork across the world.',
+    info: 'Seamless collaboration with our code sharing and instant messaging systens enables efficient teamwork across the world.',
   },
   {
     label: 'About Our Team',

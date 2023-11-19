@@ -67,7 +67,7 @@ export default function Account() {
           {/* User names and roles */}
           <div className="flex flex-col">
             <h1 className="text-5xl font-semibold">DISPLAY NAME</h1>
-            <h3 className="text-2xl font-semibold mt-2">ROLE / PROFILE DESCRIPTION</h3>
+            <h3 className="text-2xl font-medium mt-2">ROLE / PROFILE DESCRIPTION</h3>
           </div>
         </div>
         {/* TODO: change to div and include images for email, phone, linkedin, github */}
