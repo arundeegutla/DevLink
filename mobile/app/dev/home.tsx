@@ -164,11 +164,11 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#D9D9D9',
-    marginTop: 20,
-    marginLeft: 10,
+    marginTop: 5,
+    marginLeft: 2,
   },
   header: {
     flexDirection: 'row',
@@ -182,10 +182,7 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 10,
   },
-  // panel: {
-  //   flex: 1,
-  //   ...PANEL_COMMON_STYLE,
-  // },
+
   tabsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
