@@ -6,10 +6,7 @@ import { auth } from '../../src/firebase/clientApp';
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  getAuth,
   signInWithEmailAndPassword,
-  updateProfile,
 } from 'firebase/auth';
 
 export default function LoginPage() {
@@ -17,6 +14,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
 
   const router = useRouter();
+  const googleAuth = new GoogleAuthProvider();
+
+  const loginGoogle = async () => {
+    await signInWithPopup(auth, googleAuth)
+      .then((result) => {
+        if (result.user.displayName) {
+          router.push('/dev/home');
+          return;
+        }
+      })
+      .catch((error) => {
+        router.push('/auth');
+      });
+  };
 
   const loginManually = async () => {
     if (!email || !password) return;
@@ -72,7 +83,7 @@ export default function LoginPage() {
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="github" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity style={styles.socialButton} onPress={loginGoogle}>
           <Icon name="google" size={30} color="#EA4335" />
         </TouchableOpacity>
       </View>

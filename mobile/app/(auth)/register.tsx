@@ -3,6 +3,7 @@ import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'reac
 import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { errorMsg } from '../../src/firebase/authErrors';
 
 import {
   signInWithPopup,
@@ -18,6 +19,7 @@ export default function RegistrationPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const googleAuth = new GoogleAuthProvider();
 
   const signUpManually = async () => {
     if (!email || !password) return;
@@ -28,6 +30,19 @@ export default function RegistrationPage() {
       })
       .catch(function (error: any) {
         console.log(error);
+        router.push('/auth');
+      });
+  };
+
+  const signUpGoogle = async () => {
+    await signInWithPopup(auth, googleAuth)
+      .then((result) => {
+        if (result.user.displayName) {
+          router.push('/dev/home');
+          return;
+        }
+      })
+      .catch((error) => {
         router.push('/auth');
       });
   };
@@ -67,7 +82,7 @@ export default function RegistrationPage() {
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="github" size={30} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity style={styles.socialButton} onPress={signUpGoogle}>
           <Icon name="google" size={30} color="#EA4335" />
         </TouchableOpacity>
       </View>
@@ -160,3 +175,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+
+function setAuthError(arg0: string) {
+  throw new Error('Function not implemented.');
+}
