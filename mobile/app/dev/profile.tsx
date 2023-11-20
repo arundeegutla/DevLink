@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } fro
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
+import { auth } from '../../src/firebase/clientApp';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Profile = ({ }) => {
   const router = useRouter();
@@ -13,6 +14,7 @@ const Profile = ({ }) => {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [skills, setSkills] = useState('');
   const [profileImage, setProfileImage] = useState(null);
+  const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
     // Ask for permission to access the camera roll
@@ -46,9 +48,15 @@ const Profile = ({ }) => {
   };
 
   const logout = () => {
-    // logic to handle logout
-    Alert.alert('Logout', 'You have been logged out.');
-    // navigate to the login screen
+    auth
+    .signOut()
+    .then(() => {
+      router.push('/login');
+      console.log('Logging Out');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   return (
