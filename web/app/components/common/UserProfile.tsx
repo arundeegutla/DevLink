@@ -20,12 +20,14 @@ export default function UserProfile({
   isSelfProfile,
   user,
 }: UserProfile) {
+  
   const getProfilePic = () => {
     if (!user) {
       return (
-        <FaUser className="h-36 w-full border border-[#4e4e4e] rounded-full" />
+        <FaUser className="h-36 w-36 border border-[#4e4e4e] rounded-full" />
       )
     }
+    // console.log(user.photoURL);
     return (
       <img
         src={
@@ -35,7 +37,7 @@ export default function UserProfile({
            // TODO: Get other user's profile picture - temporary placeholder
           'https://s3-symbol-logo.tradingview.com/alphabet--600.png'
         }
-        className="h-36 w-full border border-[#4e4e4e] rounded-full"
+        className="h-36 w-36 border border-[#4e4e4e] rounded-full"
         alt="Profile Picture"
       />
     )
@@ -53,7 +55,7 @@ export default function UserProfile({
             transitionSpeed={1000}
           >
             <div className="ml-2 mr-8">
-              {getProfilePic()}
+              { getProfilePic() }
             </div>
           </Tilt>
           {/* User names and roles */}
@@ -64,14 +66,15 @@ export default function UserProfile({
         </div>
         {/* Info block to hold user's information */}
         <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
-          { isSelfProfile && <InfoBlock infoLink="put ur email here" Icon={IoMdMail}/> }
-          { isSelfProfile && <InfoBlock infoLink="put ur phone# here" Icon={FaPhoneAlt}/> }
-          <InfoBlock infoLink="put ur linkedin here" Icon={FaLinkedin}/>
-          <InfoBlock infoLink="put ur github here" Icon={FaGithub}/>
+          { isSelfProfile && <InfoBlock infoLink="put ur email here" Icon={IoMdMail} /> }
+          { isSelfProfile && <InfoBlock infoLink="put ur phone# here" Icon={FaPhoneAlt} /> }
+          <InfoBlock infoLink="put ur linkedin here" Icon={FaLinkedin} />
+          <InfoBlock infoLink="put ur github here" Icon={FaGithub} />
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}
       <div className="w-full h-full flex flex-row justify-between mt-12">
+        {/* TODO: Change Posts / Projects to be a swappable tab */}
         <div className="w-2/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center mr-12 p-2">
           Posts / Projects
           <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />

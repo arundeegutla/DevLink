@@ -86,8 +86,8 @@ export default function Home() {
       </div>
       {/* Current Projects */}
       <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out">
-        {tempProjects.map((item, indx) => (
-          <ProjectCard {...item} />
+        {tempProjects.map((item, index) => (
+          <ProjectCard {...item} key={index} />
         ))}
       </div>
     </div>
