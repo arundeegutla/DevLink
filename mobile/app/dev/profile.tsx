@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
-const Profile = () => {
+
+const Profile = ({ }) => {
+  const router = useRouter();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
@@ -31,7 +35,7 @@ const Profile = () => {
       quality: 1,
     });
 
-    if (!result.cancelled && result.uri) {
+    if (!result.canceled && result.uri) {
       setProfileImage(result.uri);
     }
   };
@@ -49,6 +53,15 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          // Navigate to the home page using router.push
+          router.push('/dev/home');
+        }}
+        style={styles.homeIconContainer}
+      >
+        <Ionicons name="home" size={24} color="#FFFFFF" />
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={pickImage}
         style={styles.profileImageContainer}
@@ -130,6 +143,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#23292D',
     alignItems: 'center',
+  },
+  homeIconContainer: {
+    position: 'absolute',
+    top: 20,
+    right: 20, 
   },
   profileImageContainer: {
     alignItems: 'center',
