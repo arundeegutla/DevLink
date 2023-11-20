@@ -1,6 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { NativeSyntheticEvent } from 'react-native';
 
 const PANEL_COMMON_STYLE = {
   backgroundColor: 'rgba(217, 217, 217, 0.65)',
@@ -12,26 +20,23 @@ const PANEL_COMMON_STYLE = {
 };
 
 export default function HomePage() {
-  const myProjectsScrollView = useRef(null);
   const projectInvitationsScrollView = useRef(null);
   const [selectedTab, setSelectedTab] = useState('All');
+  const router = useRouter();
+  const myProjectsScrollView = useRef<ScrollView>(null);
 
-  const redirectToHome = () => {
-    Linking.openURL('http://localhost:8081/dev/home');
-  };
-
-  const redirectToProfile = () => {
-    Linking.openURL('http://localhost:8081/dev/profile');
-  };
-
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
     // Logic to filter and display projects based on the selected tab
   };
 
-  const handleScroll = (ref, event) => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-    ref.current.scrollTo({ y: scrollY, animated: false });
+  const handleScroll = (
+    ref: React.MutableRefObject<ScrollView> | null, event: NativeSyntheticEvent<ScrollViewScrollEvent>
+  ) => {
+    if (ref) {
+      const scrollY = event.nativeEvent.contentOffset.y;
+      ref.current?.scrollTo({ y: scrollY, animated: false });
+    }
   };
 
   const myProjects = [
@@ -42,9 +47,9 @@ export default function HomePage() {
   ];
 
   const projectInvitations = [
-    { id: 1, title: 'Invitation 1'},
-    { id: 2, title: 'Invitation 2'},
-    { id: 3, title: 'Invitation 3'},
+    { id: 1, title: 'Invitation 1' },
+    { id: 2, title: 'Invitation 2' },
+    { id: 3, title: 'Invitation 3' },
     // Add more invitation items as needed
   ];
 
@@ -67,10 +72,22 @@ export default function HomePage() {
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome Home!</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={redirectToHome}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              // Navigate to the profile creation page using router.push
+              router.push('/dev/home');
+            }}
+          >
             <Ionicons name="home" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={redirectToProfile}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              // Navigate to the profile creation page using router.push
+              router.push('/dev/profile');
+            }}
+          >
             <Ionicons name="person" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -80,33 +97,18 @@ export default function HomePage() {
       <Text style={styles.sectionTitle}>My Projects</Text>
 
       {/* My Projects Panel */}
-      <View style={[styles.panel, { flex: 3 / 5 }, PANEL_COMMON_STYLE]}>
+      <View style={{ flex: 3 / 5, ...PANEL_COMMON_STYLE }}>
         {/* Tabs for project statuses */}
         <View style={styles.tabsContainer}>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'All' && styles.selectedTab]}
-            onPress={() => handleTabChange('All')}
-          >
-            <Text style={styles.tabText}>All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'In Progress' && styles.selectedTab]}
-            onPress={() => handleTabChange('In Progress')}
-          >
-            <Text style={styles.tabText}>In Progress</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'Completed' && styles.selectedTab]}
-            onPress={() => handleTabChange('Completed')}
-          >
-            <Text style={styles.tabText}>Completed</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, selectedTab === 'Not Started' && styles.selectedTab]}
-            onPress={() => handleTabChange('Not Started')}
-          >
-            <Text style={styles.tabText}>Not Started</Text>
-          </TouchableOpacity>
+          {['All', 'In Progress', 'Completed', 'Not Started'].map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={[styles.tab, selectedTab === tab && styles.selectedTab]}
+              onPress={() => handleTabChange(tab)}
+            >
+              <Text style={styles.tabText}>{tab}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {/* Projects */}
