@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { IoMdMail } from "react-icons/io";
 
-interface UserProfile {
+export interface UserProfile {
   isSelfProfile: boolean;
   user: any
 }

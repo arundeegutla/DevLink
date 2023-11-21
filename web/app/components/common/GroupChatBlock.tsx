@@ -1,4 +1,4 @@
-interface GroupChatBlock {
+export interface GroupChatBlock {
   groupImage: string;
   groupName: string;
   lastMessage: string;

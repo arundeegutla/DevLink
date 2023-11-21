@@ -1,4 +1,4 @@
-interface InfoBlock {
+export interface InfoBlock {
   infoLink: string,
   Icon: React.ElementType
 }
