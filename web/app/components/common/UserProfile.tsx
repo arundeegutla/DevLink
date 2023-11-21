@@ -20,14 +20,13 @@ export default function UserProfile({
   isSelfProfile,
   user,
 }: UserProfile) {
-  
+
   const getProfilePic = () => {
     if (!user) {
       return (
         <FaUser className="h-36 w-36 border border-[#4e4e4e] rounded-full" />
       )
     }
-    // console.log(user.photoURL);
     return (
       <img
         src={

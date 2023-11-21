@@ -11,7 +11,7 @@ export default function GroupChatBlock({
   lastMessage,
   isSelected,
 }: GroupChatBlock) {
-
+  
   // Cuts down message to 50 chars
   const MAX_LAST_MSG_SIZE = 50;
   const getShortenedMessage = () => lastMessage.length <= MAX_LAST_MSG_SIZE ? lastMessage : (lastMessage.substring(0, MAX_LAST_MSG_SIZE - 3) + '...');

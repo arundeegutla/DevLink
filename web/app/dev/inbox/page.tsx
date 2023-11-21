@@ -38,17 +38,22 @@ export default function Inbox() {
     <div className="w-full h-full flex flex-row items-center justify-center p-4">
       {/*
         Chat selection section with:
-          - projects header
+          - projects header (FINISHED)
           - project search (maybe ?)
           - list of projects this user is apart of
             - sorted by recent messages
-          - pfp's of each project
-          - most recent message from this chat (maybe ?)
+          - pfp's of each project (FINISHED)
+          - most recent message from this chat (maybe ?) (FINISHED)
       */}
       <div className="w-1/4 h-full flex flex-col items-center bg-[#252525] p-2 border-[#747474] border-e-2 rounded-l-3xl">
+        {/* TODO: Change inbox to have both inbox and messages - inbox will handle project requests and messages will handle messages */}
         <h1 className="text-xl font-semibold">Inbox</h1>
         <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
-        {/* TODO: Add timestamp for messages ? (idk if this is possible with firebase msging) */}
+        {/*
+          TODO: Add timestamp for messages ? (idk if this is possible with firebase msging)
+                Add notification thing (blue dot next to name of project)
+                Shorten project name using ... to fit notification icon
+        */}
         <div className="flex flex-col w-full overflow-y-scroll">
           <GroupChatBlock
             groupImage={"https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781647228231/minecraft-steve-block-stationery-set-9781647228231_hr.jpg"}
@@ -114,10 +119,10 @@ export default function Inbox() {
       </div>
       {/*
         Message section with:
-          - name of project
-          - message history
-          - pfp's of senders
-          - message bar
+          - name of project (FINISHED)
+          - message history (FINISHED)
+          - pfp's of senders (FINISHED)
+          - message bar (FINISHED)
       */}
       {/* TODO: componentize this so it can be swapped out based on which group is being viewed */}
       <div className="w-3/4 h-full flex flex-col bg-[#252525] mr-4 overflow-hidden rounded-r-3xl">
@@ -137,13 +142,18 @@ export default function Inbox() {
             <BsArrowUpRight className="text-xl" />
           </div>
         </div>
-        {/* Chat body container */}
+        {/* Chat body container - contains all the messages in the chat */}
         <div className="w-full h-full flex flex-col overflow-y-scroll px-4 py-2">
           <ChatMessage messageContent={"yo what's up"} isSelfMessage={false} user={user} />
           <ChatMessage messageContent={"this is a pretty long message that should break onto the next line if it actually works properly !!! :))))))0"} isSelfMessage={true} user={user} />
           <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={true} user={user} />
+          <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={false} user={user} />
+          <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={true} user={user} />
+          <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={false} user={user} />
+          <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={true} user={user} />
+          <ChatMessage messageContent={"i still have to add profile pictures to the left of this along with the name of who sent the message. ill do that shi later"} isSelfMessage={true} user={user} />
         </div>
-        {/* Chat messager container */}
+        {/* Chat messenger container - contains the text bar where users can send messages */}
         <div className="w-full h-20 flex items-center bg-[#1f1f1f] border-[#747474] border-t-2 p-3">
           <input type="text" placeholder="Type a message..." className="w-full h-full bg-[#252525] text-stone-200 outline-none rounded-xl mr-2 p-2"></input>
           <div className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
