@@ -31,12 +31,20 @@ export default function HomePage() {
   };
 
   const handleScroll = (
-    ref: React.MutableRefObject<ScrollView> | null, event: NativeSyntheticEvent<ScrollViewScrollEvent>
+    ref: React.MutableRefObject<ScrollView> | null,
+    event: NativeSyntheticEvent<ScrollViewScrollEvent>
   ) => {
     if (ref) {
       const scrollY = event.nativeEvent.contentOffset.y;
       ref.current?.scrollTo({ y: scrollY, animated: false });
     }
+  };
+
+  // Function to open the chat for a specific project
+  const handleOpenProjectChat = (projectId: number) => {
+    // Implement logic to open the chat window for the specific project ID
+    console.log(`Opening chat for project with ID: ${projectId}`);
+    // You can add functionality here to open the chat window for the specific project
   };
 
   const myProjects = [
@@ -47,9 +55,9 @@ export default function HomePage() {
   ];
 
   const projectInvitations = [
-    { id: 1, title: 'Invitation 1' },
-    { id: 2, title: 'Invitation 2' },
-    { id: 3, title: 'Invitation 3' },
+    { id: 1, title: 'Invitation 1', description: 'Description for Project 1' },
+    { id: 2, title: 'Invitation 2', description: 'Description for Project 2' },
+    { id: 3, title: 'Invitation 3', description: 'Description for Project 3' },
     // Add more invitation items as needed
   ];
 
@@ -119,10 +127,18 @@ export default function HomePage() {
         >
           {/* Content for My Projects panel */}
           {filteredProjects.map((project) => (
-            <TouchableOpacity key={project.id} style={styles.projectItem}>
-              <Text style={styles.projectTitle}>{project.title}</Text>
-              <Text style={styles.projectDescription}>{project.description}</Text>
-            </TouchableOpacity>
+            <View key={project.id} style={styles.projectItem}>
+              <View style={styles.projectDetails}>
+                <Text style={styles.projectTitle}>{project.title}</Text>
+                <Text style={styles.projectDescription}>{project.description}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.chatBubble}
+                onPress={() => handleOpenProjectChat(project.id)} // Handle opening chat for this project
+              >
+                <Ionicons name="chatbubble-ellipses-outline" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>
@@ -138,9 +154,10 @@ export default function HomePage() {
         >
           {/* Content for Project Invitations panel */}
           {projectInvitations.map((invitation) => (
-            <TouchableOpacity key={invitation.id} style={styles.invitationItem}>
+            <View key={invitation.id} style={styles.invitationItem}>
               <View>
                 <Text style={styles.invitationTitle}>{invitation.title}</Text>
+                <Text style={styles.invitationDescription}>{invitation.description}</Text> {/* Display description */}
               </View>
               <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.iconButton}>
@@ -150,7 +167,7 @@ export default function HomePage() {
                   <Ionicons name="close-circle" size={24} color="red" />
                 </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>
@@ -184,7 +201,6 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 10,
   },
-
   tabsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -216,10 +232,20 @@ const styles = StyleSheet.create({
     paddingBottom: 10, // Adjusted paddingBottom
   },
   projectItem: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    ...PANEL_COMMON_STYLE,
-    flex: 3 / 5,
+    backgroundColor: 'rgba(217, 217, 217, 0.65)',
+    borderRadius: 20,
+    elevation: 4,
+    padding: 10,
+    marginBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Align items horizontally
+    alignItems: 'center',
+  },
+  projectDetails: {
+    flex: 1,
+  },
+  chatBubble: {
+    marginLeft: 10,
   },
   projectTitle: {
     fontSize: 18,
@@ -237,7 +263,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     ...PANEL_COMMON_STYLE,
-    flex: 2 / 5,
+    marginBottom: 20,
+    paddingHorizontal: 10, // Add horizontal padding for spacing
   },
   invitationTitle: {
     fontSize: 18,
@@ -250,8 +277,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 10,
+    alignItems: 'center', // Align icons vertically
   },
   iconButton: {
     padding: 5,
