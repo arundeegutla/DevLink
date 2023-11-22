@@ -4,7 +4,9 @@ import { StepProps } from './page';
 import { Icons } from '../models/icons';
 import Stepper from './Stepper';
 import TextField from '@components/common/TextField';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { fstorage } from '@/firebase/clientApp';
 
 export default function InfoStep({
   onNext,
@@ -27,6 +29,7 @@ export default function InfoStep({
   const [lname, setLName] = useState(lastName);
   const [lnameError, setLnameError] = useState('');
   const [imageURL, setImageURL] = useState(curUser.photoURL);
+  const [newImageData, setNewImageData] = useState<File>();
 
   const updateFname = (val: string) => {
     setFName(val);
@@ -49,14 +52,15 @@ export default function InfoStep({
     }
     if (!allgood) return;
 
+    onNext && onNext();
+
     await updateProfile(curUser, {
       displayName: fname + ' ' + lname,
-      photoURL:
-        imageURL ??
-        'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png',
+      photoURL: newImageData
+        ? await uploadImage(newImageData, curUser)
+        : imageURL ??
+          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png',
     });
-
-    onNext && onNext();
   };
 
   return (
@@ -69,6 +73,7 @@ export default function InfoStep({
 
       <div className="mt-4 flex flex-row items-center">
         <ImageUpload
+          setNewImageData={setNewImageData}
           url={
             curUser.photoURL ??
             'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
@@ -105,34 +110,58 @@ export default function InfoStep({
   );
 }
 
-const ImageUpload = ({ url }: { url: string }) => {
+const ImageUpload = ({
+  url,
+  setNewImageData,
+}: {
+  url: string;
+  setNewImageData: (file: File) => void;
+}) => {
   const [image, setImage] = useState<string>(url);
+  const inputFile = useRef<HTMLInputElement | null>(null);
+
+  const onImageClick = () => {
+    inputFile.current?.click();
+  };
 
   const handleImageChange = (event: any) => {
     const file = event.target.files?.[0];
-    if (file && file.size <= 10 * 1024 * 1024) {
+    if (file && file.size <= 1 * 1024 * 1024) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setNewImageData(file);
     } else {
-      alert('Please choose an image that is less than 10MB.');
+      alert('Please choose an image that is less than 1MB.');
     }
   };
-
   return (
     <div>
-      <div className="overflow-hidden w-44 aspect-square rounded-full mr-6">
-        <Image
-          width={0}
-          height={0}
-          className="object-contain w-full h-full"
-          src={image}
-          alt="test"
-        />
-      </div>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <Image
+        width={0}
+        height={0}
+        className="w-52 aspect-square rounded-full mr-6 object-fill border-2 cursor-pointer hover:border-4 hover:border-gray-100"
+        src={image}
+        alt="test"
+        onClick={onImageClick}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        id="file"
+        ref={inputFile}
+        style={{ display: 'none' }}
+        onChange={handleImageChange}
+      />
     </div>
   );
 };
+
+async function uploadImage(file: File, curUser: User) {
+  const fileRef = ref(fstorage, curUser.uid + '.png');
+  await uploadBytes(fileRef, file);
+  const url = await getDownloadURL(fileRef);
+  return url;
+}
