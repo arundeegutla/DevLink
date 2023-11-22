@@ -11,7 +11,7 @@ export interface ProjectCardProps {
 export default function ProjectCard(item: ProjectCardProps) {
   return (
     <div
-      className={`relative rounded-lg mr-4 mt-4 bg-[#22222253] p-2 border-l-[5px] cursor-pointer overflow-hidden w-80`}
+      className={`transition-all duration-300 ease-in-out relative rounded-lg mr-4 mt-4 bg-[#22222253] hover:bg-[#57575753] p-2 border-l-[5px] cursor-pointer overflow-hidden w-80`}
       style={{
         borderColor: `${item.color}`,
       }}>
@@ -21,9 +21,9 @@ export default function ProjectCard(item: ProjectCardProps) {
           <div className="text-lg text-gray-500">{item.role}</div>
         </div>
         <div className="flex flex-col space-y-2">
-          <div className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
+          {/* <div className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
             <BsArrowUpRight className="text-2xl" />
-          </div>
+          </div> */}
           <div className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
             <BiSolidMessageSquareDetail className="text-2xl" />
           </div>

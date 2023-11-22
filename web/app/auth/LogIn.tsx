@@ -52,15 +52,11 @@ export default function LogIn({
   };
 
   const loginGoogle = async () => {
-    await signInWithPopup(auth, googleAuth)
-      .then((result) => {
-        // signed in.
-      })
-      .catch((error) => {
-        var msg =
-          errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
-        setAuthError(msg ?? 'User Not Found');
-      });
+    await signInWithPopup(auth, googleAuth).catch((error) => {
+      var msg =
+        errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
+      setAuthError(msg ?? 'User Not Found');
+    });
   };
 
   const validate = () => {
@@ -72,7 +68,11 @@ export default function LogIn({
     if (!email) {
       setEmailError('Required');
       allgood = false;
-    } else if (!email.includes('@') || !email.includes('.')) {
+    } else if (
+      !email.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) {
       setEmailError('Enter valid email');
       allgood = false;
     }
@@ -118,10 +118,10 @@ export default function LogIn({
           Sign up here
         </span>
       </p>
-      {authError.length > 0 ? (
-        <Alert className="mx-auto max-w-[350px]">{authError}</Alert>
-      ) : (
-        ''
+      {authError.length > 0 && (
+        <Alert alertType="danger" className="mx-auto max-w-[350px]">
+          {authError}
+        </Alert>
       )}
       <div className="min-w-[350px]">
         <TextField
