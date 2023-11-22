@@ -2,6 +2,7 @@
 import { MdError } from 'react-icons/md';
 // react
 import { ChangeEvent, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface TextFieldProps {
   label: string;
@@ -13,6 +14,7 @@ interface TextFieldProps {
   autoComplete?: string;
   errorMsg?: string;
   errSwitch?: boolean;
+  val?: string;
 }
 
 export default function TextField({
@@ -20,11 +22,12 @@ export default function TextField({
   type = 'text',
   setValue,
   name = 'text',
-  className = '',
+  className,
   eye = false,
   autoComplete,
   errorMsg,
   errSwitch,
+  val,
 }: TextFieldProps) {
   const [eyeToggle, setEyeToggle] = useState(false);
 
@@ -34,11 +37,16 @@ export default function TextField({
   };
 
   return (
-    <div className={`input-group ${className}`}>
+    <div
+      className={twMerge(
+        'input-group  bg-gray-200 text-black',
+        `${className}`
+      )}>
       <input
         onChange={handleInputChange}
         type={!eye || !eyeToggle ? type : 'text'}
         name={name}
+        defaultValue={val}
         className={`${eye ? 'mr-9' : ''}`}
         autoComplete={autoComplete ?? ''}
         required

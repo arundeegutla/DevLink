@@ -7,15 +7,11 @@ import { usePathname } from 'next/navigation';
 
 // Icons
 import logo from '@images/icon-link-white.png';
-import { GoHomeFill } from 'react-icons/go';
-import { BiSearch } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
-import { LuMessageSquare } from 'react-icons/lu';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { MdSpaceDashboard } from 'react-icons/md';
 import { BiSolidMessageSquareDetail } from 'react-icons/bi';
-import { PiTerminalWindowFill } from 'react-icons/pi';
 import { MdExplore } from 'react-icons/md';
 import { IoEarthOutline } from 'react-icons/io5';
 
@@ -26,7 +22,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 const navigation = [
   { name: 'Dashboard', href: '/dev/home', icon: MdSpaceDashboard },
-  // { name: 'Projects', href: '/dev/projects', icon: PiTerminalWindowFill },
   { name: 'Messages', href: '/dev/inbox', icon: BiSolidMessageSquareDetail },
   { name: 'Explore', href: '/dev/search', icon: MdExplore },
   { name: 'Profile', href: '/dev/account', isProfile: true },
@@ -42,48 +37,32 @@ export default function NavBar() {
       .signOut()
       .then(() => {
         router.push('/');
-        console.log('going home');
       })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   };
 
-  const getProfilePic = () => {
-    if (!user) {
-      return (
-        <FaUser className="h-auto w-11 mr-2 border-2 border-[#747474] rounded-xl" />
-      );
-    }
-    return (
-      <img
-        src={
-          user.photoURL ??
-          'https://s3-symbol-logo.tradingview.com/alphabet--600.png'
-        }
-        className="h-auto w-8 border-2 border-[#4e4e4e] rounded-xl"
-        alt="test"
-      />
-    );
-  };
-
-  {
-    /* dev navbar */
-  }
   return (
     <div className="z-10 h-full p-4">
-      <div className="relative flex flex-col items-center justify-between rounded-3xl p-1 h-full border-2 bg-[#000000] border-[#747474]">
+      <div className="relative flex flex-col items-center justify-between rounded-3xl p-1 h-full border-2 bg-[#0000007a] border-[#747474]">
         <div className="flex flex-col items-center justify-between">
           {/* logo */}
           <div className="mt-5">
             <Link href="/">
-              <Image src={logo} alt="Logo" className="h-7 w-auto logo" />
+              <Image
+                width={0}
+                height={0}
+                src={logo}
+                alt="Logo"
+                className="h-7 w-auto logo"
+              />
             </Link>
           </div>
           {/* navlinks */}
           <div className="flex flex-col items-start mt-14 w-full p-2">
-            {navigation.map((item) => (
-              <Link href={item.href} className="w-full">
+            {navigation.map((item, indx) => (
+              <Link href={item.href} key={indx} className="w-full">
                 <div
                   className={`navlink ${
                     currentPath.includes(item.href)
@@ -92,7 +71,17 @@ export default function NavBar() {
                   } `}>
                   <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
                     {item.isProfile ? (
-                      getProfilePic()
+                      <Image
+                        width={0}
+                        height={0}
+                        loading="eager"
+                        src={
+                          user?.photoURL ??
+                          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
+                        }
+                        className="h-auto w-8 border-2 border-[#4e4e4e] rounded-xl"
+                        alt="test"
+                      />
                     ) : (
                       <item.icon className="text-[1.5rem]" />
                     )}

@@ -137,8 +137,7 @@ export const errorMsg = {
     "The provided tenant ID does not match the Auth instance's tenant ID",
   'user-token-expired':
     "The user's credential is no longer valid. The user must sign in again.",
-  'too-many-requests':
-    'We have blocked all requests from this device due to unusual activity. Try again later.',
+  'too-many-requests': 'Please wait and try again later.',
   'unauthorized-continue-uri':
     'The domain of the continue URL is not whitelisted.  Please whitelist the domain in the Firebase console.',
   'unsupported-first-factor':

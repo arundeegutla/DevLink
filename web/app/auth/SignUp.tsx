@@ -12,8 +12,6 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  updateProfile,
-  sendEmailVerification,
 } from 'firebase/auth';
 import { errorMsg } from '@/firebase/authErrors';
 
@@ -35,11 +33,6 @@ export default function SignUp({
 }) {
   const googleAuth = new GoogleAuthProvider();
   const router = useRouter();
-
-  const [fname, setFName] = useState('');
-  const [fnameError, setFnameError] = useState('');
-  const [lname, setLName] = useState('');
-  const [lnameError, setLnameError] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -68,14 +61,6 @@ export default function SignUp({
       if (c == '!' || c == '@' || c == '#' || c == '$') setSpecialReq(true);
     }
   };
-  const updateFname = (val: string) => {
-    setFName(val);
-    setFnameError('');
-  };
-  const updateLname = (val: string) => {
-    setLName(val);
-    setLnameError('');
-  };
 
   const signUpGoogle = async () => {
     await signInWithPopup(auth, googleAuth)
@@ -91,18 +76,14 @@ export default function SignUp({
 
   const validate = () => {
     var allgood = true;
-    if (!fname) {
-      setFnameError('Required');
-      allgood = false;
-    }
-    if (!lname) {
-      setLnameError('Required');
-      allgood = false;
-    }
     if (!email) {
       setEmailError('Required');
       allgood = false;
-    } else if (!email.includes('@') || !email.includes('.')) {
+    } else if (
+      !email.match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) {
       setEmailError('Enter valid email');
       allgood = false;
     }
@@ -118,24 +99,13 @@ export default function SignUp({
 
   const signUpManually = async () => {
     if (!validate()) return;
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async function (result) {
-        await updateProfile(result.user, {
-          displayName: fname + lname,
-          photoURL: 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
-        }).then((e) => {
-          router.push('/dev/home');
-          console.log('updated profile');
-        });
-        await sendEmailVerification(result.user)
-          .then((e) => {})
-          .catch((e) => {});
-      })
-      .catch(function (error) {
+    await createUserWithEmailAndPassword(auth, email, password).catch(
+      (error) => {
         var msg =
           errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
         setAuthError(msg ?? 'There was an error cannot sign up');
-      });
+      }
+    );
   };
 
   return (
@@ -162,34 +132,14 @@ export default function SignUp({
           Log in
         </span>
       </p>
-      {authError.length > 0 ? (
-        <Alert className="mx-auto">{authError}</Alert>
-      ) : (
-        ''
+
+      {authError && (
+        <Alert alertType="danger" className="mx-auto">
+          {authError}
+        </Alert>
       )}
 
       <div>
-        <div className="flex flex-row w-full">
-          <TextField
-            label="First Name"
-            setValue={updateFname}
-            name="fname"
-            type="fname"
-            errorMsg={fnameError}
-            className="mt-3"
-          />
-
-          <TextField
-            label="Last Name"
-            setValue={updateLname}
-            name="lname"
-            type="lname"
-            className="ml-3 mt-3"
-            errorMsg={lnameError}
-            errSwitch={true}
-          />
-        </div>
-
         <TextField
           label="Email"
           setValue={updateEmail}
