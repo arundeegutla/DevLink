@@ -10,10 +10,14 @@ import { useRouter } from 'next/navigation';
 import Loading from '@components/common/Loading';
 import { ProjectCardProps } from '@components/common/ProjectCard';
 import ProjectCard from '@components/common/ProjectCard';
+import Tilt from 'react-parallax-tilt';
 
 // auth
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
+
+// icons
+import { HiOutlinePlus } from 'react-icons/hi';
 
 const tempProjects: ProjectCardProps[] = [
   {
@@ -69,26 +73,36 @@ const tempProjects: ProjectCardProps[] = [
 export default function Home() {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
-  if (user && !user.emailVerified) {
-    router.push('/dev/verify');
-    return <Loading />;
+  if (user) {
+    if (!user.emailVerified) {
+      router.push('/create-profile');
+      return <Loading />;
+    }
   } else if (loading) {
     return <Loading />;
-  } else if (error) {
+  } else if (!user || error) {
     router.push('/');
-    console.log('no user signed in home');
     return <Loading />;
   }
+
   return (
-    <div className="w-full flex flex-col mt-4">
-      <div className="mb-4 text-4xl font-semibold text-[#cccccc]">
-        Dashboard
-      </div>
-      {/* Current Projects */}
-      <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out">
+    <div className="w-full flex flex-col mt-10 pl-3">
+      <div className="mb-4 text-4xl font-normal text-[#ffffff]">Dashboard</div>
+
+      <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out mb-11">
         {tempProjects.map((item, indx) => (
-          <ProjectCard {...item} />
+          <ProjectCard key={indx} {...item} />
         ))}
+        <Tilt
+          tiltReverse={true}
+          glareMaxOpacity={0}
+          transitionSpeed={5000}
+          className={`relative rounded-lg mr-4 mt-4 bg-[#22222253] p-2 cursor-pointer overflow-hidden w-80 hover:bg-[#2222229e] flex items-center justify-center`}>
+          <div className="relative z-10 flex flex-col items-center justify-center p-5 cursor-pointer rounded-xl">
+            <HiOutlinePlus className="text-6xl text-gray-300" />
+            <h1 className="mt-2">Add Project</h1>
+          </div>
+        </Tilt>
       </div>
     </div>
   );

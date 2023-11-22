@@ -20,6 +20,7 @@ import { PiPaperPlaneTiltFill } from 'react-icons/pi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 
 import { twMerge } from 'tailwind-merge';
+import Image from 'next/image';
 
 const infoBlock = [
   {
@@ -52,22 +53,27 @@ export default function Landing() {
   } else if (loading) {
     return <Loading />;
   } else if (error) {
-    console.log('no user signed in');
   }
 
   return (
     <>
       <main className="relative w-screen h-screen">
         <HomeBar />
-        <img
-          className="back-ground top-0 left-0"
+        <Image
+          width={0}
+          height={0}
+          style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+          className="absolute top-0 left-0"
           src="https://images.unsplash.com/photo-1656077217715-bdaeb06bd01f?q=80&w=3164&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="background"
         />
         <div className="blur-20 rounded-b-2xl bg-[#000000af] pb-3 mx-auto ">
           <div className="px-20 mb-6 w-fit transition-[2s] mx-auto text-[#fffc]">
             <h1 className="text-6xl pt-32">Connect, Collaborate and Code</h1>
             <h1 className="text-6xl mt-8">together with {} Developers</h1>
-            <Link href="/auth" className="mx-auto">
+            <Link
+              href={{ pathname: '/auth', query: { signup: true } }}
+              className="mx-auto">
               <button className="my-button flex flex-row items-center p-2 px-4 border-2 border-gray-500 rounded-lg transition-[2s] font-normal hover:bg-white hover:text-black mt-10">
                 Get Started
                 <BsArrowUpRight className="ml-2" />

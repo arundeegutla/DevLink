@@ -12,13 +12,12 @@ export default function Inbox() {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   if (user && !user.emailVerified) {
-    router.push('/dev/verify');
+    router.push('/create-profile');
     return <Loading />;
   } else if (loading) {
     return <Loading />;
   } else if (error) {
     router.push('/');
-    console.log('no user signed in home');
     return <Loading />;
   }
 
