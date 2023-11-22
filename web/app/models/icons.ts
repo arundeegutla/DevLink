@@ -80,7 +80,7 @@ export const skills: SkillType[] = [
   { name: 'HTML5', color: '#c62828', icon: Icons.HTML5 },
   { name: 'CSS3', color: '#0d47a1', icon: Icons.CSS3 },
   { name: 'Python', color: '#5e35b1', icon: Icons.Python },
-  { name: 'Java', color: '#616161', icon: Icons.Java },
+  { name: 'Java', color: '#C1691C', icon: Icons.Java },
   { name: 'Git', color: '#d32f2f', icon: Icons.Git },
   { name: 'SQL', color: '#1565c0', icon: Icons.Database },
   { name: 'Docker', color: '#0288d1', icon: Icons.Docker },
