@@ -20,10 +20,6 @@ export function VerifyStep({
   const [verified, setVerified] = useState(curUser.emailVerified);
 
   useEffect(() => {
-    sendEmail();
-  });
-
-  useEffect(() => {
     const intervalId = setInterval(async () => {
       if (!verified) {
         await curUser.reload().then(() => {
