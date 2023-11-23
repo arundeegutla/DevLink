@@ -44,16 +44,7 @@ const infoBlock = [
 ];
 
 export default function Landing() {
-  const [currentComponentIndex, setCurrentComponentIndex] = useState(0);
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
-  if (user) {
-    router.push('/dev/home');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-  }
 
   return (
     <>
@@ -63,14 +54,14 @@ export default function Landing() {
           width={0}
           height={0}
           style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
-          className="absolute top-0 left-0"
+          className="fixed top-0 left-0"
           src="https://images.unsplash.com/photo-1656077217715-bdaeb06bd01f?q=80&w=3164&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="background"
         />
         <div className="blur-20 rounded-b-2xl bg-[#000000af] pb-3 mx-auto ">
           <div className="px-20 mb-6 w-fit transition-[2s] mx-auto text-[#fffc]">
             <h1 className="text-6xl pt-32">Connect, Collaborate and Code</h1>
-            <h1 className="text-6xl mt-8">together with {} Developers</h1>
+            <h1 className="text-6xl mt-8">together with Developers</h1>
             <Link
               href={{ pathname: '/auth', query: { signup: true } }}
               className="mx-auto">

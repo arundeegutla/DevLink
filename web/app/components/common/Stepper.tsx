@@ -1,6 +1,6 @@
 import { IconType } from 'react-icons';
-import { StepProps } from './page';
-import { Icons } from '../models/icons';
+import { StepProps } from '../../create-profile/page';
+import { Icons } from '../../models/icons';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {

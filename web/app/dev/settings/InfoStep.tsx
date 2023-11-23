@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import { User, updateEmail, updateProfile } from 'firebase/auth';
 import { StepProps } from './page';
-import { Icons } from '../models/icons';
-import Stepper from '../components/common/Stepper';
 import TextField from '@components/common/TextField';
 import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
+import Stepper from '@components/common/Stepper';
 
 export default function InfoStep({
   onNext,
@@ -65,10 +64,9 @@ export default function InfoStep({
 
   return (
     <div className="flex flex-col items-center w-full">
-      <h1 className="text-3xl font-bold text-gray-300">Introduce Yourself</h1>
+      <h1 className="text-3xl font-bold text-gray-300">Update Your Profile</h1>
       <h1 className="text-md w-[40%] text-gray-500 text-center mt-3">
-        Tell us who you are and add a profile picture to personalize your
-        profile
+        Let&apos;s start by refreshing your photo and basic information.
       </h1>
 
       <div className="mt-4 flex flex-row items-center">

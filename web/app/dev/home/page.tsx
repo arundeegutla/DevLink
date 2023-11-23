@@ -18,6 +18,7 @@ import { auth } from '@/firebase/clientApp';
 
 // icons
 import { HiOutlinePlus } from 'react-icons/hi';
+import { useEffect } from 'react';
 
 const tempProjects: ProjectCardProps[] = [
   {
@@ -73,6 +74,17 @@ const tempProjects: ProjectCardProps[] = [
 export default function Home() {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+
+  // useEffect(() => {
+  //   // Function to perform a hard reload
+  //   const hardReload = () => {
+  //     window.location.reload();
+  //   };
+
+  //   // Call the hard reload function
+  //   hardReload();
+  // }, []);
+
   if (user) {
     if (!user.emailVerified) {
       router.push('/create-profile');

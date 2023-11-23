@@ -1,6 +1,5 @@
-import Head from 'next/head';
+import MobileWarning from '@components/MobileWarning';
 import './globals.css';
-import HomeBar from '@components/common/HomeBar';
 
 export const metadata = {
   title: 'DevLink',
@@ -19,7 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative">{children}</body>
+      <body className="relative">
+        <MobileWarning />
+        {children}
+      </body>
     </html>
   );
 }

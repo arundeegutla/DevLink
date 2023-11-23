@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { StepProps } from './page';
-import Stepper from './Stepper';
+import Stepper from '../components/common/Stepper';
 
 export default function ConnectServices({
   onNext,
