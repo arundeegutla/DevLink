@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function createPostRequest(user: FirebaseUser, post: {
+async function createPost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[]
@@ -31,19 +31,19 @@ async function createPostRequest(user: FirebaseUser, post: {
 }
 
 
-export function createPost(user: FirebaseUser, post: {
+export function useCeatePost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[]
 }) {
   return useQuery({
     queryKey: ["createPost"],
-    queryFn: async function () { createPostRequest(user, post) }
+    queryFn: async function () { createPost(user, post) }
   })
 }
 
 
-async function editPostRequest(user: FirebaseUser, post: {
+async function editPost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[],
@@ -71,7 +71,7 @@ async function editPostRequest(user: FirebaseUser, post: {
 }
 
 
-export function editPost(user: FirebaseUser, post: {
+export function useEditPost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[],
@@ -79,12 +79,12 @@ export function editPost(user: FirebaseUser, post: {
 }) {
   return useQuery({
     queryKey: ["editPost"],
-    queryFn: async function () { editPostRequest(user, post) }
+    queryFn: async function () { editPost(user, post) }
   })
 }
 
 
-async function deletePostRequest(user: FirebaseUser, postId: string) {
+async function deletePost(user: FirebaseUser, postId: string) {
   const config = await generateRequestConfig(user);
   
   return http.delete(
@@ -102,9 +102,9 @@ async function deletePostRequest(user: FirebaseUser, postId: string) {
 }
 
 
-export function deletePost(user: FirebaseUser, postId: string) {
+export function useDeletePost(user: FirebaseUser, postId: string) {
   return useQuery({
     queryKey: ["deletePost"],
-    queryFn: async function () { deletePostRequest(user, postId) }
+    queryFn: async function () { deletePost(user, postId) }
   })
 }

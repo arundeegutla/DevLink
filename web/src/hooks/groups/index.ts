@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function createGroupRequest(user: FirebaseUser, group: {
+async function createGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
@@ -29,18 +29,18 @@ async function createGroupRequest(user: FirebaseUser, group: {
 }
 
 
-export function createGroup(user: FirebaseUser, group: {
+export function useCreateGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
   return useQuery({
     queryKey: ["createGroup"],
-    queryFn: async function () { createGroupRequest(user, group) }
+    queryFn: async function () { createGroup(user, group) }
   })
 }
 
 
-async function editGroupRequest(user: FirebaseUser, group: {
+async function editGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
@@ -64,18 +64,18 @@ async function editGroupRequest(user: FirebaseUser, group: {
 }
 
 
-export function editGroup(user: FirebaseUser, group: {
+export function useEditGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
   return useQuery({
     queryKey: ["editGroup"],
-    queryFn: async function () { editGroupRequest(user, group) }
+    queryFn: async function () { editGroup(user, group) }
   })
 }
 
 
-async function joinGroupRequest(user: FirebaseUser, group: {
+async function joinGroup(user: FirebaseUser, group: {
   groupId: string
 }) {
   const config = await generateRequestConfig(user);
@@ -97,17 +97,17 @@ async function joinGroupRequest(user: FirebaseUser, group: {
 }
 
 
-export function joinGroup(user: FirebaseUser, group: {
+export function useJoinGroup(user: FirebaseUser, group: {
   groupId: string
 }) {
   return useQuery({
     queryKey: ["joinGroup"],
-    queryFn: async function () { joinGroupRequest(user, group) }
+    queryFn: async function () { joinGroup(user, group) }
   })
 }
 
 
-async function handleRequestRequest(user: FirebaseUser, group: {
+async function handleRequest(user: FirebaseUser, group: {
   groupId: string,
   accept: boolean,
   requestedUserId: string
@@ -133,13 +133,13 @@ async function handleRequestRequest(user: FirebaseUser, group: {
 }
 
 
-export function handleRequest(user: FirebaseUser, group: {
+export function useHandleRequest(user: FirebaseUser, group: {
   groupId: string,
   accept: boolean,
   requestedUserId: string
 }) {
   return useQuery({
     queryKey: ["handleRequest"],
-    queryFn: async function () { handleRequestRequest(user, group) }
+    queryFn: async function () { handleRequest(user, group) }
   })
 }
