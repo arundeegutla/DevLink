@@ -136,7 +136,7 @@ export default function ExploreView() {
             </div>
           </div>
           <hr className="mt-2 border-t-2 w-full border-gray-700" />
-          <div className="mt-2 flex flex-row flex-wrap items-stretch transition-all duration-500 ease-in-out">
+          <div className="mt-2 flex flex-col flex-wrap items-stretch transition-all duration-500 ease-in-out">
             {results?.map((x, indx) => (
               <PostCard key={x.title} post={x}></PostCard>
             ))}
