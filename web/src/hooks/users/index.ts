@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function searchUserRequest(user: FirebaseUser, searchQuery: string) {
+async function searchUser(user: FirebaseUser, searchQuery: string) {
   const config = await generateRequestConfig(user);
   return http.get(
     `/users/search/${encodeURIComponent(searchQuery)}`,
@@ -22,15 +22,15 @@ async function searchUserRequest(user: FirebaseUser, searchQuery: string) {
 }
 
 
-export function searchUser(user: FirebaseUser, searchQuery: string) {
+export function useSearchUser(user: FirebaseUser, searchQuery: string) {
   return useQuery({
     queryKey: ["searchUser"],
-    queryFn: async function () { searchUserRequest(user, searchQuery) }
+    queryFn: async function () { searchUser(user, searchQuery) }
   })
 }
 
 
-async function getByIdRequest(user: FirebaseUser, userId: string) {
+async function getById(user: FirebaseUser, userId: string) {
   const config = await generateRequestConfig(user);
   return http.get(
     `/users/get/${encodeURIComponent(userId)}`,
@@ -47,15 +47,15 @@ async function getByIdRequest(user: FirebaseUser, userId: string) {
 }
 
 
-export function getById(user: FirebaseUser, userId: string) {
+export function useGetById(user: FirebaseUser, userId: string) {
   return useQuery({
     queryKey: ["getById"],
-    queryFn: async function () { getByIdRequest(user, userId) }
+    queryFn: async function () { getById(user, userId) }
   })
 }
 
 
-async function createProfileRequest(user: FirebaseUser, profile: {
+async function createProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
@@ -85,7 +85,7 @@ async function createProfileRequest(user: FirebaseUser, profile: {
 }
 
 
-export function createProfile(user: FirebaseUser, profile: {
+export function useCreateProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
@@ -94,12 +94,12 @@ export function createProfile(user: FirebaseUser, profile: {
 }) {
   return useQuery({
     queryKey: ["createProfile"],
-    queryFn: async function () { createProfileRequest(user, profile) }
+    queryFn: async function () { createProfile(user, profile) }
   })
 }
 
 
-async function editProfileRequest(user: FirebaseUser, profile: {
+async function editProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
@@ -129,7 +129,7 @@ async function editProfileRequest(user: FirebaseUser, profile: {
 }
 
 
-export function editProfile(user: FirebaseUser, profile: {
+export function useEditProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
@@ -138,6 +138,6 @@ export function editProfile(user: FirebaseUser, profile: {
 }) {
   return useQuery({
     queryKey: ["editProfile"],
-    queryFn: async function () { editProfileRequest(user, profile) }
+    queryFn: async function () { editProfile(user, profile) }
   })
 }
