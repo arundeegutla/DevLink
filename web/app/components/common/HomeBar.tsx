@@ -13,8 +13,6 @@ import { twMerge } from 'tailwind-merge';
 export default function HomeBar({ className }: { className?: string }) {
   const current = usePathname();
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
-
   const signOut = () => {
     auth
       .signOut()
@@ -29,7 +27,7 @@ export default function HomeBar({ className }: { className?: string }) {
   return (
     <div
       className={twMerge(
-        `absolute z-50 flex flex-row justify-between items-center left-0 right-0 mx-auto w-[80%] max-w-screen-2xl rounded-lg p-4 max-h-max`,
+        `absolute z-40 flex flex-row justify-between items-center left-0 right-0 mx-auto w-[80%] max-w-screen-2xl rounded-lg p-4 max-h-max`,
         className
       )}>
       <Link href="/">

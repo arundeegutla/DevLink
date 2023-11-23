@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
-import { SkillType, Icons, skills } from '../models/icons';
+import { SkillType, Icons, skills } from '../../models/icons';
 import { StepProps } from './page';
 import { User } from 'firebase/auth';
-import Stepper from '../components/common/Stepper';
+import Stepper from '@components/common/Stepper';
 
 export default function SkillsStep({
   onNext,
@@ -64,10 +64,12 @@ export default function SkillsStep({
 
   return (
     <div className="flex flex-col items-center w-full">
-      <h1 className="text-3xl font-bold text-gray-300">Add Your Skills</h1>
+      <h1 className="text-3xl font-bold text-gray-300">
+        Enhance Your Skill Set
+      </h1>
       <h1 className="text-md w-[40%] text-gray-500 text-center mt-3">
         Highlight your expertise by listing the skills and technologies you
-        excel in. Let employers know what you bring to the table.
+        excel in.
       </h1>
 
       <div className="w-fit rounded-xl bg-gray-950 overflow-hidden p-2 flex flex-row items-center mt-3 text-gray-200 border-2 border-gray-500">
@@ -86,7 +88,7 @@ export default function SkillsStep({
           (x) =>
             x.name
               .toLowerCase()
-              .indexOf(getNewName(searchVal).toLowerCase()) === 0 && (
+              .includes(getNewName(searchVal).toLowerCase()) && (
               <Skill
                 key={x.name}
                 {...x}

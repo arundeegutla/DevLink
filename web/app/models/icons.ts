@@ -25,12 +25,19 @@ import {
   SiDjango,
   SiBootstrap,
   SiTailwindcss,
+  SiMongodb,
 } from 'react-icons/si';
 
 import { MdError, MdDangerous } from 'react-icons/md';
 import { GrStatusGood } from 'react-icons/gr';
 import { IconType } from 'react-icons';
-import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs';
+import {
+  BsArrowLeftCircleFill,
+  BsArrowRightCircleFill,
+  BsFillPlusCircleFill,
+} from 'react-icons/bs';
+import { HiOutlinePlus } from 'react-icons/hi2';
+import { LuSearch } from 'react-icons/lu';
 
 export type SkillType = {
   name: string;
@@ -71,6 +78,10 @@ export const Icons = {
   LeftArrowCircleFilled: BsArrowLeftCircleFill,
   RightArrowAngle: FaAngleRight,
   LeftArrowAngle: FaAngleLeft,
+  PlusCircleFille: BsFillPlusCircleFill,
+  Plus: HiOutlinePlus,
+  Search: LuSearch,
+  MongoDB: SiMongodb,
 };
 
 export const skills: SkillType[] = [
@@ -97,4 +108,5 @@ export const skills: SkillType[] = [
   { name: 'Django', color: '#004d40', icon: Icons.Django },
   { name: 'Bootstrap', color: '#4527a0', icon: Icons.Bootstrap },
   { name: 'Tailwind CSS', color: '#0097a7', icon: Icons.TailwindCSS },
+  { name: 'MongoDB', color: '#004d40', icon: Icons.MongoDB },
 ];

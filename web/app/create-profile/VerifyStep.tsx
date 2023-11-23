@@ -1,6 +1,6 @@
 import { User, sendEmailVerification } from 'firebase/auth';
 import { StepProps } from './page';
-import Stepper from './Stepper';
+import Stepper from '../components/common/Stepper';
 import { errorMsg } from '@/firebase/authErrors';
 import SubmitBtn from '@components/common/SubmitBtn';
 import { useEffect, useState } from 'react';
