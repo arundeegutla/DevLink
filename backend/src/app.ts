@@ -9,6 +9,7 @@ import { dbTest } from './services/test';
 import { authenticateJWT } from './middleware/auth';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 const options = {
   definition: {
@@ -48,6 +49,7 @@ const openapiSpecification = swaggerJsdoc(options);
 const app = express();
 
 // Set up middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
