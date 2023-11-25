@@ -9,7 +9,7 @@ Welcome to **DevLink** - where software developers unite to connect, collaborate
 3. [Challenges](#challenges)
 4. [What's Next](#whats-next)
 5. [Contributors](#contributors)
-6. [Contact](#contact)
+6. [Join DevLink](#join)
 
 ## Overview
 
@@ -61,5 +61,7 @@ Meet the dedicated individuals behind DevLink:
 - **[Micheal McGarvey](https://github.com/micpatmc)** - API
 - **[Sanya Wadhwa](https://github.com/SanyaW29)** - Mobile
 - **[Laila El Banna](https://github.com/xlaila)** - Mobile
+
+## Join
 
 [Join DevLink Now](https://thedevlink.com)
