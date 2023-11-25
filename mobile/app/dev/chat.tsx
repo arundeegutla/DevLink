@@ -2,37 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-// Simulated function to fetch messages from the backend
-async function fetchMessagesFromBackend() {
-  // Simulate fetching messages from the backend
-  return [
-    { text: 'Message 1 from backend', sender: 'user1' },
-    { text: 'Message 2 from backend', sender: 'user2' },
-  ];
-}
+// Simulated hardcoded messages for a project chat
+const hardcodedMessages = [
+  { text: 'Hello!', sender: 'user' },
+  { text: 'Hi there!', sender: 'other' },
+  // Add more hardcoded messages as needed
+];
 
-export default function Chat() {
+export default function ProjectChat() {
   const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState(hardcodedMessages);
 
-  // Simulate fetching initial messages from backend on component mount
-  useEffect(() => {
-    async function fetchInitialMessages() {
-      const initialMessages = await fetchMessagesFromBackend();
-      setChatMessages(initialMessages);
-    }
-
-    fetchInitialMessages();
-  }, []);
-
+  // Simulated function to send a message
   const sendMessage = () => {
     if (message.trim() !== '') {
-      setChatMessages([...chatMessages, { text: message, sender: 'user1' }]);
+      setChatMessages([...chatMessages, { text: message, sender: 'user' }]);
       setMessage('');
-
-      // Simulate sending the message to the backend (not actual backend integration)
-      // Replace this with actual API calls to send messages to the backend
-      
     }
   };
 
@@ -42,7 +27,7 @@ export default function Chat() {
         {chatMessages.map((chat, index) => (
           <View
             key={index}
-            style={chat.sender === 'user1' ? styles.userMessage : styles.otherMessage}
+            style={chat.sender === 'user' ? styles.userMessage : styles.otherMessage}
           >
             <Text>{chat.text}</Text>
           </View>
