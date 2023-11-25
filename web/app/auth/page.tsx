@@ -115,9 +115,11 @@ export default function AuthScreen() {
 
   const [user, loading, error] = useAuthState(auth);
   if (user) {
+    console.log('signed in as ' + user.displayName);
     router.push('/dev/home');
     return <Loading />;
   } else if (loading) {
+    console.log('loading');
     return <Loading />;
   }
 

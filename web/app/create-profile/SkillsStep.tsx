@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
-import { SkillType, Icons, skills } from '../models/icons';
+import { SkillType, Icons, skills } from '@models/icons';
 import { StepProps } from './page';
-import { User } from 'firebase/auth';
-import Stepper from '../components/common/Stepper';
+import Stepper from '@components/common/Stepper';
 
 export default function SkillsStep({
   onNext,
   onBack,
-  curUser,
-}: StepProps & { curUser: User }) {
+  retSkills,
+}: StepProps & { retSkills: Dispatch<SetStateAction<string[]>> }) {
   const [searchVal, setSearchVal] = useState('');
 
   const handleSearchChange = (event: any) => {
@@ -18,24 +17,28 @@ export default function SkillsStep({
   };
 
   let mySkills = skills;
-
-  const [selectedSkills, setSelectedSkills] = useState<SkillType[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const handleSkillClick = (selectedSkill: SkillType) => {
     setSearchVal('');
     setSelectedSkills((prevSelectedSkills) => {
       const isSkillSelected = prevSelectedSkills.some(
-        (skill) => skill.name === selectedSkill.name
+        (skill) => skill === selectedSkill.name
       );
 
       if (isSkillSelected) {
         return prevSelectedSkills.filter(
-          (skill) => skill.name !== selectedSkill.name
+          (skill) => skill !== selectedSkill.name
         );
       } else {
-        return [...prevSelectedSkills, selectedSkill];
+        return [...prevSelectedSkills, selectedSkill.name];
       }
     });
+  };
+
+  const onSubmit = () => {
+    retSkills(selectedSkills);
+    onNext && onNext();
   };
 
   const handleNewSkillClick = (newSkill: SkillType) => {
@@ -90,9 +93,7 @@ export default function SkillsStep({
               <Skill
                 key={x.name}
                 {...x}
-                isSelected={selectedSkills.some(
-                  (skill) => skill.name === x.name
-                )}
+                isSelected={selectedSkills.some((skill) => skill === x.name)}
                 onClick={() => handleSkillClick(x)}
               />
             )
@@ -114,7 +115,7 @@ export default function SkillsStep({
             </>
           )}
       </div>
-      <Stepper onNext={onNext} onBack={onBack} />
+      <Stepper onNext={onSubmit} onBack={onBack} />
     </div>
   );
 }

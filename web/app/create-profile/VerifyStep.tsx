@@ -1,29 +1,28 @@
 import { User, sendEmailVerification } from 'firebase/auth';
 import { StepProps } from './page';
-import Stepper from '../components/common/Stepper';
+import Stepper from '@components/common/Stepper';
 import { errorMsg } from '@/firebase/authErrors';
 import SubmitBtn from '@components/common/SubmitBtn';
 import { useEffect, useState } from 'react';
 import { AlertProps } from '@components/common/Alert';
 import Alert from '@components/common/Alert';
+import { useUser } from '@context/UserContext';
 
-export function VerifyStep({
-  onBack,
-  onFinish,
-  curUser,
-}: StepProps & { curUser: User }) {
+export function VerifyStep({ onBack, onFinish }: StepProps) {
+  const { fbuser } = useUser();
+
   const [emailAlert, setEmailAlert] = useState<AlertProps>({
     children: '',
     alertType: 'warning',
   });
 
-  const [verified, setVerified] = useState(curUser.emailVerified);
+  const [verified, setVerified] = useState(fbuser.emailVerified);
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
       if (!verified) {
-        await curUser.reload().then(() => {
-          setVerified(curUser.emailVerified);
+        await fbuser.reload().then(() => {
+          setVerified(fbuser.emailVerified);
         });
       } else {
         clearInterval(intervalId);
@@ -33,7 +32,7 @@ export function VerifyStep({
     return () => {
       clearInterval(intervalId);
     };
-  }, [curUser, verified]);
+  }, [fbuser, verified]);
 
   const submit = () => {
     if (!verified) {
@@ -46,7 +45,7 @@ export function VerifyStep({
     onFinish && onFinish();
   };
   const sendEmail = async () => {
-    await sendEmailVerification(curUser)
+    await sendEmailVerification(fbuser)
       .then((e) => {
         setEmailAlert({
           children: 'Sent Email Verification',
@@ -72,9 +71,7 @@ export function VerifyStep({
       </h1>
 
       <div className="w-[40%] flex flex-col items-center">
-        <p className="text-gray-400 mt-3 font-semibold">
-          {curUser.email ?? ''}
-        </p>
+        <p className="text-gray-400 mt-3 font-semibold">{fbuser.email ?? ''}</p>
 
         <div className="flex flex-row p-2 bg-slate-700 items-center rounded-lg mt-3 border-gray-500 border-2">
           <div className="mr-3 text-lg">Status</div>

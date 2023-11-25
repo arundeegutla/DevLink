@@ -142,13 +142,6 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .input-group {
-  position: relative;
-  display: flex;
-  width: 100%;
-  border-radius: 10px;
-  box-sizing: border-box;
-  border-width: 2px;
-  border-color: rgb(82, 82, 82);
 }
 
 /* .input-group:has(
@@ -191,25 +184,27 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .input-group .tooltiptext {
-  width: 120px;
+  width: fit-content;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  background-color: rgba(207, 69, 69, 0.569);
+  justify-content: space-between;
+  gap: 5px;
+  background-color: rgba(161, 66, 66, 0.569);
   color: #fff;
   text-align: center;
   border-radius: 6px;
   padding: 5px;
   position: absolute;
   z-index: 1;
-  top: 5px;
-  right: -130px;
+  right: 0px;
+  translate: 100% 20%;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
 .input-group .tooltiptext.left {
-  left: -130px;
+  left: 0px;
+  translate: -100% 20%;
 }
 
 .input-group .tooltiptext::after {

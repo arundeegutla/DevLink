@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { Icons } from '../../models/icons';
+import { Icons } from '@models/icons';
 
 export interface AlertProps {
   alertType: 'good' | 'warning' | 'danger';

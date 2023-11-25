@@ -21,9 +21,9 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 
 // components
-import TextField from '../components/common/TextField';
-import SubmitBtn from '../components/common/SubmitBtn';
-import Alert from '../components/common/Alert';
+import TextField from '@components/common/TextField';
+import SubmitBtn from '@components/common/SubmitBtn';
+import Alert from '@components/common/Alert';
 
 export default function LogIn({
   changeScreen,

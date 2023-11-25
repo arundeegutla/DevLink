@@ -9,8 +9,8 @@ const SkillsDropdown = ({
   mySkills,
   className,
 }: {
-  selectedSkills: SkillType[];
-  setSelectedSkills: Dispatch<SetStateAction<SkillType[]>>;
+  selectedSkills: string[];
+  setSelectedSkills: Dispatch<SetStateAction<string[]>>;
   mySkills: SkillType[];
   className: string;
 }) => {
@@ -27,7 +27,7 @@ const SkillsDropdown = ({
     setIsOpen(false);
     setSearchVal('');
     setSelectedSkills((skills) => {
-      return [...skills, selectedSkill];
+      return [...skills, selectedSkill.name];
     });
   };
 
@@ -101,14 +101,12 @@ const SkillsDropdown = ({
                 .toLowerCase()
                 .indexOf(getNewName(searchVal).toLowerCase()) === 0 &&
               !selectedSkills.some(
-                (skill) => skill.name.toLowerCase() === x.name.toLowerCase()
+                (skill) => skill.toLowerCase() === x.name.toLowerCase()
               ) && (
                 <Skill
                   key={x.name}
                   {...x}
-                  isSelected={selectedSkills.some(
-                    (skill) => skill.name === x.name
-                  )}
+                  isSelected={selectedSkills.some((skill) => skill === x.name)}
                   onClick={() => handleSkillClick(x)}
                   className="border-t-2 border-gray-600 rounded-none mx-0 my-0 backdrop-blur-2xl bg-opacity-75"
                 />

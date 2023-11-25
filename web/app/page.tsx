@@ -1,16 +1,9 @@
 'use client';
-// firebase
-import { auth } from '@/firebase/clientApp';
-
 // react
-import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // components.
 import HomeBar from '@components/common/HomeBar';
-import Loading from '@components/common/Loading';
 import Tilt from 'react-parallax-tilt';
 
 // icons
@@ -44,8 +37,6 @@ const infoBlock = [
 ];
 
 export default function Landing() {
-  const router = useRouter();
-
   return (
     <>
       <main className="relative w-screen h-screen">

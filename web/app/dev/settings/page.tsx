@@ -10,6 +10,8 @@ import InfoStep from './InfoStep';
 import SkillsStep from './SkillsStep';
 import ChangeServices from './ChangeServices';
 import ProgressBar from '@components/common/ProgressBar';
+import { useUser } from '@context/UserContext';
+import { editProfile } from '@/hooks/users';
 
 export interface StepProps {
   onNext?: () => void;
@@ -17,14 +19,50 @@ export interface StepProps {
   onFinish?: () => void;
 }
 
-export default function CreateProfilePage() {
+export default function SettingsPage() {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
-  const [currentStep, setCurrentStep] = useState(0);
+  const { fbuser, user, refetchUser } = useUser();
 
-  const handleFinish = () => {
-    router.push('/dev/home');
+  const [currentStep, setCurrentStep] = useState(0);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [phone, setPhone] = useState<string>('');
+  const [github, setGithub] = useState<string>('');
+  const [linkedin, setLinkedin] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
+  let displayName = fbuser.displayName ?? '';
+  const nameArray = displayName.split(' ');
+  let firstName = '';
+  let lastName = '';
+  if (nameArray.length === 1) {
+    firstName = nameArray[0];
+  } else if (nameArray.length >= 2) {
+    firstName = nameArray.shift() ?? '';
+    lastName = nameArray.join(' ') ?? '';
+  }
+
+  const handleFinish = async () => {
+    setLoading(true);
+    await editProfile(fbuser, {
+      email: fbuser.email ?? '',
+      github,
+      skills,
+      firstName,
+      lastName,
+    })
+      .then((completed) => {
+        if (completed) {
+          refetchUser();
+          router.push('/dev/home');
+        } else {
+          console.log('there was an error creating profile');
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+
   const handleNextStep = () => {
     setCurrentStep((prevStep) => Math.min(steps.length - 1, prevStep + 1));
   };
@@ -32,26 +70,20 @@ export default function CreateProfilePage() {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
   };
 
-  if (user) {
-  } else if (loading) {
-    return <Loading />;
-  } else if (!user || error) {
-    router.push('/');
-    return <Loading />;
-  }
-
   const steps = [
-    <InfoStep onNext={handleNextStep} curUser={user} key={'info-step'} />,
+    <InfoStep onNext={handleNextStep} key={'info-step'} />,
     <SkillsStep
+      retSkills={setSkills}
       onNext={handleNextStep}
       onBack={handleBackStep}
-      curUser={user}
       key={'skills-step'}
     />,
     <ChangeServices
+      setGithubPar={setGithub}
+      setLinkedinPar={setLinkedin}
+      setPhonePar={setPhone}
       onFinish={handleFinish}
       onBack={handleBackStep}
-      curUser={user}
       key={'service-step'}
     />,
   ];
