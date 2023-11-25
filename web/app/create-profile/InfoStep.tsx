@@ -1,19 +1,17 @@
 import Image from 'next/image';
 import { User, updateEmail, updateProfile } from 'firebase/auth';
 import { StepProps } from './page';
-import { Icons } from '../models/icons';
-import Stepper from '../components/common/Stepper';
+import Stepper from '@components/common/Stepper';
 import TextField from '@components/common/TextField';
 import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
+import { useUser } from '@context/UserContext';
 
-export default function InfoStep({
-  onNext,
-  onBack,
-  curUser,
-}: StepProps & { curUser: User }) {
-  let displayName = curUser.displayName ?? '';
+export default function InfoStep({ onNext, onBack }: StepProps) {
+  const { fbuser } = useUser();
+
+  let displayName = fbuser.displayName ?? '';
   const nameArray = displayName.split(' ');
   let firstName = '';
   let lastName = '';
@@ -28,7 +26,7 @@ export default function InfoStep({
   const [fnameError, setFnameError] = useState('');
   const [lname, setLName] = useState(lastName);
   const [lnameError, setLnameError] = useState('');
-  const [imageURL, setImageURL] = useState(curUser.photoURL);
+  const [imageURL, setImageURL] = useState(fbuser.photoURL);
   const [newImageData, setNewImageData] = useState<File>();
 
   const updateFname = (val: string) => {
@@ -54,10 +52,10 @@ export default function InfoStep({
 
     onNext && onNext();
 
-    await updateProfile(curUser, {
+    await updateProfile(fbuser, {
       displayName: fname + ' ' + lname,
       photoURL: newImageData
-        ? await uploadImage(newImageData, curUser)
+        ? await uploadImage(newImageData, fbuser)
         : imageURL ??
           'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png',
     });
@@ -75,7 +73,7 @@ export default function InfoStep({
         <ImageUpload
           setNewImageData={setNewImageData}
           url={
-            curUser.photoURL ??
+            fbuser.photoURL ??
             'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
           }
         />
@@ -159,8 +157,8 @@ const ImageUpload = ({
   );
 };
 
-async function uploadImage(file: File, curUser: User) {
-  const fileRef = ref(fstorage, curUser.uid + '.png');
+async function uploadImage(file: File, fbuser: User) {
+  const fileRef = ref(fstorage, fbuser.uid + '.png');
   await uploadBytes(fileRef, file);
   const url = await getDownloadURL(fileRef);
   return url;

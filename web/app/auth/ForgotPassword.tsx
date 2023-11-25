@@ -11,9 +11,9 @@ import { errorMsg } from '@/firebase/authErrors';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 // components
-import TextField from '../components/common/TextField';
-import SubmitBtn from '../components/common/SubmitBtn';
-import Alert from '../components/common/Alert';
+import TextField from '@components/common/TextField';
+import SubmitBtn from '@components/common/SubmitBtn';
+import Alert from '@components/common/Alert';
 
 export default function ForgotPassword({
   changeScreen,

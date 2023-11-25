@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { twMerge } from 'tailwind-merge';
-import { SkillType, Icons, skills } from '../models/icons';
+import { SkillType, Icons, skills } from '@models/icons';
 import { StepProps } from './page';
-import { User } from 'firebase/auth';
-import Stepper from '../components/common/Stepper';
+import Stepper from '@components/common/Stepper';
+import { useUser } from '@context/UserContext';
 
-export default function SkillsStep({
-  onNext,
-  onBack,
-  curUser,
-}: StepProps & { curUser: User }) {
+export default function SkillsStep({ onNext, onBack }: StepProps) {
+  const { fbuser } = useUser();
+
   const [searchVal, setSearchVal] = useState('');
 
   const handleSearchChange = (event: any) => {

@@ -18,7 +18,7 @@ import { IoEarthOutline } from 'react-icons/io5';
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useUser } from '@context/UserContext';
 
 const navigation = [
   { name: 'Dashboard', href: '/dev/home', icon: MdSpaceDashboard },
@@ -28,9 +28,9 @@ const navigation = [
 ];
 
 export default function NavBar() {
+  const { fbuser } = useUser();
   const currentPath = usePathname();
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
 
   const signOut = () => {
     auth
@@ -49,7 +49,7 @@ export default function NavBar() {
         <div className="flex flex-col items-stretch justify-between h-full">
           {/* logo */}
           <div className="mt-5 mx-auto">
-            <Link href="/">
+            <Link href="/dev/home">
               <Image
                 width={0}
                 height={0}
@@ -76,7 +76,7 @@ export default function NavBar() {
                         height={0}
                         loading="eager"
                         src={
-                          user?.photoURL ??
+                          fbuser.photoURL ??
                           'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
                         }
                         className="aspect-square w-8 border-2 border-[#4e4e4e] rounded-xl"

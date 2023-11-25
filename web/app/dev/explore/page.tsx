@@ -15,10 +15,11 @@ import { useEffect, useRef, useState } from 'react';
 import PostCard from '@components/common/PostCard';
 import SkillsDropdown from './SkillsDropdown';
 import Skill from './Skill';
+import { useUser } from '@context/UserContext';
 
 export default function ExploreView() {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
+  const { fbuser } = useUser();
   const [results, setResults] = useState<Post[]>();
   const [searchVal, setSearchVal] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -53,16 +54,6 @@ export default function ExploreView() {
     };
     handleResultsChange();
   }, [posts, searchVal, selectedSkills]);
-
-  if (user && !user.emailVerified) {
-    router.push('/create-profile');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-    router.push('/');
-    return <Loading />;
-  }
 
   const handleSkillClick = (selectedSkill: SkillType) => {
     setSelectedSkills((skills) => {
@@ -132,7 +123,7 @@ export default function ExploreView() {
               {results?.length ?? 0}
             </div>
             <div className="text-md text-gray-200">
-              result{(results?.length || 0) >= 2 && 's'} found
+              result{(results?.length || 0) != 1 && 's'} found
             </div>
           </div>
           <hr className="mt-2 border-t-2 w-full border-gray-700" />

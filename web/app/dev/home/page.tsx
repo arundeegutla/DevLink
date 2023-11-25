@@ -17,8 +17,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 
 // icons
-import { HiOutlinePlus } from 'react-icons/hi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Icons } from '@models/icons';
+import { User } from 'firebase/auth';
+import { getUserById } from '@/hooks/users';
+import * as models from '@/hooks/models';
+import { useUser } from '@context/UserContext';
 
 const tempProjects: ProjectCardProps[] = [
   {
@@ -73,30 +77,10 @@ const tempProjects: ProjectCardProps[] = [
 
 export default function Home() {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
+  const { fbuser } = useUser();
+  const [user, setUser] = useState<models.User>();
 
-  // useEffect(() => {
-  //   // Function to perform a hard reload
-  //   const hardReload = () => {
-  //     window.location.reload();
-  //   };
-
-  //   // Call the hard reload function
-  //   hardReload();
-  // }, []);
-
-  if (user) {
-    if (!user.emailVerified) {
-      router.push('/create-profile');
-      return <Loading />;
-    }
-  } else if (loading) {
-    return <Loading />;
-  } else if (!user || error) {
-    router.push('/');
-    return <Loading />;
-  }
-
+  console.log('Logged in as: ' + fbuser.displayName);
   return (
     <div className="w-full flex flex-col mt-10 pl-3">
       <div className="mb-4 text-4xl font-normal text-[#ffffff]">Dashboard</div>
@@ -111,7 +95,7 @@ export default function Home() {
           transitionSpeed={5000}
           className={`relative rounded-lg mr-4 mt-4 bg-[#22222253] p-2 cursor-pointer overflow-hidden w-80 hover:bg-[#2222229e] flex items-center justify-center`}>
           <div className="relative z-10 flex flex-col items-center justify-center p-5 cursor-pointer rounded-xl">
-            <HiOutlinePlus className="text-6xl text-gray-300" />
+            <Icons.Plus className="text-6xl text-gray-300" />
             <h1 className="mt-2">Add Project</h1>
           </div>
         </Tilt>

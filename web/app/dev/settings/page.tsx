@@ -10,6 +10,7 @@ import InfoStep from './InfoStep';
 import SkillsStep from './SkillsStep';
 import ChangeServices from './ChangeServices';
 import ProgressBar from '@components/common/ProgressBar';
+import { useUser } from '@context/UserContext';
 
 export interface StepProps {
   onNext?: () => void;
@@ -19,7 +20,8 @@ export interface StepProps {
 
 export default function CreateProfilePage() {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
+  const { fbuser } = useUser();
+
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleFinish = () => {
@@ -32,26 +34,16 @@ export default function CreateProfilePage() {
     setCurrentStep((prevStep) => Math.max(0, prevStep - 1));
   };
 
-  if (user) {
-  } else if (loading) {
-    return <Loading />;
-  } else if (!user || error) {
-    router.push('/');
-    return <Loading />;
-  }
-
   const steps = [
-    <InfoStep onNext={handleNextStep} curUser={user} key={'info-step'} />,
+    <InfoStep onNext={handleNextStep} key={'info-step'} />,
     <SkillsStep
       onNext={handleNextStep}
       onBack={handleBackStep}
-      curUser={user}
       key={'skills-step'}
     />,
     <ChangeServices
       onFinish={handleFinish}
       onBack={handleBackStep}
-      curUser={user}
       key={'service-step'}
     />,
   ];

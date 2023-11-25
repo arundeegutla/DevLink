@@ -4,24 +4,12 @@
  * even if it a valid project ID, it will show 404 error.
  */
 
-import { auth } from '@/firebase/clientApp';
-import Loading from '@components/common/Loading';
+import { useUser } from '@context/UserContext';
 import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function ProjectView() {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
-  if (user && !user.emailVerified) {
-    router.push('/create-profile');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-    router.push('/');
-
-    return <Loading />;
-  }
+  const { fbuser } = useUser();
 
   return (
     <div className="w-full h-full flex flex-row items-center justify-center">
