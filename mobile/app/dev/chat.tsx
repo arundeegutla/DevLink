@@ -1,36 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 
-export default function GroupChat() {
+// Simulated function to fetch messages from the backend
+async function fetchMessagesFromBackend() {
+  // Simulate fetching messages from the backend
+  return [
+    { text: 'Message 1 from backend', sender: 'user1' },
+    { text: 'Message 2 from backend', sender: 'user2' },
+  ];
+}
+
+export default function Chat() {
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
-  const navigation = useNavigation();
+
+  // Simulate fetching initial messages from backend on component mount
+  useEffect(() => {
+    async function fetchInitialMessages() {
+      const initialMessages = await fetchMessagesFromBackend();
+      setChatMessages(initialMessages);
+    }
+
+    fetchInitialMessages();
+  }, []);
 
   const sendMessage = () => {
     if (message.trim() !== '') {
-      setChatMessages([...chatMessages, { text: message, sender: 'user' }]);
+      setChatMessages([...chatMessages, { text: message, sender: 'user1' }]);
       setMessage('');
-    }
-  };
 
-  const navigateToHomePage = () => {
-    // Redirect to http://localhost:8081/dev/home
-    window.location.href = 'http://localhost:8081/dev/home';
+      // Simulate sending the message to the backend (not actual backend integration)
+      // Replace this with actual API calls to send messages to the backend
+      
+    }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={navigateToHomePage}>
-        <FontAwesome name="arrow-left" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-
       <ScrollView contentContainerStyle={styles.chatContent}>
         {chatMessages.map((chat, index) => (
           <View
             key={index}
-            style={chat.sender === 'user' ? styles.userMessage : styles.otherMessage}
+            style={chat.sender === 'user1' ? styles.userMessage : styles.otherMessage}
           >
             <Text>{chat.text}</Text>
           </View>
@@ -56,9 +68,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#23292D',
-    padding: 10,
-  },
-  backButton: {
     padding: 10,
   },
   chatContent: {

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { NativeSyntheticEvent } from 'react-native';
 
 const PANEL_COMMON_STYLE = {
@@ -22,6 +23,7 @@ const PANEL_COMMON_STYLE = {
 export default function HomePage() {
   const projectInvitationsScrollView = useRef(null);
   const [selectedTab, setSelectedTab] = useState('All');
+  const navigation = useNavigation();
   const router = useRouter();
   const myProjectsScrollView = useRef<ScrollView>(null);
 
@@ -41,7 +43,7 @@ export default function HomePage() {
   };
 
   // Function to open the chat for a specific project
-  const handleOpenProjectChat = (projectId: number) => {
+  const handleOpenChat = (projectId: number) => {
     // Implement logic to open the chat window for the specific project ID
     console.log(`Opening chat for project with ID: ${projectId}`);
     // You can add functionality here to open the chat window for the specific project
@@ -73,6 +75,29 @@ export default function HomePage() {
     }
     return false;
   });
+
+  // Function to render each project item with a chat icon
+  const renderProjectItem = (project) => {
+    const handleOpenChat = (projectId) => {
+      console.log(`Opening chat for project with ID: ${projectId}`);
+      navigation.navigate('Chat', { projectId });
+    };
+
+    return (
+      <View key={project.id} style={styles.projectItem}>
+        <View style={styles.projectDetails}>
+          <Text style={styles.projectTitle}>{project.title}</Text>
+          <Text style={styles.projectDescription}>{project.description}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.chatBubble}
+          onPress={() => handleOpenChat(project.id)}
+        >
+          <Ionicons name="chatbubble-ellipses-outline" size={24} color="#333" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -134,7 +159,7 @@ export default function HomePage() {
               </View>
               <TouchableOpacity
                 style={styles.chatBubble}
-                onPress={() => handleOpenProjectChat(project.id)} // Handle opening chat for this project
+                onPress={() => handleOpenChat(project.id)} // Handle opening chat for this project
               >
                 <Ionicons name="chatbubble-ellipses-outline" size={24} color="#333" />
               </TouchableOpacity>
