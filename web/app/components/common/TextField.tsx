@@ -14,7 +14,8 @@ interface TextFieldProps {
   autoComplete?: string;
   errorMsg?: string;
   errSwitch?: boolean;
-  val?: string;
+  defaultValue?: string;
+  value?: string;
 }
 
 export default function TextField({
@@ -27,11 +28,12 @@ export default function TextField({
   autoComplete,
   errorMsg,
   errSwitch,
-  val,
+  defaultValue,
+  value,
 }: TextFieldProps) {
   const [eyeToggle, setEyeToggle] = useState(false);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: any) => {
     const newValue = event.target.value;
     setValue(newValue);
   };
@@ -39,16 +41,17 @@ export default function TextField({
   return (
     <div
       className={twMerge(
-        'input-group  bg-gray-200 text-black',
+        'input-group relative flex w-full rounded-[10px] box-border border-2 border-[#525252] bg-gray-200 text-black',
         `${className}`
       )}>
       <input
         onChange={handleInputChange}
         type={!eye || !eyeToggle ? type : 'text'}
         name={name}
-        defaultValue={val}
+        defaultValue={defaultValue}
         className={`${eye ? 'mr-9' : ''}`}
         autoComplete={autoComplete ?? ''}
+        value={value}
         required
       />
       <label>{label}</label>

@@ -19,11 +19,13 @@ import { useUser } from '@context/UserContext';
 
 export default function ExploreView() {
   const router = useRouter();
-  const { fbuser } = useUser();
+  const { fbuser, user } = useUser();
   const [results, setResults] = useState<Post[]>();
   const [searchVal, setSearchVal] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const [selectedSkills, setSelectedSkills] = useState<SkillType[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(
+    user?.skills ?? []
+  );
   let posts = samplePosts;
   let mySkills = skills;
 
@@ -45,8 +47,8 @@ export default function ExploreView() {
           ) {
             return false;
           }
-          let has = selectedSkills.every((skill) => {
-            return post.skillsWanted.includes(skill.name);
+          let has = selectedSkills.some((skill) => {
+            return post.skillsWanted.includes(skill);
           });
           return has;
         });
@@ -57,13 +59,17 @@ export default function ExploreView() {
 
   const handleSkillClick = (selectedSkill: SkillType) => {
     setSelectedSkills((skills) => {
-      return skills.filter((skill) => skill.name !== selectedSkill.name);
+      return skills.filter((skill) => skill !== selectedSkill.name);
     });
   };
 
   const handleSearchClick = () => {
     inputRef.current?.blur();
     setSearchVal(inputRef.current?.value ?? '');
+  };
+
+  const resetSkills = () => {
+    setSelectedSkills(user?.skills ?? []);
   };
 
   return (
@@ -90,27 +96,37 @@ export default function ExploreView() {
           </div>
           <div className="relative">
             <SkillsDropdown
-              className="absolute z-20 top-0"
+              className="absolute z-20 top-0 select-none"
               mySkills={mySkills}
               selectedSkills={selectedSkills}
               setSelectedSkills={setSelectedSkills}
             />
             <div className="pt-16 flex flex-row flex-wrap items-start w-60">
-              {selectedSkills.length ? (
-                selectedSkills.map((x) => (
-                  <Skill
-                    key={x.name}
-                    {...x}
-                    isSelected={selectedSkills.some(
-                      (skill) => skill.name === x.name
-                    )}
-                    onClick={() => handleSkillClick(x)}
-                    shouldHover={false}
-                  />
-                ))
+              {selectedSkills.length !== 0 ? (
+                mySkills.map((x) => {
+                  return !selectedSkills.some((skill) => skill == x.name) ? (
+                    ''
+                  ) : (
+                    <Skill
+                      key={x.name}
+                      {...x}
+                      isSelected={true}
+                      onClick={() => handleSkillClick(x)}
+                      shouldHover={false}
+                    />
+                  );
+                })
               ) : (
                 <div className="text-gray-500 p-2">
-                  Add Skills to refine search
+                  {user!.skills.length > 0 ? (
+                    <div
+                      onClick={resetSkills}
+                      className="mt-4 px-5 py-2 rounded-full bg-gray-900 text-gray-200 cursor-pointer hover:bg-gray-700 border-gray-700 border-2">
+                      Add My Skills
+                    </div>
+                  ) : (
+                    'Add Skills to refine search'
+                  )}
                 </div>
               )}
             </div>

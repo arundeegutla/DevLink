@@ -9,21 +9,16 @@ import { usePathname } from 'next/navigation';
 import logo from '@images/icon-link-white.png';
 import { FaUser } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
-import { IoSettingsSharp } from 'react-icons/io5';
-import { MdSpaceDashboard } from 'react-icons/md';
-import { BiSolidMessageSquareDetail } from 'react-icons/bi';
-import { MdExplore } from 'react-icons/md';
-import { IoEarthOutline } from 'react-icons/io5';
-
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@context/UserContext';
+import { Icons } from '@/models/icons';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dev/home', icon: MdSpaceDashboard },
-  { name: 'Messages', href: '/dev/inbox', icon: BiSolidMessageSquareDetail },
-  { name: 'Explore', href: '/dev/explore', icon: MdExplore },
+  { name: 'Dashboard', href: '/dev/home', icon: Icons.DashBoard },
+  { name: 'Messages', href: '/dev/inbox', icon: Icons.Message },
+  { name: 'Explore', href: '/dev/explore', icon: Icons.Explore },
   { name: 'Profile', href: '/dev/account', isProfile: true },
 ];
 
@@ -101,7 +96,7 @@ export default function NavBar() {
                   : 'text-[#adadad]'
               } `}>
               <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
-                <IoEarthOutline className="text-[1.5rem]" />
+                <Icons.Earth className="text-[1.5rem]" />
               </div>
               Feedback
             </div>
@@ -114,7 +109,7 @@ export default function NavBar() {
                     : 'text-[#adadad]'
                 } `}>
                 <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
-                  <IoSettingsSharp className="text-[1.5rem]" />
+                  <Icons.Settings className="text-[1.5rem]" />
                 </div>
                 Settings
               </div>

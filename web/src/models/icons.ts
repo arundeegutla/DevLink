@@ -1,4 +1,11 @@
-import { FaUser, FaHeart, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import {
+  FaUser,
+  FaHeart,
+  FaAngleLeft,
+  FaAngleRight,
+  FaGithub,
+  FaLinkedin,
+} from 'react-icons/fa';
 import {
   FaJsSquare,
   FaReact,
@@ -28,16 +35,24 @@ import {
   SiMongodb,
 } from 'react-icons/si';
 
-import { MdError, MdDangerous } from 'react-icons/md';
+import {
+  MdError,
+  MdDangerous,
+  MdExplore,
+  MdSpaceDashboard,
+} from 'react-icons/md';
 import { GrStatusGood } from 'react-icons/gr';
 import { IconType } from 'react-icons';
 import {
   BsArrowLeftCircleFill,
   BsArrowRightCircleFill,
   BsFillPlusCircleFill,
+  BsTelephoneFill,
 } from 'react-icons/bs';
 import { HiOutlinePlus } from 'react-icons/hi2';
 import { LuSearch } from 'react-icons/lu';
+import { BiSolidMessageSquareDetail } from 'react-icons/bi';
+import { IoEarthOutline, IoSettingsSharp } from 'react-icons/io5';
 
 export type SkillType = {
   name: string;
@@ -82,6 +97,14 @@ export const Icons = {
   Plus: HiOutlinePlus,
   Search: LuSearch,
   MongoDB: SiMongodb,
+  Phone: BsTelephoneFill,
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedin,
+  DashBoard: MdSpaceDashboard,
+  Message: BiSolidMessageSquareDetail,
+  Explore: MdExplore,
+  Earth: IoEarthOutline,
+  Settings: IoSettingsSharp,
 };
 
 export const skills: SkillType[] = [

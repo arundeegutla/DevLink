@@ -8,6 +8,7 @@ export interface ProjectCardProps {
   color: string;
   role: string;
 }
+
 export default function ProjectCard(item: ProjectCardProps) {
   return (
     <div

@@ -88,7 +88,7 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             errorMsg={fnameError}
             className="mt-3 bg-gray-800 text-gray-300"
             errSwitch={true}
-            val={fname}
+            defaultValue={fname}
           />
           <TextField
             label="Last Name"
@@ -98,7 +98,7 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             autoComplete="lname"
             errorMsg={lnameError}
             className="mt-3 bg-gray-800 text-gray-300"
-            val={lname}
+            defaultValue={lname}
             errSwitch={true}
           />
         </div>

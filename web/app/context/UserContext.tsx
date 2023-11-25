@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useEffect,
   useState,
+  useCallback,
 } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
@@ -15,6 +16,8 @@ import * as models from '@/hooks/models';
 
 interface UserContextProps {
   fbuser: User;
+  user?: models.User;
+  refetchUser: () => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -24,21 +27,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [fbuser, authLoading, error] = useAuthState(auth);
   const [user, setUser] = useState<models.User>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const refetchUser = useCallback(async () => {
+    setLoading(true);
+    if (fbuser) {
+      setUser(
+        await getUserById(fbuser, fbuser.uid).finally(() => setLoading(false))
+      );
+    }
+  }, [fbuser]);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (fbuser) {
-        setUser(
-          await getUserById(fbuser, fbuser.uid).catch(() => {
-            return undefined;
-          })
-        );
-      }
-    };
-    setLoading(true);
-    fetchUser().finally(() => setLoading(false));
-  }, [fbuser]);
+    refetchUser();
+  }, [refetchUser]);
 
   if (authLoading || loading) {
     return <Loading />;
@@ -51,14 +53,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ fbuser }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ fbuser, user, refetchUser }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error('useUser must be used within a UserProvider - ask arun');
   }
   return context;
 };

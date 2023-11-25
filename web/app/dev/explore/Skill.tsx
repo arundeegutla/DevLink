@@ -31,7 +31,7 @@ const Skill = ({
   return (
     <div
       className={twMerge(
-        `animated animatedFadeInUp fadeInUp p-3 mx-1 my-1 flex flex-row items-center cursor-pointer transition-all duration-500 ease-in-out bg-gray-800 text-gray-400 rounded-md`,
+        `animated animatedFadeInUp fadeInUp p-3 mx-1 my-1 flex flex-row items-center cursor-pointer transition-all duration-500 ease-in-out bg-gray-800 text-gray-400 rounded-md select-none`,
         className
       )}
       style={{
