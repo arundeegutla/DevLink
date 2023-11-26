@@ -15,28 +15,12 @@ import {
 } from 'react-icons/bs';
 
 // Auth
-import { auth } from '@/firebase/clientApp';
 import { useUser } from '@context/UserContext';
 import { useRouter } from 'next/navigation';
 
 export default function Inbox() {
   const router = useRouter();
-
-  const [user, loading, error] = useAuthState(auth);
-
-  if (user && !user.emailVerified) {
-    router.push('/dev/verify');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-    router.push('/');
-    console.log('no user signed in home');
-    return <Loading />;
-  }
-  
-  // WE WILL USE THIS SOON ON THIS PAGE, NEED TO REPLACE INSTANCES OF user WITH fbuser
-  // const { fbuser } = useUser();
+  const {fbuser, user} = useUser();
 
   return (
     <div className="w-full h-full flex flex-row items-center justify-center p-4">
@@ -94,26 +78,26 @@ export default function Inbox() {
           </div>
         </div>
         {/* Chat body container - contains all the messages in the chat */}
-        <div className="w-full h-full flex flex-col overflow-y-scroll px-4 py-2">
-          <ChatMessage messageContent={"Hey, how's it going?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Not too bad, just busy with work."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"I totally get that. Anything exciting happening?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Well, I'm planning a trip for next month. Super excited about it!"} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"That sounds amazing! Where are you planning to go?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"I'm thinking about exploring Europe, maybe visit Italy and France."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Wow, that's a dream vacation! What places are you most excited about?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Definitely looking forward to the art and history in Florence, and of course, the Eiffel Tower in Paris."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Sounds incredible! Don't forget to try the local cuisine, it's always a highlight."} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Absolutely, I'm a foodie, so trying new dishes is a must for me."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Speaking of food, have you tried the new restaurant downtown?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Not yet, is it any good?"} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"It's fantastic! We should plan a dinner there sometime."} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Sure, that sounds like a plan. I'll check it out soon and let you know."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Great! Looking forward to it. By the way, did you catch the latest movie?"} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Not yet, but I heard it's really good. Planning to watch it this weekend."} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Nice! Let me know how it is. We can compare notes."} isOwnMessage={true} user={user} />
-          <ChatMessage messageContent={"Will do! Anyway, I've got to run. Talk to you later?"} isOwnMessage={false} user={user} />
-          <ChatMessage messageContent={"Sure thing! Take care and catch up with you soon."} isOwnMessage={true} user={user} />
+        <div className="w-full h-full flex flex-col-reverse overflow-y-scroll px-4 py-2">
+          <ChatMessage messageContent={"Hey, how's it going?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Not too bad, just busy with work."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"I totally get that. Anything exciting happening?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Well, I'm planning a trip for next month. Super excited about it!"} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"That sounds amazing! Where are you planning to go?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"I'm thinking about exploring Europe, maybe visit Italy and France."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Wow, that's a dream vacation! What places are you most excited about?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Definitely looking forward to the art and history in Florence, and of course, the Eiffel Tower in Paris."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Sounds incredible! Don't forget to try the local cuisine, it's always a highlight."} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Absolutely, I'm a foodie, so trying new dishes is a must for me."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Speaking of food, have you tried the new restaurant downtown?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Not yet, is it any good?"} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"It's fantastic! We should plan a dinner there sometime."} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Sure, that sounds like a plan. I'll check it out soon and let you know."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Great! Looking forward to it. By the way, did you catch the latest movie?"} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Not yet, but I heard it's really good. Planning to watch it this weekend."} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Nice! Let me know how it is. We can compare notes."} isOwnMessage={true} user={fbuser} />
+          <ChatMessage messageContent={"Will do! Anyway, I've got to run. Talk to you later?"} isOwnMessage={false} user={fbuser} />
+          <ChatMessage messageContent={"Sure thing! Take care and catch up with you soon."} isOwnMessage={true} user={fbuser} />
         </div>
         {/* Chat messenger container - contains the text bar where users can send messages */}
         <div className="w-full h-20 flex items-center bg-[#1f1f1f] border-[#747474] border-t-2 p-3">

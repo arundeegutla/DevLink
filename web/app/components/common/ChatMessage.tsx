@@ -5,7 +5,7 @@ import { User } from 'firebase/auth';
 export interface ChatMessage {
   messageContent: string;
   isOwnMessage: boolean;
-  user: User | undefined | null;
+  user: User | undefined;
 }
 
 export default function ChatMessage({
