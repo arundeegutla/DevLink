@@ -3,6 +3,12 @@ import NavBar from '@components/common/NavBar';
 import React from 'react';
 import { UserProvider } from '@context/UserContext';
 
+/*
+  POSSIBLE FIX FOR REACT HYDRATION WARNING:
+  import dynamic from 'next/dynamic';
+  const NavBar = dynamic(() => import('@components/common/NavBar'), { ssr: false });
+*/
+
 export default function RootLayout({
   children,
 }: {
