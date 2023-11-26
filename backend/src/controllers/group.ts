@@ -1,16 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { createGroup, editGroup, getGroupOwner, requestGroupJoin, acceptUser, rejectUser } from "../services/group";
+import { createGroup, editGroup, getGroupOwner, requestGroupJoin, acceptUser, rejectUser, getGroupById } from "../services/group";
 import { Group } from "../models/db";
 import { validateNewGroup, validateEdit } from "../utils/group";
 import { DocumentReference } from "@google-cloud/firestore";
 import { error } from "console";
+import { addGrouptoUser } from "../services/user";
 
 export const createInitialGroup = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { name = "", description = "" }: Group = req.body;
+  const { name = "", description = "", color = "#FFFFFF" }: Group = req.body;
   
   const userDoc: DocumentReference | undefined = res.locals.userRef;
   if (userDoc === undefined) {
@@ -18,7 +19,7 @@ export const createInitialGroup = async (
     return;
   }
 
-  const group: Group = { name, description, members: [res.locals.userRef], posts: [], owner: res.locals.userRef, userQueue: []};
+  const group: Group = { name, description, members: [res.locals.userRef], posts: [], owner: res.locals.userRef, userQueue: [], color};
 
   // Validates request body
   try {
@@ -28,7 +29,8 @@ export const createInitialGroup = async (
     return;
   }
   try {
-    await createGroup(group);
+    const newGrop = await createGroup(group);
+    await addGrouptoUser(newGrop, res.locals.user.uid);
     res.send({ message: "Group created!" });
   } catch (error) {
     next(error);
@@ -40,7 +42,7 @@ export const editExistingGroup = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, description }: Group = req.body;
+  const { name, description, color }: Group = req.body;
   const { groupId } = req.body;
 
   // Checks for undefined and inserts them into user object
@@ -53,6 +55,7 @@ export const editExistingGroup = async (
   const group: Partial<Group> = {
     ...(name && { name }),
     ...(description && { description }),
+    ...(color && { color })
   };
   try {
     validateEdit(group);
@@ -106,8 +109,6 @@ export const handleGroupJoinRequest = async (
 
   const groupOwner: string = await getGroupOwner(groupId);
   if (res.locals.user.uid !== groupOwner) {
-    console.log("userID", res.locals.user.uid);
-    console.log("groupOwner", groupOwner);
     res.status(403).send({ error: "User is not owner of group" });
     return;
   }
@@ -131,4 +132,23 @@ export const handleGroupJoinRequest = async (
   else {
     res.status(400).send({ error: "Invalid request" });
   }
-}
+};
+
+export const retreiveGroupData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const groupId: string = req.params.id;
+
+  try {
+    const groupData = await getGroupById(groupId);
+    res.send(groupData);
+  } catch (error) {
+    if (error.message === "Group does not exist") {
+      res.status(404).send({ error: error.message });
+      return;
+    }
+    next(error);
+  }
+};

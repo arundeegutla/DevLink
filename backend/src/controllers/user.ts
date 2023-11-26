@@ -27,8 +27,8 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {firstName = "", lastName = "", email = "", github = "", skills = []}: User = req.body;
-    const user: User = { firstName, lastName, email, github, skills, groups: [] };
+    const {firstName = "", lastName = "", email = "", github = "", linkedin = "", skills = []}: User = req.body;
+    const user: User = { firstName, lastName, email, github, skills, linkedin, groups: [] };
 
     // Validates request body
     try {
@@ -46,7 +46,7 @@ export const createUserProfile = async (req: Request, res: Response, next: NextF
 }
 
 export const editUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {firstName, lastName, email, github, skills}: User = req.body;
+    const {firstName, lastName, email, github, skills, linkedin}: User = req.body;
 
     // Checks for undefined and inserts them into user object
     const user: Partial<User> = {
@@ -54,6 +54,7 @@ export const editUserProfile = async (req: Request, res: Response, next: NextFun
         ...(lastName && { lastName }),
         ...(email && { email }),
         ...(github && { github }),
+        ...(linkedin && { linkedin }),
         ...(skills && { skills }),
     };
     try {

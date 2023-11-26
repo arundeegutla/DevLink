@@ -1,15 +1,41 @@
 import { Request, Response, NextFunction } from "express";
-import { createPost, editPost, deletePost } from "../services/post";
+import { createPost, editPost, deletePost, getPostUserOwner, getPostById } from "../services/post";
 import { Post } from "../models/db";
-import { validateNewPost, validateEdit, validateDelete } from "../utils/post";
+import { validateNewPost, validateEdit } from "../utils/post";
+import { getGroupOwner, groupWithIdExists } from "../services/group";
+
 
 export const createInitialPost = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { title = "", body = "" }: Post = req.body;
-  const post: Post = { title, body, postId: "", owner: [], skillsWanted: []};
+  const { title = "", body = "", groupId = "", skillsWanted = [] } = req.body;
+  if (groupId === "") {
+    res.status(403).send({ error: "Not assigned group" });
+    return;
+  }
+  
+  try {
+    const groupExists: boolean = await groupWithIdExists(groupId);
+    if (!groupExists) {
+      res.status(404).send({ error: "Group does not exist" });
+      return;
+    }
+  } catch (error) {
+    next(error);
+  }
+
+  try {
+    if (res.locals.user.uid !== await getGroupOwner(groupId)) {
+      res.status(403).send({ error: "User is not owner of group" });
+      return;
+    }
+  } catch (error) {
+    next(error);
+  }
+  
+  const post: Partial<Post> = { title, body, skillsWanted};
 
   // Validates request body
   try {
@@ -19,7 +45,7 @@ export const createInitialPost = async (
     return;
   }
   try {
-    await createPost(post);
+    await createPost(post, groupId);
     res.send({ message: "Post created!" });
   } catch (error) {
     next(error);
@@ -31,13 +57,13 @@ export const editExistingPost = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { title, body, postId }: Post = req.body;
+  const { title, body, skillsWanted, postId } = req.body;
 
   // Checks for undefined and inserts them into user object
   const post: Partial<Post> = {
     ...(title && { title }),
     ...(body && { body }),
-    ...(postId && { postId }),
+    ...(skillsWanted && { skillsWanted })
   };
   try {
     validateEdit(post);
@@ -59,16 +85,20 @@ export const deleteExistingPost = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { postId }: Post = req.body;
+  const { postId = "" } = req.body;
 
   // Checks for undefined and inserts them into user object
-  const post: Partial<Post> = {
-    ...(postId && { postId }),
-  };
+  if (postId === "") {
+    res.status(400);
+    return;
+  }
   try {
-    validateDelete(post);
+    if (res.locals.user.uid !== await getPostUserOwner(postId)) {
+      res.status(403).send({ error: "User is not owner of post" });
+      return;
+    }
   } catch (error) {
-    res.status(400).send({ error: error.message });
+    next(error);
   }
 
   try {
@@ -78,3 +108,27 @@ export const deleteExistingPost = async (
     next(error);
   }
 };
+
+export const retreivePostData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const postId: string = req.params.id;
+
+  if (postId === "") {
+    res.status(400);
+    return;
+  }
+
+  try {
+    const post = await getPostById(postId);
+    res.send(post);
+  } catch (error) {
+    if (error?.message === "Post does not exist") {
+      res.status(404).send({ error: error.message });
+      return;
+    }
+    next(error);
+  }
+}
