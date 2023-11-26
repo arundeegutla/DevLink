@@ -1,15 +1,16 @@
 // Icons
 import { FaUser } from 'react-icons/fa';
+import { User } from 'firebase/auth';
 
 export interface ChatMessage {
   messageContent: string;
-  isSelfMessage: boolean;
-  user: any;
+  isOwnMessage: boolean;
+  user: User | undefined | null;
 }
 
 export default function ChatMessage({
   messageContent,
-  isSelfMessage,
+  isOwnMessage,
   user,
 }: ChatMessage) {
 
@@ -22,7 +23,7 @@ export default function ChatMessage({
     return (
       <img
         src={
-          isSelfMessage ?
+          isOwnMessage ?
           (user.photoURL ??
           'https://s3-symbol-logo.tradingview.com/alphabet--600.png') :
            // TODO: Get other user's profile picture - temporary placeholder
@@ -35,11 +36,12 @@ export default function ChatMessage({
   }
 
   return (
-    <div className={`w-full max-w-sm h-full flex items-center ${isSelfMessage ? "self-end" : "self-start"} mt-2`}>
-      { !isSelfMessage && <div className="mr-2 flex-shrink-0">{getProfilePic()}</div> }
-      <div className={`w-auto h-auto break-words ${isSelfMessage ? "bg-cyan-600" : "bg-amber-500"} rounded-xl p-2`}>
-        <h1 className="font-medium">{messageContent}</h1>
+    <div className={`w-auto max-w-sm h-full flex-col ${isOwnMessage ? "self-end" : "self-start"} mt-2`}>
+      <div className="flex">
+        { !isOwnMessage && <div className="mr-2 flex-shrink-0 self-end">{getProfilePic()}</div> }
+        <h1 className={`w-auto h-auto break-words ${isOwnMessage ? "bg-cyan-600" : "bg-amber-500"} rounded-xl p-2 font-medium`}>{messageContent}</h1>
       </div>
+      { !isOwnMessage && <h1 className="font-light text-stone-200 mt-1">Sender A</h1> }
     </div>
   )
 }

@@ -5,7 +5,6 @@ import InfoBlock from './InfoBlock';
 // Icons
 import {
   FaUser,
-  FaPhoneAlt,
   FaLinkedin,
   FaGithub,
 } from 'react-icons/fa';
@@ -53,9 +52,7 @@ export default function UserProfile({
             glareMaxOpacity={0}
             transitionSpeed={1000}
           >
-            <div className="ml-2 mr-8">
-              { getProfilePic() }
-            </div>
+            <div className="ml-2 mr-8">{getProfilePic()}</div>
           </Tilt>
           {/* User names and roles */}
           <div className="flex flex-col">
@@ -66,20 +63,20 @@ export default function UserProfile({
         {/* Info block to hold user's information */}
         <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
           { isSelfProfile && <InfoBlock infoLink="put ur email here" Icon={IoMdMail} /> }
-          { isSelfProfile && <InfoBlock infoLink="put ur phone# here" Icon={FaPhoneAlt} /> }
           <InfoBlock infoLink="put ur linkedin here" Icon={FaLinkedin} />
           <InfoBlock infoLink="put ur github here" Icon={FaGithub} />
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}
       <div className="w-full h-full flex flex-row justify-between mt-12">
-        {/* TODO: Change Posts / Projects to be a swappable tab */}
+        {/* TODO: Create the projets component to display each project */}
         <div className="w-2/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center mr-12 p-2">
-          Posts / Projects
+          <h1>Projects</h1>
           <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
         </div>
+        {/* TODO: Fill skill section with arun's skills components */}
         <div className="w-1/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center p-2">
-          Skills
+          <h1>Skills</h1>
           <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
         </div>
       </div>
