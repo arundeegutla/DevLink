@@ -8,11 +8,6 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *   schemas:
  *     User:
  *       type: object
- *       required:
- *         - firstName
- *         - lastName
- *         - contactInfo
- *         - skills
  *       properties:
  *         firstName:
  *           type: string
@@ -26,6 +21,9 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *         github:
  *          type: string
  *          description: Github username of the user
+ *         linkedin:
+ *          type: string
+ *          description: LinkedIn username of the user
  *         skills:
  *           type: array
  *           items:
@@ -50,6 +48,7 @@ import { getUserbyId, getUserByName, createUserProfile, editUserProfile } from '
  *         lastName: Doe
  *         email: johndoe@gmail.com
  *         github: johndoe
+ *         linkedin: johndoe
  *         skills: [React, Angular, Javascript, Typescript]
  *         groups: [{ id: "123", name: "My Group", description: "A cool group!" }]
  */
@@ -114,6 +113,9 @@ router.get("/search/:name", getUserByName);
  *               github:
  *                 type: string
  *                 description: Github username of the user
+ *               linkedin:
+ *                 type: string
+ *                 description: Linkedin name of user
  *               skills:
  *                 type: array
  *                 items:
@@ -197,6 +199,9 @@ router.get('/get/:id', getUserbyId);
  *               github:
  *                 type: string
  *                 required: false
+ *               linkedin:
+ *                 type: string
+ *                 required: false
  *               skills:
  *                 type: array
  *                 items:
@@ -207,6 +212,7 @@ router.get('/get/:id', getUserbyId);
  *               lastName: Doe
  *               email: johndoe@gmail.com
  *               github: johndoe
+ *               linkedin: johndoe
  *               skills: [React, Angular, JavaScript, TypeScript]
  *     responses:
  *       '200':
