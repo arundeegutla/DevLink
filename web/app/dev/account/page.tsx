@@ -15,6 +15,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Account() {
   const router = useRouter();
+
   const [user, loading, error] = useAuthState(auth);
 
   if (user && !user.emailVerified) {

@@ -3,7 +3,7 @@
 /**
  * Signup page for new users. Takes user through the entire account creation process.
  */
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 // Components
 import HomeBar from '@components/common/HomeBar';
@@ -37,7 +37,6 @@ const tags = [
     className: 'bg-gray-200 text-gray-800',
     icon: FiCode,
   },
-
   {
     label: 'React',
     className: 'bg-blue-200 text-blue-800',
@@ -88,7 +87,6 @@ const tags = [
     className: 'bg-gray-200 text-gray-800',
     icon: FaNodeJs,
   },
-  // Add more technologies as needed
 ];
 
 export default function AuthScreen() {
@@ -97,9 +95,17 @@ export default function AuthScreen() {
   const [curTagInd, setCurTag] = useState(0);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const isSignUp = searchParams.get('signup');
+
+    if (isSignUp === 'true') {
+      setScreenType(1);
+    }
+  }, []);
+
+  useEffect(() => {
     const intervalId = setInterval(() => {
       setCurTag((prevIndex) => (prevIndex + 1) % tags.length);
-      console.log('second');
     }, 3000);
 
     return () => {
@@ -108,35 +114,36 @@ export default function AuthScreen() {
   }, [curTagInd]);
 
   const [user, loading, error] = useAuthState(auth);
-  if (user && user.displayName) {
+  if (user) {
+    console.log('signed in as ' + user.displayName);
     router.push('/dev/home');
     return <Loading />;
   } else if (loading) {
+    console.log('loading');
     return <Loading />;
-  } else {
-    console.log('no user signed in');
   }
+
   const changeScreen = (num: number) => {
     setScreenType(num);
   };
   const screens = [
-    <LogIn changeScreen={changeScreen} />,
-    <SignUp changeScreen={changeScreen} />,
-    <ForgotPassword changeScreen={changeScreen} />,
+    <LogIn changeScreen={changeScreen} key={'login-screen'} />,
+    <SignUp changeScreen={changeScreen} key={'signup-screen'} />,
+    <ForgotPassword changeScreen={changeScreen} key={'forgotpass-screen'} />,
   ];
 
   return (
     <>
-      <main className="back-ground w-screen h-screen overflow-hidden">
+      <main className="w-screen h-screen overflow-hidden">
         <HomeBar />
-        <div className="flex flex-row items-center h-screen mx-auto justify-evenly animated animatedFadeInUp fadeInUp w-[80%] max-w-screen-2xl">
-          <div className="vertical-layout w-[50%] mx-auto items-center flex flex-col">
+        <div className="flex flex-row items-center h-screen mx-auto justify-center animated animatedFadeInUp fadeInUp w-full max-w-screen-2xl">
+          <div className="vertical-layout w-[50%] items-center flex flex-col mr-10">
             <div>Unlock the</div>
             {tags.map((tag, index) => (
-              <span
+              <div
                 key={index}
                 className={twMerge(
-                  'px-10 rounded-xl transition-all duration-500 ease-in-out flex flex-row items-center space-x-4 whitespace-nowrap mr-7',
+                  'px-10 rounded-xl transition-all duration-500 ease-in-out flex flex-row items-center space-x-4 whitespace-nowrap',
                   `${tag.className} ${
                     index === curTagInd
                       ? 'animated animatedFadeInUp fadeInUp'
@@ -145,11 +152,11 @@ export default function AuthScreen() {
                 )}>
                 {<tag.icon className="mr-3" />}
                 {tag.label}
-              </span>
+              </div>
             ))}
             Network.
           </div>
-          <div className="flex flex-col items-center w-[50%]">
+          <div className="flex flex-col w-[40%] items-center">
             {screens.map((screen, index) => (
               <div
                 key={index}

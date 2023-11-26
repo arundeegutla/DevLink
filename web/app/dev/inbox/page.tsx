@@ -16,11 +16,12 @@ import {
 
 // Auth
 import { auth } from '@/firebase/clientApp';
+import { useUser } from '@context/UserContext';
 import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function Inbox() {
   const router = useRouter();
+
   const [user, loading, error] = useAuthState(auth);
 
   if (user && !user.emailVerified) {
@@ -33,6 +34,9 @@ export default function Inbox() {
     console.log('no user signed in home');
     return <Loading />;
   }
+  
+  // WE WILL USE THIS SOON ON THIS PAGE, NEED TO REPLACE INSTANCES OF user WITH fbuser
+  // const { fbuser } = useUser();
 
   return (
     <div className="w-full h-full flex flex-row items-center justify-center p-4">

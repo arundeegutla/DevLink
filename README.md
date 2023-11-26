@@ -9,7 +9,7 @@ Welcome to **DevLink** - where software developers unite to connect, collaborate
 3. [Challenges](#challenges)
 4. [What's Next](#whats-next)
 5. [Contributors](#contributors)
-6. [Contact](#contact)
+6. [Join DevLink](#join)
 
 ## Overview
 
@@ -55,12 +55,13 @@ Join us on this exciting journey to make DevLink even better!
 Meet the dedicated individuals behind DevLink:
 
 - **[Austin Robertson](https://github.com/Usdiez)** - API / Project Manager
-- **[Arun Deegutla](https://github.com/arundeegutla/)** - Web
+- **[Arun Deegutla](https://github.com/arundeegutla/)** - Web, UI/UX
 - **[Brennan Cleland](https://github.com/eternal-dx)** - Web
 - **[Rahul Mohan](https://github.com/rahulmohan126)** - Web
 - **[Micheal McGarvey](https://github.com/micpatmc)** - API
 - **[Sanya Wadhwa](https://github.com/SanyaW29)** - Mobile
 - **[Laila El Banna](https://github.com/xlaila)** - Mobile
 
+## Join
 
 [Join DevLink Now](https://thedevlink.com)
