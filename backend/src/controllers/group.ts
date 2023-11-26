@@ -30,7 +30,6 @@ export const createInitialGroup = async (
   }
   try {
     const newGrop = await createGroup(group);
-    console.log("GROUPID",newGrop);
     await addGrouptoUser(newGrop, res.locals.user.uid);
     res.send({ message: "Group created!" });
   } catch (error) {
@@ -110,8 +109,6 @@ export const handleGroupJoinRequest = async (
 
   const groupOwner: string = await getGroupOwner(groupId);
   if (res.locals.user.uid !== groupOwner) {
-    console.log("userID", res.locals.user.uid);
-    console.log("groupOwner", groupOwner);
     res.status(403).send({ error: "User is not owner of group" });
     return;
   }
@@ -148,6 +145,10 @@ export const retreiveGroupData = async (
     const groupData = await getGroupById(groupId);
     res.send(groupData);
   } catch (error) {
+    if (error.message === "Group does not exist") {
+      res.status(404).send({ error: error.message });
+      return;
+    }
     next(error);
   }
 };

@@ -58,8 +58,7 @@ export const getGroupById = async (
         owner: doc.data()?.owner.id,
       } as GroupPage;
     } else {
-      console.log("No such document!");
-      return undefined;
+      throw new Error("Group does not exist");
     }
   } catch (error) {
     console.log("Error getting document:", error);
