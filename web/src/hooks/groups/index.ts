@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { User as FirebaseUser } from "firebase/auth";
 
 import * as models from "@/hooks/models";
@@ -29,14 +29,16 @@ async function createGroup(user: FirebaseUser, group: {
 }
 
 
-export function useCreateGroup(user: FirebaseUser, group: {
-  name: string,
-  description: string
-}) {
-  return useQuery({
-    queryKey: ["createGroup"],
-    queryFn: async function () { createGroup(user, group) }
-  })
+export function useCreateGroup() {
+  return useMutation({
+    mutationFn: (data: {
+      user: FirebaseUser,
+      group: {
+        name: string,
+        description: string
+      }
+    }) => createGroup(data.user, data.group)
+  });
 }
 
 
@@ -64,25 +66,25 @@ async function editGroup(user: FirebaseUser, group: {
 }
 
 
-export function useEditGroup(user: FirebaseUser, group: {
-  name: string,
-  description: string
-}) {
-  return useQuery({
-    queryKey: ["editGroup"],
-    queryFn: async function () { editGroup(user, group) }
-  })
+export function useEditGroup() {
+  return useMutation({
+    mutationFn: (data: {
+      user: FirebaseUser,
+      group: {
+        name: string,
+        description: string
+      }
+    }) => editGroup(data.user, data.group)
+  });
 }
 
 
-async function joinGroup(user: FirebaseUser, group: {
-  groupId: string
-}) {
+async function joinGroup(user: FirebaseUser, groupId: string) {
   const config = await generateRequestConfig(user);
   return http.post(
     "/groups/requestJoin",
     {
-      groupId: group.groupId
+      groupId: groupId
     },
     config
   ).then(res => {
@@ -97,13 +99,13 @@ async function joinGroup(user: FirebaseUser, group: {
 }
 
 
-export function useJoinGroup(user: FirebaseUser, group: {
-  groupId: string
-}) {
-  return useQuery({
-    queryKey: ["joinGroup"],
-    queryFn: async function () { joinGroup(user, group) }
-  })
+export function useJoinGroup() {
+  return useMutation({
+    mutationFn: (data: {
+      user: FirebaseUser,
+      groupId: string
+    }) => joinGroup(data.user, data.groupId)
+  });
 }
 
 
@@ -133,13 +135,15 @@ async function handleRequest(user: FirebaseUser, group: {
 }
 
 
-export function useHandleRequest(user: FirebaseUser, group: {
-  groupId: string,
-  accept: boolean,
-  requestedUserId: string
-}) {
-  return useQuery({
-    queryKey: ["handleRequest"],
-    queryFn: async function () { handleRequest(user, group) }
-  })
+export function useHandleRequest() {
+  return useMutation({
+    mutationFn: (data: {
+      user: FirebaseUser,
+      group: {
+        groupId: string,
+        accept: boolean,
+        requestedUserId: string
+      }
+    }) => handleRequest(data.user, data.group)
+  });
 }
