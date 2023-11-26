@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function createGroup(user: FirebaseUser, group: {
+export async function createGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
@@ -42,7 +42,7 @@ export function useCreateGroup() {
 }
 
 
-async function editGroup(user: FirebaseUser, group: {
+export async function editGroup(user: FirebaseUser, group: {
   name: string,
   description: string
 }) {
@@ -79,7 +79,7 @@ export function useEditGroup() {
 }
 
 
-async function joinGroup(user: FirebaseUser, groupId: string) {
+export async function joinGroup(user: FirebaseUser, groupId: string) {
   const config = await generateRequestConfig(user);
   return http.post(
     "/groups/requestJoin",
@@ -109,7 +109,7 @@ export function useJoinGroup() {
 }
 
 
-async function handleRequest(user: FirebaseUser, group: {
+export async function handleRequest(user: FirebaseUser, group: {
   groupId: string,
   accept: boolean,
   requestedUserId: string

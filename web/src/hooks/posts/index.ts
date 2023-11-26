@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function createPost(user: FirebaseUser, post: {
+export async function createPost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[]
@@ -45,7 +45,7 @@ export function useCreatePost() {
 }
 
 
-async function editPost(user: FirebaseUser, post: {
+export async function editPost(user: FirebaseUser, post: {
   title: string,
   body: string,
   skillsWanted: string[],
@@ -88,7 +88,7 @@ export function useEditPost() {
 }
 
 
-async function deletePost(user: FirebaseUser, postId: string) {
+export async function deletePost(user: FirebaseUser, postId: string) {
   const config = await generateRequestConfig(user);
 
   return http.delete(

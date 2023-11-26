@@ -5,7 +5,7 @@ import * as models from "@/hooks/models";
 import { http, generateRequestConfig } from "@/hooks/default";
 
 
-async function searchUser(user: FirebaseUser, searchQuery: string) {
+export async function searchUser(user: FirebaseUser, searchQuery: string) {
   const config = await generateRequestConfig(user);
   return http.get(
     `/users/search/${encodeURIComponent(searchQuery)}`,
@@ -30,7 +30,7 @@ export function useSearchUser(user: FirebaseUser, searchQuery: string) {
 }
 
 
-async function getById(user: FirebaseUser, userId: string) {
+export async function getUserById(user: FirebaseUser, userId: string) {
   const config = await generateRequestConfig(user);
   return http.get(
     `/users/get/${encodeURIComponent(userId)}`,
@@ -50,12 +50,12 @@ async function getById(user: FirebaseUser, userId: string) {
 export function useGetById(user: FirebaseUser, userId: string) {
   return useQuery({
     queryKey: ["getById", userId],
-    queryFn: () => getById(user, userId)
+    queryFn: () => getUserById(user, userId)
   })
 }
 
 
-async function createProfile(user: FirebaseUser, profile: {
+export async function createProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
@@ -101,7 +101,7 @@ export function useCreateProfile() {
 }
 
 
-async function editProfile(user: FirebaseUser, profile: {
+export async function editProfile(user: FirebaseUser, profile: {
   email: string;
   github: string;
   firstName: string;
