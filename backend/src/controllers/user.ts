@@ -27,9 +27,9 @@ export const getUserByName = async (req: Request, res: Response, next: NextFunct
   };
 
 export const createUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const {firstName = "", lastName = "", email = "", github = "", linkedin = "", skills = []}: User = req.body;
-    const user: User = { firstName, lastName, email, github, skills, linkedin, groups: [] };
-
+    const {id = res.locals.user.uid, firstName = "", lastName = "", email = "", github = "", linkedin = "", skills = []}: User = req.body;
+    const user: User = {id, firstName, lastName, email, github, skills, linkedin, groups: []};
+    
     // Validates request body
     try {
         validateNewUser(user);

@@ -2,6 +2,7 @@ import { DocumentReference } from "@google-cloud/firestore";
 import { type } from "os";
 
 export type User = {
+  id: string;
   email?: string;
   github?: string;
   linkedin?: string;
