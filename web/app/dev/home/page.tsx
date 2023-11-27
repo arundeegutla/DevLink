@@ -95,14 +95,14 @@ export default function Home() {
   );
 }
 
-const ListOfProjects = ({ projects }: { projects: models.Group[] }) => {
+const ListOfProjects = ({ projects }: { projects: models.condensedGroup[] }) => {
   return (
     <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out mb-11">
       {projects.map((item, indx) => (
         <ProjectCard
           key={indx}
           id={item.name}
-          color="#fff"
+          color={item.color}
           role={'Front-End Engineer'}
           title={item.name}
         />

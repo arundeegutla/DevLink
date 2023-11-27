@@ -5,35 +5,25 @@ export type User = {
   linkedin?: string;
   firstName: string;
   lastName: string;
-  groups: DocumentReference[];
+  groups: condensedGroup[];
   skills: string[];
 };
 
-export type UserPage = User & {
- groups: condensedGroup[];
-}
-
-export type GroupPage = Group & {
-  members: condensedUser[];
-  posts: condensedPost[];
-};
-
-export type condensedPost = {
-  id: string;
-  title: string;
-  body: string;
-  skillsWanted: string[];
-};
-
-export type condensedGroup = {
-  id: string;
+export type Group = {
   name: string;
   description: string;
+  owner: condensedUser;
+  members: condensedUser[];
+  userQueue: condensedUser[];
+  posts: condensedPost[];
   color: string;
 };
 
-export type PostPage = Post & {
-  owner: condensedGroup
+export type Post = {
+  title: string;
+  body: string;
+  owner: condensedGroup;
+  skillsWanted: string[];
 };
 
 export type condensedUser = {
@@ -42,19 +32,16 @@ export type condensedUser = {
   lastName: string;
 }
 
-export type Group = {
+export type condensedGroup = {
+  id: string;
   name: string;
   description: string;
-  owner: DocumentReference;
-  members: DocumentReference[];
-  userQueue: DocumentReference[];
-  posts: DocumentReference[];
   color: string;
 };
 
-export type Post = {
+export type condensedPost = {
+  id: string;
   title: string;
   body: string;
-  owner: DocumentReference;
   skillsWanted: string[];
 };

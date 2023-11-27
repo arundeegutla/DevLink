@@ -122,7 +122,7 @@ export async function getPost(user: FirebaseUser, postId: string) {
       return null;
     }
 
-    return res.data as models.PostPage;
+    return res.data as models.Post;
   }).catch(err => {
     return null;
   });
@@ -148,7 +148,7 @@ export async function searchPost(user: FirebaseUser, filter: string[]) {
       return null;
     }
 
-    return res.data as models.PostPage[];
+    return res.data as models.Post[];
   }).catch(err => {
     return null;
   });
