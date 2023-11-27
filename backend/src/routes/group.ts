@@ -43,6 +43,9 @@ import { createInitialGroup, editExistingGroup, requestToJoinGroup, handleGroupJ
  *               github:
  *                 type: string
  *                 description: Github username of the user
+ *               linkedin:
+ *                 type: string
+ *                 description: LinkedIn of the user
  *               skills:
  *                 type: array
  *                 items:
