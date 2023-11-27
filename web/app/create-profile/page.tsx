@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { VerifyStep } from './VerifyStep';
 import { UserProvider, useUser } from '@context/UserContext';
-import { createProfile, getUserById } from '@/hooks/users';
+import { createProfile, getUser } from '@/hooks/users';
 import HomeBar from '@components/common/HomeBar';
 import ProgressBar from '@components/common/ProgressBar';
 import InfoStep from './InfoStep';
@@ -33,7 +33,7 @@ export default function CreateProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       if (fbuser) {
-        await getUserById(fbuser, fbuser.uid).then((user) => {
+        await getUser(fbuser, fbuser.uid).then((user) => {
           if (user) {
             router.push('/dev/home');
           } else {
@@ -66,11 +66,12 @@ export default function CreateProfilePage() {
   const handleFinish = async () => {
     setLoading(true);
     await createProfile(fbuser, {
-      email: fbuser.email ?? '',
-      github,
-      skills,
       firstName,
       lastName,
+      email: fbuser.email ?? '',
+      github,
+      linkedin,
+      skills,
     })
       .then((val) => {
         if (val) {

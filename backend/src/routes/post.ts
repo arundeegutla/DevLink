@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createInitialPost, editExistingPost, deleteExistingPost } from "../controllers/post";
+import { createInitialPost, editExistingPost, deleteExistingPost, searchExistingPost, retreivePostData } from "../controllers/post";
 
 /**
  * @swagger
@@ -18,34 +18,33 @@ import { createInitialPost, editExistingPost, deleteExistingPost } from "../cont
  *           type: string
  *           description: Body of the post
  *         owner:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the group
- *               description:
- *                 type: string
- *                 description: Description of the group
- *               members:
- *                 type: array
- *                 items:
- *                   type: string
- *                   description: Members of the group
- *               posts:
- *                 type: array
- *                 items:
- *                   type: string
- *                   description: Posts by the group 
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: Group Id
+ *             name:
+ *               type: string
+ *               description: Name of the group
+ *             description:
+ *               type: string
+ *               description: Description of the group
+ *             color:
+ *               type: string
+ *               description: Color of the group
  *         skillsWanted:
  *           type: array
  *           description: Wanted skills from the post
  *       example:
  *         title: DevLink Post
  *         body: This is our post
- *         owner: [{ id: "123", firstName: "John", lastName: "Smith", email: "johnsmith@gmail.com", github: "github.com", skills: [JavaScript] }]
- *         skillsWanted: [Python]
+ *         owner:
+ *           id: "123"
+ *           name: "John Smith"
+ *           description: "Group description"
+ *           color: "#FF0000"
+ *         skillsWanted:
+ *           - Python
  */
 
 // Create a new router instance
@@ -66,15 +65,24 @@ const router: Router = express.Router();
  *           schema:
  *             type: object
  *             properties:
+ *               groupId:
+ *                 type: string
+ *                 description: Group Id
  *               title:
  *                 type: string
  *                 description: Name of the post
  *               body:
  *                 type: string
  *                 description: The body of the post
+ *               skillsWanted:
+ *                 type: array
+ *                 description: Array of wanted skills
  *             example:
+ *               groupId: "123"
  *               title: DevLink Post
  *               body: This is our post
+ *               skillsWanted:
+ *                 - Python
  *     responses:
  *       '400':
  *         description: Bad request
@@ -103,15 +111,24 @@ router.post("/createPost", createInitialPost);
  *           schema:
  *             type: object
  *             properties:
+ *               postId:
+ *                 type: string
+ *                 required: true
  *               title:
  *                 type: string
- *                 required: true
+ *                 required: false
  *               body:
  *                 type: string
- *                 required: true
+ *                 required: false
+ *               skillsWanted:
+ *                 type: array
+ *                 required: false
  *             example:
  *               title: DevLink Post
  *               body: This is our post
+ *               postId: ab18duh429lk
+ *               skillsWanted:
+ *                 - Python
  *     responses:
  *       '200':
  *         description: Post updated successfully
@@ -127,7 +144,7 @@ router.put("/editPost", editExistingPost);
 /**
  * @swagger
  * /posts/deletePost:
- *   delete:
+ *   post:
  *     summary: Delete a post
  *     tags:
  *      - Posts
@@ -155,6 +172,64 @@ router.put("/editPost", editExistingPost);
  *       '403':
  *         description: Forbidden
  */
-router.delete("/deletePost", deleteExistingPost);
+router.post("/deletePost", deleteExistingPost);
+
+/**
+ * @swagger
+ * /posts/get/{id}:
+ *   get:
+ *     summary: Get a post by id
+ *     tags:
+ *      - Posts
+ *     description: Get a post by id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Post id
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Post retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       '400':
+ *         description: Bad request
+ *       '401':
+ *         description: Unauthorized
+ *       '403':
+ *         description: Forbidden
+ */
+router.get("/get/:id", retreivePostData);
+
+/**
+ * @swagger
+ * /posts/search:
+ *   get:
+ *     summary: Get post(s) by filter
+ *     tags:
+ *      - Posts
+ *     description: Retrieve a post(s) by their filter
+ *     parameters:
+ *       - in: query
+ *         name: filter
+ *         schema:
+ *           type: array
+ *         required: true
+ *         description: Filter(s) of the post to retrieve
+ *     responses:
+ *       '200':
+ *         description: A single post object
+ *         content:
+ *           application/json:
+ *             schema:
+ *       '404':
+ *         description: Post not found
+ */
+router.get("/search", searchExistingPost);
+
 
 export default router;

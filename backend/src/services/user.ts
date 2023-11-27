@@ -1,18 +1,40 @@
 import { db } from "../config/firebaseInit";
 import { Group, User, UserPage, condensedGroup } from "../models/db";
-import { DocumentReference } from "@google-cloud/firestore";
+import { DocumentReference, FieldValue } from "@google-cloud/firestore";
 
-export const getUserDoc = async (uid: string): Promise<DocumentReference | undefined> => {
+export const getUserDoc = async (
+  uid: string
+): Promise<DocumentReference | undefined> => {
   try {
-      const doc = await db.collection("Users").doc(uid).get();
-      if (doc.exists) {
-          return db.collection("Users").doc(uid);
-      } else {
-          return undefined;
-      }
+    const doc = await db.collection("Users").doc(uid).get();
+    if (doc.exists) {
+      return db.collection("Users").doc(uid);
+    } else {
+      return undefined;
+    }
   } catch (error) {
-      console.log("Error getting document:", error);
-      throw error;
+    console.log("Error getting document:", error);
+    throw error;
+  }
+};
+
+export const addGrouptoUser = async (
+  groupId: string,
+  userId: string
+): Promise<void> => {
+  try {
+    console.log(userId);
+    const groupRef = db.collection("Groups").doc(groupId);
+    const userRef = db.collection("Users").doc(userId);
+    await db
+      .collection("Users")
+      .doc(userId)
+      .update({
+        groups: FieldValue.arrayUnion(groupRef),
+      });
+  } catch (error) {
+    console.log("Error getting document:", error);
+    throw error;
   }
 };
 
@@ -31,6 +53,7 @@ export const queryUserbyId = async (
               id: groupDoc.id,
               description: groupData.description,
               name: groupData.name,
+              color: groupData.color
             } as condensedGroup;
           } else return;
         })

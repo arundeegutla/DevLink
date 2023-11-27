@@ -44,11 +44,12 @@ export default function SettingsPage() {
   const handleFinish = async () => {
     setLoading(true);
     await editProfile(fbuser, {
-      email: fbuser.email ?? '',
-      github,
-      skills,
       firstName,
       lastName,
+      email: fbuser.email ?? '',
+      github,
+      linkedin,
+      skills,
     })
       .then((completed) => {
         if (completed) {
