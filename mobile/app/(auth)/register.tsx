@@ -38,7 +38,7 @@ export default function RegistrationPage() {
     await signInWithPopup(auth, googleAuth)
       .then((result) => {
         if (result.user.displayName) {
-          router.push('/dev/home');
+          router.push('/dev/welcome');
           return;
         }
       })

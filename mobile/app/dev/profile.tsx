@@ -6,9 +6,12 @@ import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+import { useCreateProfile } from '../../src/hooks/saveProfileFn'; // Update with the correct path
+
 const Profile = ({ }) => {
   const router = useRouter();
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
@@ -17,7 +20,6 @@ const Profile = ({ }) => {
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    // Ask for permission to access the camera roll
     (async () => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
@@ -42,34 +44,58 @@ const Profile = ({ }) => {
     }
   };
 
-  const saveProfile = () => {
-    // save the profile, including the profile image URI
-    Alert.alert('Profile Saved', 'Your profile has been saved successfully.');
+  const createProfileMutation = useCreateProfile();
+
+  const saveProfile = async () => {
+    try {
+      const profileData = {
+        firstName,
+        lastName,
+        email,
+        github: githubUrl,
+        linkedin: linkedinUrl,
+        skills: skills.split(','),
+      };
+
+      const success = await createProfileMutation.mutateAsync({
+        user,
+        profile: profileData,
+      });
+
+      if (success) {
+        Alert.alert('Profile Saved', 'Your profile has been saved successfully.');
+      } else {
+        Alert.alert('Error', 'Failed to save the profile. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+    }
   };
 
   const logout = () => {
     auth
-    .signOut()
-    .then(() => {
-      router.push('/login');
-      console.log('Logging Out');
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .signOut()
+      .then(() => {
+        router.push('/login');
+        console.log('Logging Out');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          // Navigate to the home page using router.push
           router.push('/dev/home');
         }}
         style={styles.homeIconContainer}
       >
         <Ionicons name="home" size={24} color="#FFFFFF" />
       </TouchableOpacity>
+
       <TouchableOpacity
         onPress={pickImage}
         style={styles.profileImageContainer}
@@ -90,10 +116,17 @@ const Profile = ({ }) => {
         <Text style={styles.label}>Personal Information</Text>
         <TextInput
           style={styles.input}
-          placeholder="Full Name"
+          placeholder="First Name"
           placeholderTextColor="#A9A9A9"
-          value={fullName}
-          onChangeText={(text) => setFullName(text)}
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          placeholderTextColor="#A9A9A9"
+          value={lastName}
+          onChangeText={(text) => setLastName(text)}
         />
         <TextInput
           style={styles.input}
@@ -138,7 +171,6 @@ const Profile = ({ }) => {
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
 
-      {/* Logo at the bottom */}
       <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
 
     </View>
@@ -155,7 +187,7 @@ const styles = StyleSheet.create({
   homeIconContainer: {
     position: 'absolute',
     top: 20,
-    right: 20, 
+    right: 20,
   },
   profileImageContainer: {
     alignItems: 'center',
