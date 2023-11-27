@@ -136,14 +136,20 @@ const ImageUpload = ({
   };
   return (
     <div>
-      <Image
-        width={0}
-        height={0}
-        className="w-52 aspect-square rounded-full mr-6 object-fill border-2 cursor-pointer hover:border-4 hover:border-gray-100"
-        src={image}
-        alt="test"
-        onClick={onImageClick}
-      />
+      <div
+        className="relative w-52 aspect-square rounded-full mr-6 border-2 cursor-pointer hover:border-4 hover:border-gray-100 overflow-hidden"
+        onClick={onImageClick}>
+        <Image
+          width={0}
+          height={0}
+          className="object-fill w-52 aspect-square rounded-full"
+          src={image}
+          alt="test"
+        />
+        <div className="absolute bottom-0 mx-0 left-0 right-0 flex flex-row items-center justify-center bg-black/[50%] p-2 backdrop-blur-lg text-sm">
+          Edit Image
+        </div>
+      </div>
       <input
         type="file"
         accept="image/*"

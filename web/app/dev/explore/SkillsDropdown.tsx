@@ -23,7 +23,6 @@ const SkillsDropdown = ({
   };
 
   const handleSkillClick = (selectedSkill: SkillType) => {
-    console.log(selectedSkill.name);
     setIsOpen(false);
     setSearchVal('');
     setSelectedSkills((skills) => {
@@ -78,7 +77,7 @@ const SkillsDropdown = ({
   return (
     <div className={twMerge(`flex flex-col items-start w-full`, className)}>
       <div
-        className={`rounded-xl bg-gray-950 overflow-hidden p-2 flex flex-row items-center mt-3 text-gray-200 border-2 border-gray-500 ${
+        className={` w-full rounded-xl bg-gray-950 overflow-hidden p-2 flex flex-row items-center mt-3 text-gray-200 border-2 border-gray-500 ${
           isOpen && 'rounded-b-none'
         }`}>
         <Icons.Plus className="text-xl mr-2 text-gray-400" />

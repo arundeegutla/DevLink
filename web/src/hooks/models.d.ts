@@ -1,7 +1,7 @@
-
 export type User = {
   email?: string;
   github?: string;
+  linkedin: string;
   firstName: string;
   lastName: string;
   groups: Group[];
@@ -9,12 +9,13 @@ export type User = {
 };
 
 export type UserPage = User & {
- groups: condensedGroup[];
-}
+  groups: condensedGroup[];
+};
 
 export type condensedGroup = {
   id: string;
   name: string;
+  color: string;
   description: string;
 };
 
@@ -24,6 +25,7 @@ export type Group = {
   owner: User;
   members: User[];
   userQueue: User[];
+  color: string;
   posts: Post[];
 };
 

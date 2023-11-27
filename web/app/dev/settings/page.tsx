@@ -55,7 +55,7 @@ export default function SettingsPage() {
           refetchUser();
           router.push('/dev/home');
         } else {
-          console.log('there was an error creating profile');
+          console.log('there was an error editing profile');
         }
       })
       .finally(() => {

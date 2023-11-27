@@ -26,14 +26,11 @@ export default function Profile() {
     return <Loading />;
   } else if (error) {
     router.push('/');
-    console.log('no user signed in home');
     return <Loading />;
   }
-  
+
   // WE WILL USE THIS SOON ON THIS PAGE, NEED TO REPLACE INSTANCES OF user WITH fbuser
   // const { fbuser } = useUser();
 
-  return (
-    <UserProfile isSelfProfile={false} user={user} />
-  );
+  return <UserProfile isSelfProfile={false} user={user} />;
 }

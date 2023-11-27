@@ -31,6 +31,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const refetchUser = useCallback(async () => {
     setLoading(true);
+
     if (fbuser) {
       setUser(
         await getUserById(fbuser, fbuser.uid).finally(() => setLoading(false))

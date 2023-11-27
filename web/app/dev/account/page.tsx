@@ -25,11 +25,8 @@ export default function Account() {
     return <Loading />;
   } else if (error) {
     router.push('/');
-    console.log('no user signed in home');
     return <Loading />;
   }
 
-  return (
-    <UserProfile isSelfProfile={true} user={user} />
-  );
+  return <UserProfile isSelfProfile={true} user={user} />;
 }

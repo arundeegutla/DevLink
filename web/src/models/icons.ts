@@ -47,6 +47,7 @@ import {
   BsArrowLeftCircleFill,
   BsArrowRightCircleFill,
   BsFillPlusCircleFill,
+  BsLightbulbFill,
   BsTelephoneFill,
 } from 'react-icons/bs';
 import { HiOutlinePlus } from 'react-icons/hi2';
@@ -105,6 +106,7 @@ export const Icons = {
   Explore: MdExplore,
   Earth: IoEarthOutline,
   Settings: IoSettingsSharp,
+  LightBulb: BsLightbulbFill,
 };
 
 export const skills: SkillType[] = [

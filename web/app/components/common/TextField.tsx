@@ -49,7 +49,7 @@ export default function TextField({
         type={!eye || !eyeToggle ? type : 'text'}
         name={name}
         defaultValue={defaultValue}
-        className={`${eye ? 'mr-9' : ''}`}
+        className={`relative ${eye ? 'mr-9' : ''}`}
         autoComplete={autoComplete ?? ''}
         value={value}
         required
