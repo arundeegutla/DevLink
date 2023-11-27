@@ -2,12 +2,14 @@ import express from 'express';
 import testRouter from './routes/test';
 import userRouter from './routes/user'
 import groupRouter from './routes/group'
+import postRouter from './routes/post'
 import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
 import { dbTest } from './services/test';
 import { authenticateJWT } from './middleware/auth';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 const options = {
   definition: {
@@ -22,7 +24,7 @@ const options = {
         description: 'Development server',
       },
       {
-        url: 'https://api.devlink.com',
+        url: 'https://api.thedevlink.com',
         description: 'Production server',
       }
     ],
@@ -47,6 +49,7 @@ const openapiSpecification = swaggerJsdoc(options);
 const app = express();
 
 // Set up middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -62,8 +65,9 @@ app.get('/', (req, res) => {
 app.use(authenticateJWT);
 
 // Set up routes
-app.use('/user', userRouter);
-app.use('/group', groupRouter);
+app.use('/users', userRouter);
+app.use('/groups', groupRouter);
+app.use('/posts', postRouter);
 app.use('/test', testRouter);
 
 // TODO: Finish Error Middleware
