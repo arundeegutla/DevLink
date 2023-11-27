@@ -155,7 +155,7 @@ export async function getGroup(user: FirebaseUser, groupId: string) {
       return null;
     }
 
-    return res.data as models.User;
+    return res.data as models.GroupPage;
   }).catch(err => {
     return null;
   });

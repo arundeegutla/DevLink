@@ -15,7 +15,7 @@ export async function searchUser(user: FirebaseUser, searchQuery: string) {
       return null;
     }
 
-    return res.data as models.User;
+    return res.data as models.UserPage;
   }).catch(err => {
     return null;
   });
@@ -40,7 +40,7 @@ export async function getUser(user: FirebaseUser, userId: string) {
       return null;
     }
 
-    return res.data as models.User;
+    return res.data as models.UserPage;
   }).catch(err => {
     return null;
   });
