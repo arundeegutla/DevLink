@@ -20,7 +20,7 @@ import { auth } from '@/firebase/clientApp';
 import { useEffect, useState } from 'react';
 import { Icons } from '@models/icons';
 import { User } from 'firebase/auth';
-import { getUserById } from '@/hooks/users';
+import { getUser } from '@/hooks/users';
 import * as models from '@/hooks/models';
 import { useUser } from '@context/UserContext';
 import SubmitBtn from '@components/common/SubmitBtn';
