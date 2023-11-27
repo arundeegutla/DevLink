@@ -1,4 +1,4 @@
-import { Group } from '@/hooks/models';
+import { Group, condensedGroup } from '@/hooks/models';
 import { Icons } from '@/models/icons';
 import ProjectCard from '@components/common/ProjectCard';
 import { Dispatch, SetStateAction } from 'react';
@@ -8,7 +8,7 @@ const ProjectList = ({
   projects,
   showNewProject,
 }: {
-  projects: Group[];
+  projects: condensedGroup[];
   showNewProject: Dispatch<SetStateAction<boolean>>;
 }) => {
   return (
