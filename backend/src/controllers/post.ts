@@ -138,9 +138,19 @@ export const searchExistingPost = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { queryFilters } = req.body;
+  const queryParams = req.query;
+
+  if (queryParams.filter === undefined) {
+    res.send(400);
+    return;
+  }
+  
+  const filterArray: string[] = Array.isArray(queryParams.filter)
+    ? <string[]>queryParams.filter
+    : [<string>queryParams.filter];
+
   try {
-    const postResult: Post[] = await getPostByFilter(queryFilters);
+    const postResult: Post[] = await getPostByFilter(filterArray);
     res.send(postResult);
   } catch (error) {
     next(error);

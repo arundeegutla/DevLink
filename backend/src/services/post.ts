@@ -95,17 +95,32 @@ export const getPostUserOwner = async (
 export const getPostByFilter = async (
   queryFilters: string[]
 ): Promise<Post[] | undefined> => {
-  const lowercaseFilters = queryFilters.map((filter) => filter.toLowerCase());
 
   const doc = await db
     .collection("Posts")
-    .where("SkillsWanted", "array-contains-any", lowercaseFilters)
+    .where("skillsWanted", "array-contains-any", queryFilters)
     .get();
 
-  const additionalPostsData = doc.docs.map((doc) => doc.data() as Post);
+    const postsData: PostPage[] = [];
 
-  const postsData: Post[] = [];
-  postsData.push(...additionalPostsData);
-
-  return postsData;
+    for (const postDoc of doc.docs) {
+      const postData = postDoc.data() as Post;
+      const postGroup = await postData.owner.get();
+      if (postGroup.exists) {
+        const groupData = postGroup.data() as Group;
+        const condensedGroupData: condensedGroup = {
+          id: postGroup.id,
+          name: groupData.name,
+          description: groupData.description,
+          color: groupData.color
+        };
+        const resolvedPostData = {
+          ...postData,
+          owner: condensedGroupData,
+        };
+        postsData.push(resolvedPostData as PostPage);
+      }
+    }
+  
+    return postsData;
 }

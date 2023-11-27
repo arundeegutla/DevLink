@@ -214,8 +214,8 @@ router.get("/get/:id", retreivePostData);
  *      - Posts
  *     description: Retrieve a post(s) by their filter
  *     parameters:
- *       - in: path
- *         filter: filter
+ *       - in: query
+ *         name: filter
  *         schema:
  *           type: array
  *         required: true
