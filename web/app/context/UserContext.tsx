@@ -8,11 +8,12 @@ import React, {
 } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
-import { getUserById } from '@/hooks/users';
+import { getUser } from '@/hooks/users';
 import Loading from '@components/common/Loading';
 import { User } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import * as models from '@/hooks/models';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 interface UserContextProps {
   fbuser: User;
@@ -27,14 +28,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [fbuser, authLoading, error] = useAuthState(auth);
   const [user, setUser] = useState<models.User>();
+  const [queryClient] = React.useState(() => new QueryClient())
   const [loading, setLoading] = useState(true);
 
   const refetchUser = useCallback(async () => {
     setLoading(true);
     if (fbuser) {
-      setUser(
-        await getUserById(fbuser, fbuser.uid).finally(() => setLoading(false))
-      );
+      let u = await getUser(fbuser, fbuser.uid);
+      setUser(u ? u : undefined);
+      setLoading(false);
     }
   }, [fbuser]);
 
@@ -53,9 +55,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ fbuser, user, refetchUser }}>
-      {children}
-    </UserContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <UserContext.Provider value={{ fbuser, user, refetchUser }}>
+        {children}
+      </UserContext.Provider>
+    </QueryClientProvider>
   );
 };
 

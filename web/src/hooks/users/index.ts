@@ -12,12 +12,12 @@ export async function searchUser(user: FirebaseUser, searchQuery: string) {
     config
   ).then(res => {
     if (res.status !== 200) {
-      return undefined;
+      return null;
     }
 
     return res.data as models.User;
   }).catch(err => {
-    return undefined;
+    return null;
   });
 }
 
@@ -30,48 +30,43 @@ export function useSearchUser(user: FirebaseUser, searchQuery: string) {
 }
 
 
-export async function getUserById(user: FirebaseUser, userId: string) {
+export async function getUser(user: FirebaseUser, userId: string) {
   const config = await generateRequestConfig(user);
   return http.get(
     `/users/get/${encodeURIComponent(userId)}`,
     config
   ).then(res => {
     if (res.status !== 200) {
-      return undefined;
+      return null;
     }
 
     return res.data as models.User;
   }).catch(err => {
-    return undefined;
+    return null;
   });
 }
 
 
-export function useGetById(user: FirebaseUser, userId: string) {
+export function useGetUser(user: FirebaseUser, userId: string) {
   return useQuery({
-    queryKey: ["getById", userId],
-    queryFn: () => getUserById(user, userId)
+    queryKey: ["getUser", userId],
+    queryFn: () => getUser(user, userId)
   })
 }
 
 
 export async function createProfile(user: FirebaseUser, profile: {
-  email: string;
-  github: string;
-  firstName: string;
-  lastName: string;
-  skills: string[];
+  firstName: string,
+  lastName: string,
+  email: string,
+  github: string,
+  linkedin: string,
+  skills: string[],
 }) {
   const config = await generateRequestConfig(user);
   return http.post(
     "/users/createProfile",
-    {
-      email: profile.email,
-      github: profile.github,
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      skills: profile.skills
-    },
+    profile,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -90,11 +85,12 @@ export function useCreateProfile() {
     mutationFn: (data: {
       user: FirebaseUser,
       profile: {
-        email: string;
-        github: string;
-        firstName: string;
-        lastName: string;
-        skills: string[];
+        firstName: string,
+        lastName: string,
+        email: string,
+        github: string,
+        linkedin: string,
+        skills: string[],
       }
     }) => createProfile(data.user, data.profile)
   })
@@ -102,22 +98,17 @@ export function useCreateProfile() {
 
 
 export async function editProfile(user: FirebaseUser, profile: {
-  email: string;
-  github: string;
-  firstName: string;
-  lastName: string;
-  skills: string[];
+  firstName: string,
+  lastName: string,
+  email: string,
+  github: string,
+  linkedin: string,
+  skills: string[],
 }) {
   const config = await generateRequestConfig(user);
   return http.put(
     "/users/editProfile",
-    {
-      email: profile.email,
-      github: profile.github,
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      skills: profile.skills
-    },
+    profile,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -136,11 +127,12 @@ export function useEditProfile() {
     mutationFn: (data: {
       user: FirebaseUser,
       profile: {
-        email: string;
-        github: string;
-        firstName: string;
-        lastName: string;
-        skills: string[];
+        firstName: string,
+        lastName: string,
+        email: string,
+        github: string,
+        linkedin: string,
+        skills: string[],
       }
     }) => editProfile(data.user, data.profile)
   })

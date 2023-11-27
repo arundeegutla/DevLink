@@ -144,7 +144,7 @@ router.put("/editPost", editExistingPost);
 /**
  * @swagger
  * /posts/deletePost:
- *   delete:
+ *   post:
  *     summary: Delete a post
  *     tags:
  *      - Posts
@@ -172,7 +172,7 @@ router.put("/editPost", editExistingPost);
  *       '403':
  *         description: Forbidden
  */
-router.delete("/deletePost", deleteExistingPost);
+router.post("/deletePost", deleteExistingPost);
 
 /**
  * @swagger

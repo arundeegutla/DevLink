@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { User as FirebaseUser } from "firebase/auth";
 
 import * as models from "@/hooks/models";
@@ -6,6 +6,7 @@ import { http, generateRequestConfig } from "@/hooks/default";
 
 
 export async function createPost(user: FirebaseUser, post: {
+  groupId: string,
   title: string,
   body: string,
   skillsWanted: string[]
@@ -13,11 +14,7 @@ export async function createPost(user: FirebaseUser, post: {
   const config = await generateRequestConfig(user);
   return http.post(
     "/posts/createPost",
-    {
-      title: post.title,
-      body: post.body,
-      skillsWanted: post.skillsWanted
-    },
+    post,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -36,6 +33,7 @@ export function useCreatePost() {
     mutationFn: (data: {
       user: FirebaseUser,
       post: {
+        groupId: string,
         title: string,
         body: string,
         skillsWanted: string[]
@@ -55,11 +53,7 @@ export async function editPost(user: FirebaseUser, post: {
 
   return http.put(
     "/posts/editPost",
-    {
-      title: post.title,
-      body: post.body,
-      postId: post.postId
-    },
+    post,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -91,8 +85,11 @@ export function useEditPost() {
 export async function deletePost(user: FirebaseUser, postId: string) {
   const config = await generateRequestConfig(user);
 
-  return http.delete(
-    `/posts/deletePost/${encodeURIComponent(postId)}`,
+  return http.post(
+    `/posts/deletePost`,
+    {
+      postId: postId
+    },
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -112,5 +109,29 @@ export function useDeletePost() {
       user: FirebaseUser,
       postId: string
     }) => deletePost(data.user, data.postId)
+  })
+}
+
+export async function getPost(user: FirebaseUser, postId: string) {
+  const config = await generateRequestConfig(user);
+  return http.get(
+    `/posts/get/${encodeURIComponent(postId)}`,
+    config
+  ).then(res => {
+    if (res.status !== 200) {
+      return null;
+    }
+
+    return res.data as models.User;
+  }).catch(err => {
+    return null;
+  });
+}
+
+
+export function useGetPost(user: FirebaseUser, postId: string) {
+  return useQuery({
+    queryKey: ["getPost", postId],
+    queryFn: () => getPost(user, postId)
   })
 }

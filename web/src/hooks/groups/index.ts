@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { User as FirebaseUser } from "firebase/auth";
 
 import * as models from "@/hooks/models";
@@ -7,15 +7,13 @@ import { http, generateRequestConfig } from "@/hooks/default";
 
 export async function createGroup(user: FirebaseUser, group: {
   name: string,
-  description: string
+  description: string,
+  color: string
 }) {
   const config = await generateRequestConfig(user);
   return http.post(
     "/groups/createGroup",
-    {
-      name: group.description,
-      description: group.description
-    },
+    group,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -35,7 +33,8 @@ export function useCreateGroup() {
       user: FirebaseUser,
       group: {
         name: string,
-        description: string
+        description: string,
+        color: string
       }
     }) => createGroup(data.user, data.group)
   });
@@ -43,16 +42,15 @@ export function useCreateGroup() {
 
 
 export async function editGroup(user: FirebaseUser, group: {
+  groupId: string,
   name: string,
-  description: string
+  description: string,
+  color: string,
 }) {
   const config = await generateRequestConfig(user);
   return http.put(
     "/groups/editGroup",
-    {
-      name: group.description,
-      description: group.description
-    },
+    group,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -71,8 +69,10 @@ export function useEditGroup() {
     mutationFn: (data: {
       user: FirebaseUser,
       group: {
+        groupId: string,
         name: string,
-        description: string
+        description: string,
+        color: string
       }
     }) => editGroup(data.user, data.group)
   });
@@ -117,11 +117,7 @@ export async function handleRequest(user: FirebaseUser, group: {
   const config = await generateRequestConfig(user);
   return http.post(
     "/groups/handleJoinRequest",
-    {
-      groupId: group.groupId,
-      accept: group.accept,
-      requestedUserId: group.requestedUserId
-    },
+    group,
     config
   ).then(res => {
     if (res.status !== 200) {
@@ -146,4 +142,29 @@ export function useHandleRequest() {
       }
     }) => handleRequest(data.user, data.group)
   });
+}
+
+// TODO
+export async function getGroup(user: FirebaseUser, groupId: string) {
+  const config = await generateRequestConfig(user);
+  return http.get(
+    `/groups/get/${encodeURIComponent(groupId)}`,
+    config
+  ).then(res => {
+    if (res.status !== 200) {
+      return null;
+    }
+
+    return res.data as models.User;
+  }).catch(err => {
+    return null;
+  });
+}
+
+
+export function useGetGroup(user: FirebaseUser, groupId: string) {
+  return useQuery({
+    queryKey: ["getGroup", groupId],
+    queryFn: () => getGroup(user, groupId)
+  })
 }
