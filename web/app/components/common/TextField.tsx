@@ -3,6 +3,7 @@ import { MdError } from 'react-icons/md';
 // react
 import { ChangeEvent, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { Icons } from '@/models/icons';
 
 interface TextFieldProps {
   label: string;
@@ -13,7 +14,6 @@ interface TextFieldProps {
   eye?: boolean;
   autoComplete?: string;
   errorMsg?: string;
-  errSwitch?: boolean;
   defaultValue?: string;
   value?: string;
 }
@@ -27,7 +27,7 @@ export default function TextField({
   eye = false,
   autoComplete,
   errorMsg,
-  errSwitch,
+
   defaultValue,
   value,
 }: TextFieldProps) {
@@ -41,28 +41,31 @@ export default function TextField({
   return (
     <div
       className={twMerge(
-        'input-group relative flex w-full rounded-[10px] box-border border-2 border-[#525252] bg-gray-200 text-black',
+        `input-group relative flex w-full h-fit rounded-[10px] box-border border-2 border-[#525252] bg-gray-200 text-black overflow-hidden 
+        ${errorMsg && 'border-2 border-red-500'}`,
         `${className}`
       )}>
       <input
+        onFocus={handleInputChange}
         onChange={handleInputChange}
         type={!eye || !eyeToggle ? type : 'text'}
         name={name}
         defaultValue={defaultValue}
-        className={`${eye ? 'mr-9' : ''}`}
+        className={`relative ${eye && 'mr-9'}`}
         autoComplete={autoComplete ?? ''}
         value={value}
         required
       />
       <label>{label}</label>
-      <span
-        className={`${errorMsg ? 'flex' : 'hidden'} tooltiptext ${
-          errSwitch ? '' : 'left'
-        }`}>
-        <MdError className="text-2xl" />
-        {errorMsg ?? 'Required'}
-      </span>
-      {eye ? (
+
+      {errorMsg && (
+        <div className="absolute flex flex-row items-center right-0 h-fit my-auto bg-red-300 px-3 py-1 text-sm rounded-bl-lg ">
+          <Icons.Warning className="mr-1" />
+          {errorMsg}
+        </div>
+      )}
+
+      {eye && (
         <div
           onClick={() => setEyeToggle(!eyeToggle)}
           className="absolute right-3 top-[40%] cursor-pointer">
@@ -78,8 +81,6 @@ export default function TextField({
             />
           </svg>
         </div>
-      ) : (
-        ''
       )}
     </div>
   );

@@ -23,7 +23,6 @@ const SkillsDropdown = ({
   };
 
   const handleSkillClick = (selectedSkill: SkillType) => {
-    console.log(selectedSkill.name);
     setIsOpen(false);
     setSearchVal('');
     setSelectedSkills((skills) => {

@@ -6,10 +6,10 @@ import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
 import Stepper from '@components/common/Stepper';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 
 export default function InfoStep({ onNext, onBack }: StepProps) {
-  const { fbuser } = useUser();
+  const { fbuser } = useFBUser();
 
   let displayName = fbuser.displayName ?? '';
   const nameArray = displayName.split(' ');
@@ -86,7 +86,6 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             autoComplete="fname"
             errorMsg={fnameError}
             className="mt-3 bg-gray-800 text-gray-300"
-            errSwitch={true}
             defaultValue={fname}
           />
           <TextField
@@ -98,7 +97,6 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             errorMsg={lnameError}
             className="mt-3 bg-gray-800 text-gray-300"
             defaultValue={lname}
-            errSwitch={true}
           />
         </div>
       </div>
@@ -136,14 +134,20 @@ const ImageUpload = ({
   };
   return (
     <div>
-      <Image
-        width={0}
-        height={0}
-        className="w-52 aspect-square rounded-full mr-6 object-fill border-2 cursor-pointer hover:border-4 hover:border-gray-100"
-        src={image}
-        alt="test"
-        onClick={onImageClick}
-      />
+      <div
+        className="relative w-52 aspect-square rounded-full mr-6 border-2 cursor-pointer hover:border-4 hover:border-gray-100 overflow-hidden"
+        onClick={onImageClick}>
+        <Image
+          width={0}
+          height={0}
+          className="object-fill w-52 aspect-square rounded-full"
+          src={image}
+          alt="test"
+        />
+        <div className="absolute bottom-0 mx-0 left-0 right-0 flex flex-row items-center justify-center bg-black/[50%] p-2 backdrop-blur-lg text-sm">
+          Edit Image
+        </div>
+      </div>
       <input
         type="file"
         accept="image/*"

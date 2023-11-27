@@ -3,7 +3,8 @@ import { StepProps } from './page';
 import Stepper from '@components/common/Stepper';
 import TextField from '@components/common/TextField';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function ConnectServices({
   onFinish,
@@ -16,7 +17,8 @@ export default function ConnectServices({
   setGithubPar: Dispatch<SetStateAction<string>>;
   setLinkedinPar: Dispatch<SetStateAction<string>>;
 }) {
-  const { fbuser, user } = useUser();
+  const { fbuser } = useFBUser();
+  const { user } = useDLUser();
   const [phone, setPhone] = useState('');
   const [github, setGitHub] = useState(user?.github ?? '');
   const [linkedin, setLinkedIn] = useState('');
@@ -110,7 +112,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={phone}
-          errSwitch={true}
           errorMsg={phoneErr}
         />
       </div>
@@ -124,7 +125,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={github}
-          errSwitch={true}
           errorMsg={githubErr}
         />
       </div>
@@ -138,7 +138,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={linkedin}
-          errSwitch={true}
           errorMsg={linkedinErr}
         />
       </div>

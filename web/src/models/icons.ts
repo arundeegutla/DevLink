@@ -46,13 +46,15 @@ import { IconType } from 'react-icons';
 import {
   BsArrowLeftCircleFill,
   BsArrowRightCircleFill,
+  BsArrowUpRight,
   BsFillPlusCircleFill,
+  BsLightbulbFill,
   BsTelephoneFill,
 } from 'react-icons/bs';
 import { HiOutlinePlus } from 'react-icons/hi2';
 import { LuSearch } from 'react-icons/lu';
 import { BiSolidMessageSquareDetail } from 'react-icons/bi';
-import { IoEarthOutline, IoSettingsSharp } from 'react-icons/io5';
+import { IoEarthOutline, IoSettingsSharp, IoMail } from 'react-icons/io5';
 
 export type SkillType = {
   name: string;
@@ -105,6 +107,9 @@ export const Icons = {
   Explore: MdExplore,
   Earth: IoEarthOutline,
   Settings: IoSettingsSharp,
+  LightBulb: BsLightbulbFill,
+  Email: IoMail,
+  ArrowUpRight: BsArrowUpRight,
 };
 
 export const skills: SkillType[] = [

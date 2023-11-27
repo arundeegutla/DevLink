@@ -1,4 +1,3 @@
-
 export type User = {
   email?: string;
   github?: string;
@@ -11,6 +10,7 @@ export type User = {
 
 export type Group = {
   name: string;
+  color: string;
   description: string;
   owner: condensedUser;
   members: condensedUser[];
@@ -30,7 +30,7 @@ export type condensedUser = {
   id: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export type condensedGroup = {
   id: string;

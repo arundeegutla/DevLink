@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { VerifyStep } from './VerifyStep';
-import { UserProvider, useUser } from '@context/UserContext';
 import { createProfile, getUser } from '@/hooks/users';
 import HomeBar from '@components/common/HomeBar';
 import ProgressBar from '@components/common/ProgressBar';
@@ -13,6 +12,7 @@ import ConnectServices from './ConnectServices';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import Loading from '@components/common/Loading';
+import { FBUserProvider } from '@context/FBUserContext';
 
 export interface StepProps {
   onNext?: () => void;
@@ -116,7 +116,7 @@ export default function CreateProfilePage() {
   ];
 
   return (
-    <UserProvider>
+    <FBUserProvider>
       <main className="relative w-screen h-screen">
         <HomeBar className="backdrop-blur-[40px]" />
         <div className="relative z-10 flex flex-col items-center h-screen overflow-scroll pt-16 w-full">
@@ -139,6 +139,6 @@ export default function CreateProfilePage() {
         </div>
         <div className="absolute top-0 w-screen h-screen bg-[#0f0f0f]"></div>
       </main>
-    </UserProvider>
+    </FBUserProvider>
   );
 }
