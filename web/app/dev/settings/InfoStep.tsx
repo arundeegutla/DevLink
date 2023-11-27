@@ -86,7 +86,6 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             autoComplete="fname"
             errorMsg={fnameError}
             className="mt-3 bg-gray-800 text-gray-300"
-            errSwitch={true}
             defaultValue={fname}
           />
           <TextField
@@ -98,7 +97,6 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
             errorMsg={lnameError}
             className="mt-3 bg-gray-800 text-gray-300"
             defaultValue={lname}
-            errSwitch={true}
           />
         </div>
       </div>

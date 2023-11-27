@@ -112,7 +112,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={phone}
-          errSwitch={true}
           errorMsg={phoneErr}
         />
       </div>
@@ -126,7 +125,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={github}
-          errSwitch={true}
           errorMsg={githubErr}
         />
       </div>
@@ -140,7 +138,6 @@ export default function ConnectServices({
           type="text"
           className="bg-gray-800 text-gray-300 border-none rounded-l-none"
           value={linkedin}
-          errSwitch={true}
           errorMsg={linkedinErr}
         />
       </div>
