@@ -1,38 +1,47 @@
 export type User = {
   email?: string;
   github?: string;
-  linkedin: string;
+  linkedin?: string;
   firstName: string;
   lastName: string;
-  groups: Group[];
-  skills: string[];
-};
-
-export type UserPage = User & {
   groups: condensedGroup[];
-};
-
-export type condensedGroup = {
-  id: string;
-  name: string;
-  color: string;
-  description: string;
+  skills: string[];
 };
 
 export type Group = {
   name: string;
-  description: string;
-  owner: User;
-  members: User[];
-  userQueue: User[];
   color: string;
-  posts: Post[];
+  description: string;
+  owner: condensedUser;
+  members: condensedUser[];
+  userQueue: condensedUser[];
+  posts: condensedPost[];
+  color: string;
 };
 
 export type Post = {
   title: string;
   body: string;
+  owner: condensedGroup;
   skillsWanted: string[];
-  owner: Group;
-  postId: string;
+};
+
+export type condensedUser = {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
+export type condensedGroup = {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+};
+
+export type condensedPost = {
+  id: string;
+  title: string;
+  body: string;
+  skillsWanted: string[];
 };

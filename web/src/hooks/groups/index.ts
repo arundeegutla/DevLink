@@ -152,12 +152,10 @@ export async function getGroup(user: FirebaseUser, groupId: string) {
       if (res.status !== 200) {
         return null;
       }
-
-      return res.data as models.User;
-    })
-    .catch((err) => {
-      return null;
-    });
+    return res.data as models.Group;
+  }).catch(err => {
+    return null;
+  });
 }
 
 export function useGetGroup(user: FirebaseUser, groupId: string) {
