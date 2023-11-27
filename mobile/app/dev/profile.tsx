@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { useCreateProfile } from '../../src/hooks/saveProfileFn'; // Update with the correct path
+import { useCreateProfile } from '../../src/hooks/users/index'; 
 
 const Profile = ({ }) => {
   const router = useRouter();
