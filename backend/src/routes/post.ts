@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { createInitialPost, editExistingPost, deleteExistingPost, retreivePostData } from "../controllers/post";
+import { createInitialPost, editExistingPost, deleteExistingPost, searchExistingPost, retreivePostData } from "../controllers/post";
 
 /**
  * @swagger
@@ -204,5 +204,32 @@ router.delete("/deletePost", deleteExistingPost);
  *         description: Forbidden
  */
 router.get("/get/:id", retreivePostData);
+
+/**
+ * @swagger
+ * /posts/search:
+ *   get:
+ *     summary: Get post(s) by filter
+ *     tags:
+ *      - Posts
+ *     description: Retrieve a post(s) by their filter
+ *     parameters:
+ *       - in: path
+ *         filter: filter
+ *         schema:
+ *           type: array
+ *         required: true
+ *         description: Filter(s) of the post to retrieve
+ *     responses:
+ *       '200':
+ *         description: A single post object
+ *         content:
+ *           application/json:
+ *             schema:
+ *       '404':
+ *         description: Post not found
+ */
+router.get("/search", searchExistingPost);
+
 
 export default router;

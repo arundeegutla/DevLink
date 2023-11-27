@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { createPost, editPost, deletePost, getPostUserOwner, getPostById } from "../services/post";
+import { createPost, editPost, deletePost, getPostUserOwner, getPostByFilter, getPostById } from "../services/post";
 import { Post } from "../models/db";
 import { validateNewPost, validateEdit } from "../utils/post";
 import { getGroupOwner, groupWithIdExists } from "../services/group";
@@ -132,3 +132,17 @@ export const retreivePostData = async (
     next(error);
   }
 }
+
+export const searchExistingPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { queryFilters } = req.body;
+  try {
+    const postResult: Post[] = await getPostByFilter(queryFilters);
+    res.send(postResult);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -91,3 +91,21 @@ export const getPostUserOwner = async (
     throw error;
   }
 };
+
+export const getPostByFilter = async (
+  queryFilters: string[]
+): Promise<Post[] | undefined> => {
+  const lowercaseFilters = queryFilters.map((filter) => filter.toLowerCase());
+
+  const doc = await db
+    .collection("Posts")
+    .where("SkillsWanted", "array-contains-any", lowercaseFilters)
+    .get();
+
+  const additionalPostsData = doc.docs.map((doc) => doc.data() as Post);
+
+  const postsData: Post[] = [];
+  postsData.push(...additionalPostsData);
+
+  return postsData;
+}
