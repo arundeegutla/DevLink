@@ -46,6 +46,7 @@ import { IconType } from 'react-icons';
 import {
   BsArrowLeftCircleFill,
   BsArrowRightCircleFill,
+  BsArrowUpRight,
   BsFillPlusCircleFill,
   BsLightbulbFill,
   BsTelephoneFill,
@@ -108,6 +109,7 @@ export const Icons = {
   Settings: IoSettingsSharp,
   LightBulb: BsLightbulbFill,
   Email: IoMail,
+  ArrowUpRight: BsArrowUpRight,
 };
 
 export const skills: SkillType[] = [

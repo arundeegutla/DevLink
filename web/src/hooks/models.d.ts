@@ -30,7 +30,7 @@ export type condensedUser = {
   id: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export type condensedGroup = {
   id: string;

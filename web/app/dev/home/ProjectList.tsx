@@ -14,13 +14,7 @@ const ProjectList = ({
   return (
     <div className="flex flex-row flex-wrap transition-all duration-300 ease-in-out pb-11">
       {projects.map((item, indx) => (
-        <ProjectCard
-          key={indx}
-          id={item.name}
-          color={item.color}
-          role={'Front-End Engineer'}
-          title={item.name}
-        />
+        <ProjectCard key={item.id} {...item} />
       ))}
       <Tilt
         tiltReverse={true}
