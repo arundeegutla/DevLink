@@ -91,3 +91,36 @@ export const getPostUserOwner = async (
     throw error;
   }
 };
+
+export const getPostByFilter = async (
+  queryFilters: string[]
+): Promise<Post[] | undefined> => {
+
+  const doc = await db
+    .collection("Posts")
+    .where("skillsWanted", "array-contains-any", queryFilters)
+    .get();
+
+    const postsData: PostPage[] = [];
+
+    for (const postDoc of doc.docs) {
+      const postData = postDoc.data() as Post;
+      const postGroup = await postData.owner.get();
+      if (postGroup.exists) {
+        const groupData = postGroup.data() as Group;
+        const condensedGroupData: condensedGroup = {
+          id: postGroup.id,
+          name: groupData.name,
+          description: groupData.description,
+          color: groupData.color
+        };
+        const resolvedPostData = {
+          ...postData,
+          owner: condensedGroupData,
+        };
+        postsData.push(resolvedPostData as PostPage);
+      }
+    }
+  
+    return postsData;
+}
