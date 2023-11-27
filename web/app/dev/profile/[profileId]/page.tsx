@@ -10,27 +10,15 @@ import UserProfile from '@components/common/UserProfile';
 
 // Auth
 import { auth } from '@/firebase/clientApp';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function Profile() {
   const router = useRouter();
 
-  const [user, loading, error] = useAuthState(auth);
+  const { user } = useDLUser();
 
-  if (user && !user.emailVerified) {
-    router.push('/dev/verify');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-    router.push('/');
-    return <Loading />;
-  }
-
-  // WE WILL USE THIS SOON ON THIS PAGE, NEED TO REPLACE INSTANCES OF user WITH fbuser
-  // const { fbuser } = useUser();
-
-  return <UserProfile isSelfProfile={false} user={user} />;
+  return <UserProfile user={user!} />;
 }

@@ -15,11 +15,12 @@ import { useEffect, useRef, useState } from 'react';
 import PostCard from '@components/common/PostCard';
 import SkillsDropdown from './SkillsDropdown';
 import Skill from './Skill';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function ExploreView() {
   const router = useRouter();
-  const { fbuser, user } = useUser();
+  const { user } = useDLUser();
   const [results, setResults] = useState<Post[]>();
   const [searchVal, setSearchVal] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -102,11 +103,9 @@ export default function ExploreView() {
               setSelectedSkills={setSelectedSkills}
             />
             <div className="pt-16 flex flex-row flex-wrap items-start w-60">
-              {selectedSkills.length !== 0 ? (
-                mySkills.map((x) => {
-                  return !selectedSkills.some((skill) => skill == x.name) ? (
-                    ''
-                  ) : (
+              {mySkills.map((x) => {
+                return (
+                  selectedSkills.some((skill) => skill == x.name) && (
                     <Skill
                       key={x.name}
                       {...x}
@@ -114,21 +113,16 @@ export default function ExploreView() {
                       onClick={() => handleSkillClick(x)}
                       shouldHover={false}
                     />
-                  );
-                })
-              ) : (
-                <div className="text-gray-500 p-2">
-                  {user!.skills.length > 0 ? (
-                    <div
-                      onClick={resetSkills}
-                      className="mt-4 px-5 py-2 rounded-full bg-gray-900 text-gray-200 cursor-pointer hover:bg-gray-700 border-gray-700 border-2">
-                      Add My Skills
-                    </div>
-                  ) : (
-                    'Add Skills to refine search'
-                  )}
+                  )
+                );
+              })}
+              <div className="text-gray-500 p-2">
+                <div
+                  onClick={resetSkills}
+                  className="mt-2 px-5 py-2 rounded-full bg-gray-900 text-gray-200 cursor-pointer hover:bg-gray-700 border-gray-700 border-2">
+                  Reset My Skills
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

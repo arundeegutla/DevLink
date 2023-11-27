@@ -6,10 +6,10 @@ import TextField from '@components/common/TextField';
 import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 
 export default function InfoStep({ onNext, onBack }: StepProps) {
-  const { fbuser } = useUser();
+  const { fbuser } = useFBUser();
 
   let displayName = fbuser.displayName ?? '';
   const nameArray = displayName.split(' ');

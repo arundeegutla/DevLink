@@ -6,10 +6,10 @@ import SubmitBtn from '@components/common/SubmitBtn';
 import { useEffect, useState } from 'react';
 import { AlertProps } from '@components/common/Alert';
 import Alert from '@components/common/Alert';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 
 export function VerifyStep({ onBack, onFinish }: StepProps) {
-  const { fbuser } = useUser();
+  const { fbuser } = useFBUser();
 
   const [emailAlert, setEmailAlert] = useState<AlertProps>({
     children: '',

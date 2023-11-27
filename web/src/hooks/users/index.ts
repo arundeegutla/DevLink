@@ -3,6 +3,9 @@ import { User as FirebaseUser } from 'firebase/auth';
 
 import * as models from '@/hooks/models';
 import { http, generateRequestConfig } from '@/hooks/default';
+import { fstorage } from '@/firebase/clientApp';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { useState } from 'react';
 
 export async function searchUser(user: FirebaseUser, searchQuery: string) {
   const config = await generateRequestConfig(user);
@@ -133,3 +136,11 @@ export function useEditProfile() {
     }) => editProfile(data.user, data.profile),
   });
 }
+
+// export function useGetPhotoURL(user: models.User) {
+//   const [url, setUrl] = useState('');
+
+//   const fileRef = ref(fstorage,  + '.png');
+//   setUrl(await getDownloadURL(fileRef));
+//   return url;
+// }

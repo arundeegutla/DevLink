@@ -12,21 +12,10 @@ import UserProfile from '@components/common/UserProfile';
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function Account() {
   const router = useRouter();
-
-  const [user, loading, error] = useAuthState(auth);
-
-  if (user && !user.emailVerified) {
-    router.push('/dev/verify');
-    return <Loading />;
-  } else if (loading) {
-    return <Loading />;
-  } else if (error) {
-    router.push('/');
-    return <Loading />;
-  }
-
-  return <UserProfile isSelfProfile={true} user={user} />;
+  const { user } = useDLUser();
+  return <UserProfile user={user} />;
 }

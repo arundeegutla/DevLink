@@ -10,8 +10,9 @@ import InfoStep from './InfoStep';
 import SkillsStep from './SkillsStep';
 import ChangeServices from './ChangeServices';
 import ProgressBar from '@components/common/ProgressBar';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 import { editProfile } from '@/hooks/users';
+import { useDLUser } from '@context/DLUserContext';
 
 export interface StepProps {
   onNext?: () => void;
@@ -21,7 +22,8 @@ export interface StepProps {
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { fbuser, user, refetchUser } = useUser();
+  const { fbuser } = useFBUser();
+  const { refetch } = useDLUser();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [skills, setSkills] = useState<string[]>([]);
@@ -53,7 +55,7 @@ export default function SettingsPage() {
     })
       .then((completed) => {
         if (completed) {
-          refetchUser();
+          refetch();
           router.push('/dev/home');
         } else {
           console.log('there was an error editing profile');
