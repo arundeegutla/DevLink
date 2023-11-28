@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { User as FirebaseUser } from 'firebase/auth';
 
-import * as models from '@/hooks/models';
-import { http, generateRequestConfig } from '@/hooks/default';
+import * as models from '../models';
+import { http, generateRequestConfig } from '../default';
 
 export async function createPost(
   user: FirebaseUser,
