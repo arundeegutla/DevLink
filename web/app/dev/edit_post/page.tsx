@@ -6,20 +6,32 @@
 
 import { skills, SkillType, Icons } from '@models/icons';
 import { useFBUser } from '@context/FBUserContext';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import SkillsDropdown from './SkillsDropdown';
 import Skill from './Skill';
-import { useDLUser } from '@context/DLUserContext';
+import { useCreatePost, useEditPost, useGetPost } from '@/hooks/posts';
+import Loading from '@components/common/Loading';
+import { useSearchParams } from 'next/navigation';
 
 export default function EditPostView() {
-  const router = useRouter();
+  const params = useSearchParams();
   const { fbuser } = useFBUser();
-  const { user } = useDLUser();
 
-  const [title, setTitle] = useState<string>('New post for -project title-');
-  const [content, setContent] = useState<string>('');
+  const groupName = params.get("groupName") || "";
+
+  const postId = params.get("postId") || "";
+  const groupId = params.get("groupId") || "";
+  const isEditing = !!postId;
+
+  const { data, isPending } = useGetPost(fbuser, postId);
+
+  const createMutation = useCreatePost();
+  const editMutation = useEditPost();
+
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [title, setTitle] = useState<string>("");
+  const [body, setBody] = useState<string>("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const handleSkillClick = (selectedSkill: SkillType) => {
@@ -28,22 +40,55 @@ export default function EditPostView() {
     );
   };
 
-  const submitPost = () => {
-    // submit post
-  };
+  const submitPost = async () => {
+    if (title.length === 0 || body.length === 0) return;
+
+    let res = false;
+    if (isEditing) {
+      res = await editMutation.mutateAsync({
+        user: fbuser,
+        post: {
+          postId: postId,
+          title: title,
+          body: body,
+          skillsWanted: selectedSkills
+        }
+      });
+    }
+    else {
+      res = await createMutation.mutateAsync({
+        user: fbuser,
+        post: {
+          groupId: groupId,
+          title: title,
+          body: body,
+          skillsWanted: selectedSkills
+        }
+      });
+    }
+    
+  }
+
+  if (isEditing && isPending) {
+    return <Loading/>
+  }
+  else if (isLoading && isEditing && data) {
+    setTitle(data.title);
+    setBody(data.body);
+    setSelectedSkills(data.skillsWanted);
+    setLoading(false);
+  }
 
   return (
     <div className="w-full h-full pl-3 flex flex-col justify-center py-5">
-      <div className="my-5 text-4xl font-normal text-[#ffffff]">
-        Creating/Editing post for -project title-
-      </div>
+      <div className="my-5 text-4xl font-normal text-[#ffffff]">{isEditing ? "Editing" : "Creating"} post for: {groupName}</div>
       <div className="w-full h-full flex flex-row justify-center gap-3 mt-5 items-start">
         <div className="flex flex-col w-6/12 h-5/6 gap-3 items-center">
           <div className="flex flex-col rounded-xl bg-gray-700 text-black w-full h-15">
             <input
               placeholder="Title"
               className="h-full bg-transparent focus:outline-none m-3 text-white text-left"
-              onBlur={(event) => {
+              onChange={(event) => {
                 setTitle(event.target.value);
               }}
               value={title}
@@ -53,10 +98,10 @@ export default function EditPostView() {
             <textarea
               placeholder="Post Content"
               className="h-full bg-transparent focus:outline-none m-3 text-white text-left"
-              onBlur={(event) => {
-                setContent(event.target.value);
+              onChange={(event) => {
+                setBody(event.target.value);
               }}
-              value={content}
+              value={body}
             />
           </div>
           <button
