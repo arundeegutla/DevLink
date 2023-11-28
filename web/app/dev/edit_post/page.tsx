@@ -5,32 +5,38 @@
  */
 
 import { skills, SkillType, Icons } from '@models/icons';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import SkillsDropdown from './SkillsDropdown';
 import Skill from './Skill';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function EditPostView() {
   const router = useRouter();
-  const { fbuser, user } = useUser();
+  const { fbuser } = useFBUser();
+  const { user } = useDLUser();
 
   const [title, setTitle] = useState<string>('New post for -project title-');
   const [content, setContent] = useState<string>('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const handleSkillClick = (selectedSkill: SkillType) => {
-    setSelectedSkills(selectedSkills.filter((skill) => skill !== selectedSkill.name));
+    setSelectedSkills(
+      selectedSkills.filter((skill) => skill !== selectedSkill.name)
+    );
   };
 
   const submitPost = () => {
     // submit post
-  }
+  };
 
   return (
     <div className="w-full h-full pl-3 flex flex-col justify-center py-5">
-      <div className="my-5 text-4xl font-normal text-[#ffffff]">Creating/Editing post for -project title-</div>
+      <div className="my-5 text-4xl font-normal text-[#ffffff]">
+        Creating/Editing post for -project title-
+      </div>
       <div className="w-full h-full flex flex-row justify-center gap-3 mt-5 items-start">
         <div className="flex flex-col w-6/12 h-5/6 gap-3 items-center">
           <div className="flex flex-col rounded-xl bg-gray-700 text-black w-full h-15">

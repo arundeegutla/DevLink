@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative select-none">
+      <body className="relative w-full h-screen">
         <MobileWarning />
         {children}
       </body>

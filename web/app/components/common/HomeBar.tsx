@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import logo from '@images/logo2-white.png';
 import { usePathname } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { auth } from '@/firebase/clientApp';
@@ -41,7 +40,13 @@ export default function HomeBar({ className }: { className?: string }) {
       </Link>
       {current == '/' && (
         <div className="flex flex-row items-center">
-          <Link href="/auth" className="font-normal mx-5 hover:opacity-70">
+          <Link
+            target="_blank"
+            href="https://github.com/Usdiez/DevLink/main/README.md"
+            className="font-normal mr-5 hover:opacity-70">
+            About
+          </Link>
+          <Link href="/auth" className="font-normal mr-5 hover:opacity-70">
             Log In
           </Link>
           <Link href={{ pathname: '/auth', query: { signup: true } }}>

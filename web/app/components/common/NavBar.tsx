@@ -12,7 +12,7 @@ import { BiLogOut } from 'react-icons/bi';
 // Auth
 import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 import { Icons } from '@/models/icons';
 
 const navigation = [
@@ -23,7 +23,7 @@ const navigation = [
 ];
 
 export default function NavBar() {
-  const { fbuser } = useUser();
+  const { fbuser } = useFBUser();
   const currentPath = usePathname();
   const router = useRouter();
 

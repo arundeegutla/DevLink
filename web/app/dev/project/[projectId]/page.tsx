@@ -4,12 +4,12 @@
  * even if it a valid project ID, it will show 404 error.
  */
 
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
 import { useRouter } from 'next/navigation';
 
 export default function ProjectView() {
   const router = useRouter();
-  const { fbuser } = useUser();
+  const { fbuser } = useFBUser();
 
   return (
     <div className="w-full h-full flex flex-row items-center justify-center">

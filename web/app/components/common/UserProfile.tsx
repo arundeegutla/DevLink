@@ -4,43 +4,29 @@ import InfoBlock from './InfoBlock';
 import ProfilePageProject from './ProfilePageProject';
 
 // Icons
-import {
-  FaUser,
-  FaLinkedin,
-  FaGithub,
-} from 'react-icons/fa';
-import { IoMdMail } from "react-icons/io";
+import { FaUser, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { User } from '@/hooks/models';
+import Image from 'next/image';
+import { Icons } from '@/models/icons';
 
 export interface UserProfile {
-  isSelfProfile: boolean;
-  user: any
+  user: User;
 }
 
-export default function UserProfile({
-  isSelfProfile,
-  user,
-}: UserProfile) {
-
+export default function UserProfile({ user }: UserProfile) {
   const getProfilePic = () => {
-    if (!user) {
-      return (
-        <FaUser className="h-36 w-36 border border-[#4e4e4e] rounded-full" />
-      )
-    }
     return (
-      <img
+      <Image
+        width={0}
+        height={0}
         src={
-          isSelfProfile ?
-          (user.photoURL ??
-          'https://s3-symbol-logo.tradingview.com/alphabet--600.png') :
-           // TODO: Get other user's profile picture - temporary placeholder
-          'https://s3-symbol-logo.tradingview.com/alphabet--600.png'
+          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
         }
         className="h-36 w-36 border border-[#4e4e4e] rounded-full"
         alt="Profile Picture"
       />
-    )
-  }
+    );
+  };
 
   return (
     <div className="w-full h-full flex flex-col pl-8 pr-12 py-8">
@@ -48,23 +34,22 @@ export default function UserProfile({
       <div className="w-full h-1/3 flex items-center bg-[#252525] rounded-xl overflow-hidden p-4">
         <div className="w-2/3 h-full flex items-center">
           {/* User profile picture (tilt cause why not)*/}
-          <Tilt
-            tiltReverse={true}
-            glareMaxOpacity={0}
-            transitionSpeed={1000}
-          >
+          <Tilt tiltReverse={true} glareMaxOpacity={0} transitionSpeed={1000}>
             <div className="ml-2 mr-8">{getProfilePic()}</div>
           </Tilt>
           {/* User names and roles */}
           <div className="flex flex-col">
-            <h1 className="text-5xl font-semibold">DISPLAY NAME</h1>
+            <h1 className="text-5xl font-semibold">
+              {user.firstName + ' ' + user.lastName}
+            </h1>
+            <h3 className="text-2xl font-medium mt-2">FRONT END</h3>
           </div>
         </div>
         {/* Info block to hold user's information */}
         <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
-          { isSelfProfile && <InfoBlock infoLink="put ur email here" Icon={IoMdMail} /> }
-          <InfoBlock infoLink="put ur linkedin here" Icon={FaLinkedin} />
-          <InfoBlock infoLink="put ur github here" Icon={FaGithub} />
+          <InfoBlock infoLink="put ur email here" Icon={Icons.Email} />
+          <InfoBlock infoLink="put ur linkedin here" Icon={Icons.LinkedIn} />
+          <InfoBlock infoLink="put ur github here" Icon={Icons.GitHub} />
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}

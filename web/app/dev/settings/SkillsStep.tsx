@@ -4,7 +4,8 @@ import { twMerge } from 'tailwind-merge';
 import { SkillType, Icons, skills } from '@models/icons';
 import { StepProps } from './page';
 import Stepper from '@components/common/Stepper';
-import { useUser } from '@context/UserContext';
+import { useFBUser } from '@context/FBUserContext';
+import { useDLUser } from '@context/DLUserContext';
 
 export default function SkillsStep({
   onNext,
@@ -12,7 +13,8 @@ export default function SkillsStep({
   retSkills,
 }: StepProps & { retSkills: Dispatch<SetStateAction<string[]>> }) {
   const [searchVal, setSearchVal] = useState('');
-  const { fbuser, user } = useUser();
+  const { fbuser } = useFBUser();
+  const { user } = useDLUser();
 
   const handleSearchChange = (event: any) => {
     setSearchVal(event.target.value);
