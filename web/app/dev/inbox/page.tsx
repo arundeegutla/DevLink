@@ -72,7 +72,6 @@ export default function Inbox() {
   >([]);
   useEffect(() => {
     setLoadingMessages(true);
-    console.log("rendered");
 
     const q = query(
       collection(
@@ -94,15 +93,6 @@ export default function Inbox() {
     return unsubscribe;
   }, [selectedGroup]);
 
-  console.log(groups);
-
-  console.log(messages);
-
-  if (isLoading) {
-    return <Loading />;
-  } else if (isError) {
-    return <div>Error</div>;
-  }
   return (
     <div className="w-full h-full flex flex-row items-center justify-center p-4">
       <div className="w-1/4 h-full flex flex-col items-center bg-[#252525] p-2 border-[#747474] border-e-2 rounded-l-3xl">
@@ -145,6 +135,7 @@ export default function Inbox() {
           </div>
         </div>
         {/* Chat body container - contains all the messages in the chat */}
+        {(isLoading || loadingMessages) ? <Loading /> :
         <div className="w-full h-full flex flex-col-reverse overflow-y-scroll px-4 py-2">
           {messages.map((message) => {
             const messageUser = groupData.members.find(
@@ -159,9 +150,8 @@ export default function Inbox() {
               />
             );
           })}
-        </div>
+        </div> }
         {/* Chat messenger container - contains the text bar where users can send messages */}
-        {loadingMessages ? <Loading /> :
         <div className="w-full h-20 flex items-center bg-[#1f1f1f] border-[#747474] border-t-2 p-3">
           <input
             type="text"
@@ -182,7 +172,7 @@ export default function Inbox() {
           >
             <BsSendFill className="text-xl" />
           </div>
-        </div>}
+        </div>
       </div>
     </div>
   );
