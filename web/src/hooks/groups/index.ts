@@ -149,12 +149,9 @@ export async function getGroup(user: FirebaseUser, groupId: string) {
   return http
     .get(`/groups/get/${encodeURIComponent(groupId)}`, config)
     .then((res) => {
-      if (res.status !== 200) {
-        return null;
-      }
     return res.data as models.Group;
   }).catch(err => {
-    return null;
+    throw err;
   });
 }
 
