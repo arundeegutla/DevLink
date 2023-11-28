@@ -78,7 +78,7 @@ export default function Inbox() {
           </div>
         </div>
         {/* Chat body container - contains all the messages in the chat */}
-        <div className="w-full h-full flex flex-col-reverse overflow-y-scroll px-4 py-2">
+        <div className="w-full h-full flex flex-col overflow-y-scroll px-4 py-2">
           <ChatMessage messageContent={"Hey, how's it going?"} isOwnMessage={true} user={fbuser} />
           <ChatMessage messageContent={"Not too bad, just busy with work."} isOwnMessage={false} user={fbuser} />
           <ChatMessage messageContent={"I totally get that. Anything exciting happening?"} isOwnMessage={true} user={fbuser} />

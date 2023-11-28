@@ -1,6 +1,7 @@
 // External Components
 import Tilt from 'react-parallax-tilt';
 import InfoBlock from './InfoBlock';
+import ProfilePageProject from './ProfilePageProject';
 
 // Icons
 import {
@@ -57,7 +58,6 @@ export default function UserProfile({
           {/* User names and roles */}
           <div className="flex flex-col">
             <h1 className="text-5xl font-semibold">DISPLAY NAME</h1>
-            <h3 className="text-2xl font-medium mt-2">ROLE / PROFILE DESCRIPTION</h3>
           </div>
         </div>
         {/* Info block to hold user's information */}
@@ -69,13 +69,16 @@ export default function UserProfile({
       </div>
       {/* Bottom div for posts/projects view and skills section */}
       <div className="w-full h-full flex flex-row justify-between mt-12">
-        {/* TODO: Create the projets component to display each project */}
-        <div className="w-2/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center mr-12 p-2">
+        <div className="w-2/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center mr-12 p-2 overflow-y-scroll">
           <h1>Projects</h1>
-          <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
+          <hr className="mt-1 border-t-2 w-full border-[#3b3b3b]" />
+          <div className="w-full h-full flex flex-col px-1">
+            <ProfilePageProject id="1" title="DevLink" color="red" description="project" />
+            <ProfilePageProject id="2" title="other project" color="blue" description="Harnessing cutting-edge algorithms to create harmonious melodies that adapt in real-time to users' moods and preferences." />
+          </div>
         </div>
         {/* TODO: Fill skill section with arun's skills components */}
-        <div className="w-1/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center p-2">
+        <div className="w-1/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center p-2 overflow-y-scroll">
           <h1>Skills</h1>
           <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
         </div>
