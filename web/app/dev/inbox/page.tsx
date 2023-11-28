@@ -1,24 +1,108 @@
-'use client';
+"use client";
 /**
  * Shows all existing conversations. Allows you to click on conversation and send messages?
  */
 
 // External Components
-import Loading from '@components/common/Loading';
-import GroupChatBlock from '@components/common/GroupChatBlock';
-import ChatMessage from '@components/common/ChatMessage';
-import Image from 'next/image';
+import Loading from "@components/common/Loading";
+import GroupChatBlock from "@components/common/GroupChatBlock";
+import ChatMessage from "@components/common/ChatMessage";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Group } from "@/hooks/models";
+import {
+  collection,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+
 // Icons
-import { BsArrowUpRight, BsSendFill } from 'react-icons/bs';
+import { BsArrowUpRight, BsSendFill } from "react-icons/bs";
 
 // Auth
-import { useFBUser } from '@context/FBUserContext';
-import { useRouter } from 'next/navigation';
+import { useFBUser } from "@context/FBUserContext";
+import { useDLUser } from "@context/DLUserContext";
+import { useRouter } from "next/navigation";
+import { useGetGroup } from "@/hooks/groups";
 
 export default function Inbox() {
   const router = useRouter();
   const { fbuser } = useFBUser();
+  const { user } = useDLUser();
 
+  // Initialize Firestore
+  const firestore = getFirestore();
+
+  // Make a array of the users groups based on user.groups
+  const [groups, setGroups] = useState(user.groups);
+  const [selectedGroup, setSelectedGroup] = useState(groups[0] ?? null);
+  const [inputValue, setInputValue] = useState("");
+  const [loadingMessages, setLoadingMessages] = useState(true);
+
+  const handleSendMessage = async () => {
+    if (inputValue.trim() !== "") {
+      const currValue = inputValue;
+      setInputValue("");
+      await addDoc(
+        collection(firestore, "Groups", selectedGroup?.id, "messages"),
+        {
+          id: fbuser.uid,
+          content: currValue,
+          created: serverTimestamp(),
+        }
+      );
+    }
+  };
+
+  const handleSelectGroup = (groupId: string) => {
+    const newGroup = groups.find((group) => group.id === groupId);
+    if (newGroup !== undefined)
+      setSelectedGroup(newGroup);
+      setMessages([]);
+  };
+
+  const {data: groupData, isLoading, isError} = useGetGroup(fbuser, selectedGroup?.id) as {data: Group, isLoading: boolean, isError: boolean};  // Make an array of all the messages in a group based on the group's messages subcollection and sort by timestamp
+  const [messages, setMessages] = useState<
+    { messageKey: string; id: string; content: string }[]
+  >([]);
+  useEffect(() => {
+    setLoadingMessages(true);
+    console.log("rendered");
+
+    const q = query(
+      collection(
+        doc(collection(firestore, "Groups"), selectedGroup?.id),
+        "messages"
+      ),
+      orderBy("created", "desc")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setMessages(
+        snapshot.docs.map((doc) => ({
+          messageKey: doc.id,
+          id: doc.data().id as string,
+          content: doc.data().content as string,
+        }))
+      );
+      setLoadingMessages(false);
+    });
+    return unsubscribe;
+  }, [selectedGroup]);
+
+  console.log(groups);
+
+  console.log(messages);
+
+  if (isLoading) {
+    return <Loading />;
+  } else if (isError) {
+    return <div>Error</div>;
+  }
   return (
     <div className="w-full h-full flex flex-row items-center justify-center p-4">
       <div className="w-1/4 h-full flex flex-col items-center bg-[#252525] p-2 border-[#747474] border-e-2 rounded-l-3xl">
@@ -26,42 +110,18 @@ export default function Inbox() {
         <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
         {/* TODO: Add timestamp for messages ? (idk if this is possible with firebase msging) */}
         <div className="flex flex-col w-full overflow-y-scroll">
-          <GroupChatBlock
-            groupImage={
-              'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781647228231/minecraft-steve-block-stationery-set-9781647228231_hr.jpg'
-            }
-            groupName={'Group Chat A'}
-            lastMessage={'This is the last message.'}
-            isSelected={true}
-            hasNotification={false}
-          />
-          <GroupChatBlock
-            groupImage={
-              'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781647228231/minecraft-steve-block-stationery-set-9781647228231_hr.jpg'
-            }
-            groupName={'Group Chat B'}
-            lastMessage={'This is the last message.'}
-            isSelected={false}
-            hasNotification={true}
-          />
-          <GroupChatBlock
-            groupImage={
-              'https://media.licdn.com/dms/image/D4E03AQH5CpaCJCgo1A/profile-displayphoto-shrink_800_800/0/1694814673983?e=2147483647&v=beta&t=K1MezuWNQkHxSqXzqjWwQAf4RrzOLJ0vKc5S1Ewi60A'
-            }
-            groupName={'Group Chat C'}
-            lastMessage={'This is the last message.'}
-            isSelected={false}
-            hasNotification={true}
-          />
-          <GroupChatBlock
-            groupImage={
-              'https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781647228231/minecraft-steve-block-stationery-set-9781647228231_hr.jpg'
-            }
-            groupName={'Group Chat D'}
-            lastMessage={'This is the last message.'}
-            isSelected={false}
-            hasNotification={true}
-          />
+          {groups.map((group) => {
+            return (
+              <GroupChatBlock
+                key={group.id}
+                groupId={group.id}
+                groupColor={group.color}
+                groupName={group.name}
+                isSelected={group.id === selectedGroup?.id}
+                changeGroup={handleSelectGroup}
+              />
+            );
+          })}
         </div>
       </div>
       {/* TODO: componentize this so it can be swapped out based on which group is being viewed */}
@@ -77,7 +137,7 @@ export default function Inbox() {
               className="w-12 h-12 rounded-full ml-2 mr-4"
               alt="Group Chat Image"
             />
-            <h1 className="text-xl font-semibold mr-2">The Crafters</h1>
+            <h1 className="text-xl font-semibold mr-2">{selectedGroup.name}</h1>
           </div>
           {/* Link to project page */}
           <div className="transition-all duration-300 ease-in-out rounded-full p-2 mr-2 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
@@ -86,140 +146,43 @@ export default function Inbox() {
         </div>
         {/* Chat body container - contains all the messages in the chat */}
         <div className="w-full h-full flex flex-col-reverse overflow-y-scroll px-4 py-2">
-          <ChatMessage
-            messageContent={"Hey, how's it going?"}
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={'Not too bad, just busy with work.'}
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={'I totally get that. Anything exciting happening?'}
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Well, I'm planning a trip for next month. Super excited about it!"
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              'That sounds amazing! Where are you planning to go?'
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "I'm thinking about exploring Europe, maybe visit Italy and France."
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Wow, that's a dream vacation! What places are you most excited about?"
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              'Definitely looking forward to the art and history in Florence, and of course, the Eiffel Tower in Paris.'
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Sounds incredible! Don't forget to try the local cuisine, it's always a highlight."
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Absolutely, I'm a foodie, so trying new dishes is a must for me."
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              'Speaking of food, have you tried the new restaurant downtown?'
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={'Not yet, is it any good?'}
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "It's fantastic! We should plan a dinner there sometime."
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Sure, that sounds like a plan. I'll check it out soon and let you know."
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              'Great! Looking forward to it. By the way, did you catch the latest movie?'
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Not yet, but I heard it's really good. Planning to watch it this weekend."
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              'Nice! Let me know how it is. We can compare notes.'
-            }
-            isOwnMessage={true}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={
-              "Will do! Anyway, I've got to run. Talk to you later?"
-            }
-            isOwnMessage={false}
-            user={fbuser}
-          />
-          <ChatMessage
-            messageContent={'Sure thing! Take care and catch up with you soon.'}
-            isOwnMessage={true}
-            user={fbuser}
-          />
+          {messages.map((message) => {
+            const messageUser = groupData.members.find(
+              (member) => member.id === message.id
+            );
+            return (
+              <ChatMessage
+                key={message.messageKey}
+                messageContent={message.content}
+                isOwnMessage={message.id === fbuser?.uid}
+                user={messageUser ? messageUser : null}
+              />
+            );
+          })}
         </div>
         {/* Chat messenger container - contains the text bar where users can send messages */}
+        {loadingMessages ? <Loading /> :
         <div className="w-full h-20 flex items-center bg-[#1f1f1f] border-[#747474] border-t-2 p-3">
           <input
             type="text"
             placeholder="Type a message..."
-            className="w-full h-full bg-[#252525] text-stone-200 outline-none rounded-xl mr-2 p-2 break-words"></input>
-          <div className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
+            className="w-full h-full bg-[#252525] text-stone-200 outline-none rounded-xl mr-2 p-2 break-words"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSendMessage();
+                e.preventDefault(); // Prevents the addition of a new line in the input on Enter
+              }
+            }}
+          ></input>
+          <div
+            className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]"
+            onClick={handleSendMessage}
+          >
             <BsSendFill className="text-xl" />
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
