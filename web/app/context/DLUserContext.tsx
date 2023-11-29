@@ -44,11 +44,7 @@ export const DLUserProvider = ({ children }: { children: ReactNode }) => {
     refetch,
   } = useGetUser(fbuser, fbuser.uid);
 
-  useEffect(() => {
-    setLoading(isLoading || isPending || isFetching);
-  }, [isFetching, isLoading, isPending]);
-
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   } else if (!user) {
     router.push('/create-profile');
