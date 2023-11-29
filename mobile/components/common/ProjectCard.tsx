@@ -7,9 +7,9 @@ export default function ProjectCard(item: condensedGroup) {
   const [hovering, setIsHovering] = useState(false);
   const router = useRouter();
 
-  const handleChatPress = () => {
+  const handleChatPress = (groupId: string) => {
     // Navigate to the "/dev/chat" page when the chat icon is pressed
-    router.push('/dev/chat');
+    router.push(`/dev/chat?groupId=${groupId}`);
   };
 
   return (
@@ -18,7 +18,7 @@ export default function ProjectCard(item: condensedGroup) {
       onMagicTap={() => setIsHovering(true)}
       onTouchMove={() => setIsHovering(true)}
       onTouchEnd={() => setIsHovering(false)}>
-      <TouchableOpacity onPress={handleChatPress} style={styles.chatIcon}>
+      <TouchableOpacity onPress={() => handleChatPress(item.id)} style={styles.chatIcon}>
         <Text style={styles.chatIconText}>💬</Text>
       </TouchableOpacity>
       <Text style={styles.cardText}>{item.name}</Text>
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 28,
     right: 15,
-    padding: 10,
+    padding: 15,
     backgroundColor: '#051094',
     borderRadius: 25,
   },
