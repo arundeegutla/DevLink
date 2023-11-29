@@ -1,3 +1,4 @@
+'use client';
 // External Components
 import Tilt from 'react-parallax-tilt';
 import InfoBlock from './InfoBlock';
@@ -7,21 +8,34 @@ import ProfilePageProject from './ProfilePageProject';
 import { FaUser, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { User } from '@/hooks/models';
 import Image from 'next/image';
-import { Icons } from '@/models/icons';
+import { Icons, skillMap } from '@/models/icons';
+import { useEffect, useState } from 'react';
+import { defaultImageURL, getPhotoURL } from '@/hooks/users';
+import ProjectCard from './ProjectCard';
+import SkillsStep, { Skill } from '../../dev/settings/SkillsStep';
 
 export interface UserProfile {
   user: User;
+  id: string;
 }
 
-export default function UserProfile({ user }: UserProfile) {
+export default function UserProfile({ user, id }: UserProfile) {
+  const [imageURL, setImageURL] = useState<string>(defaultImageURL);
+
+  useEffect(() => {
+    const getImage = async () => {
+      const url = await getPhotoURL(id);
+      setImageURL(url);
+    };
+    getImage();
+  }, [id]);
+
   const getProfilePic = () => {
     return (
       <Image
         width={0}
         height={0}
-        src={
-          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
-        }
+        src={imageURL}
         className="h-36 w-36 border border-[#4e4e4e] rounded-full"
         alt="Profile Picture"
       />
@@ -31,7 +45,7 @@ export default function UserProfile({ user }: UserProfile) {
   return (
     <div className="w-full h-full flex flex-col pl-8 pr-12 py-8">
       {/* Top div for user info */}
-      <div className="w-full h-1/3 flex items-center bg-[#252525] rounded-xl overflow-hidden p-4">
+      <div className="w-full h-1/3 flex items-center bg-[#252525] rounded-xl p-4 min-h-fit">
         <div className="w-2/3 h-full flex items-center">
           {/* User profile picture (tilt cause why not)*/}
           <Tilt tiltReverse={true} glareMaxOpacity={0} transitionSpeed={1000}>
@@ -42,30 +56,63 @@ export default function UserProfile({ user }: UserProfile) {
             <h1 className="text-5xl font-semibold">
               {user.firstName + ' ' + user.lastName}
             </h1>
-            <h3 className="text-2xl font-medium mt-2">FRONT END</h3>
           </div>
         </div>
         {/* Info block to hold user's information */}
         <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
-          <InfoBlock infoLink="put ur email here" Icon={Icons.Email} />
-          <InfoBlock infoLink="put ur linkedin here" Icon={Icons.LinkedIn} />
-          <InfoBlock infoLink="put ur github here" Icon={Icons.GitHub} />
+          <InfoBlock
+            href={`mailto: ${user.email}`}
+            content={user.email ?? 'No email'}
+            Icon={Icons.Email}
+          />
+          <InfoBlock
+            href={user.linkedin ?? 'https://www.linkedin.com'}
+            content={user.linkedin ?? 'linkedin.com'}
+            Icon={Icons.LinkedIn}
+          />
+          <InfoBlock
+            href={
+              'https://github.com/' + (user.github?.replaceAll('@', '') ?? '')
+            }
+            content={user.github ?? 'www.github.com'}
+            Icon={Icons.GitHub}
+          />
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}
       <div className="w-full h-full flex flex-row justify-between mt-12">
-        <div className="w-2/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center mr-12 p-2 overflow-y-scroll">
-          <h1>Projects</h1>
-          <hr className="mt-1 border-t-2 w-full border-[#3b3b3b]" />
-          <div className="w-full h-full flex flex-col px-1">
-            <ProfilePageProject id="1" title="DevLink" color="red" description="project" />
-            <ProfilePageProject id="2" title="other project" color="blue" description="Harnessing cutting-edge algorithms to create harmonious melodies that adapt in real-time to users' moods and preferences." />
+        {/* TODO: Fill skill section with arun's skills components */}
+        <div className="w-1/3 h-fit flex flex-col text-3xl font-normal rounded-xl items-start p-5 overflow-y-scroll mr-4">
+          <h1>Skills</h1>
+          <div className="animated animatedFadeInUp fadeInUp mt-4 w-full flex flex-row flex-wrap items-start justify-start transition-all duration-500 ease-in-out text-lg font-normal">
+            {user.skills.length > 0
+              ? user.skills.map((skill, indx) => {
+                  const skilltype = skillMap[skill] ?? {
+                    name: skill,
+                    color: 'not found',
+                    icon: Icons.Heart,
+                  };
+                  return (
+                    <Skill
+                      key={indx}
+                      {...skilltype}
+                      isSelected={true}
+                      onClick={() => {}}
+                    />
+                  );
+                })
+              : 'No skills found :('}
           </div>
         </div>
-        {/* TODO: Fill skill section with arun's skills components */}
-        <div className="w-1/3 h-full flex flex-col text-3xl font-semibold bg-[#252525] rounded-xl items-center p-2 overflow-y-scroll">
-          <h1>Skills</h1>
-          <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
+        <div className="w-2/3 h-fit flex flex-col text-3xl font-medium rounded-xl items-start mr-12 p-2 pb-10">
+          <h1>Projects</h1>
+          <div className="w-full h-full flex flex-row flex-wrap px-1">
+            {user.groups.length > 0
+              ? user.groups.map((group, indx) => {
+                  return <ProjectCard key={indx} {...group} />;
+                })
+              : 'No projects'}
+          </div>
         </div>
       </div>
     </div>

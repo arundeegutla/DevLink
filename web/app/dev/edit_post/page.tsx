@@ -6,33 +6,45 @@
 
 import { skills, SkillType, Icons } from '@models/icons';
 import { useFBUser } from '@context/FBUserContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SkillsDropdown from './SkillsDropdown';
 import Skill from './Skill';
-import { useCreatePost, useEditPost, useGetPost } from '@/hooks/posts';
+import {
+  createPost,
+  useCreatePost,
+  useEditPost,
+  useGetPost,
+} from '@/hooks/posts';
 import Loading from '@components/common/Loading';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getGroup } from '@/hooks/groups';
+import { Group } from '@/hooks/models';
+import Error from '@components/common/Error';
+import { set } from 'firebase/database';
+import Alert from '@components/common/Alert';
 
 export default function EditPostView() {
+  const router = useRouter();
   const params = useSearchParams();
   const { fbuser } = useFBUser();
 
-  const groupName = params.get("groupName") || "";
+  const groupName = params.get('groupName') || '';
 
-  const postId = params.get("postId") || "";
-  const groupId = params.get("groupId") || "";
+  const postId = params.get('postId') || '';
+  const groupId = params.get('groupId') || '';
   const isEditing = !!postId;
 
   const { data, isPending } = useGetPost(fbuser, postId);
-
-  const createMutation = useCreatePost();
-  const editMutation = useEditPost();
+  // const editMutation = useEditPost();
 
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [title, setTitle] = useState<string>("");
-  const [body, setBody] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
+  const [body, setBody] = useState<string>('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [error, setError] = useState<boolean>(false);
+  const [project, setProject] = useState<Group>();
+  const [alert, setAlert] = useState<string>('');
 
   const handleSkillClick = (selectedSkill: SkillType) => {
     setSelectedSkills(
@@ -40,51 +52,81 @@ export default function EditPostView() {
     );
   };
 
-  const submitPost = async () => {
-    if (title.length === 0 || body.length === 0) return;
-
-    let res = false;
-    if (isEditing) {
-      res = await editMutation.mutateAsync({
-        user: fbuser,
-        post: {
-          postId: postId,
-          title: title,
-          body: body,
-          skillsWanted: selectedSkills
+  useEffect(() => {
+    const fetchGroup = async () => {
+      const project = await getGroup(fbuser, groupId);
+      if (!project) setError(true);
+      else {
+        setProject(project);
+        if (project.owner !== fbuser.uid) {
+          setError(true);
         }
-      });
-    }
-    else {
-      res = await createMutation.mutateAsync({
-        user: fbuser,
-        post: {
-          groupId: groupId,
-          title: title,
-          body: body,
-          skillsWanted: selectedSkills
-        }
-      });
-    }
-    
-  }
+      }
+      setLoading(false);
+    };
+    fetchGroup();
+  }, [fbuser, groupId]);
 
+  if (isLoading) return <Loading />;
+  else if (error || !project) return <Error message={`Invalid Project URL`} />;
   if (isEditing && isPending) {
-    return <Loading/>
-  }
-  else if (isLoading && isEditing && data) {
+    return <Loading />;
+  } else if (isLoading && isEditing && data) {
     setTitle(data.title);
     setBody(data.body);
     setSelectedSkills(data.skillsWanted);
     setLoading(false);
   }
+  const submitPost = async () => {
+    if (title.length === 0 || body.length === 0 || selectedSkills.length < 3) {
+      setAlert('Please fill out all fields and select at least 3 skills');
+      return;
+    }
+
+    let res = false;
+    if (isEditing) {
+      // res = await editMutation.mutateAsync({
+      //   user: fbuser,
+      //   post: {
+      //     postId: postId,
+      //     title: title,
+      //     body: body,
+      //     skillsWanted: selectedSkills,
+      //   },
+      // });
+    } else {
+      res = await createPost(fbuser, {
+        groupId: groupId,
+        title: title,
+        body: body,
+        skillsWanted: selectedSkills,
+      });
+      console.log(res ? 'success' : 'fail');
+    }
+
+    if (res) {
+      router.push(`/dev/project/${groupId}`);
+    }
+  };
 
   return (
-    <div className="w-full h-full pl-3 flex flex-col justify-center py-5">
-      <div className="my-5 text-4xl font-normal text-[#ffffff]">{isEditing ? "Editing" : "Creating"} post for: {groupName}</div>
+    <div className="relative w-full h-full pl-3 flex flex-col justify-center py-5 pr-4">
+      <div className="relative flex flex-row items-center p-2 pl-7 rounded-xl bg-black/[60%] border-2 border-gray-500 justify-between overflow-hidden">
+        <div className="text-4xl font-normal text-[#ffffff] items-end my-3">
+          <div className="my-3">{groupName}</div>
+        </div>
+        <div
+          className="absolute -top-6 -left-6 w-36 h-36 opacity-20 filter blur-[70px] rounded-full"
+          style={{ backgroundColor: `${project.color}` }}
+        />
+      </div>
+
       <div className="w-full h-full flex flex-row justify-center gap-3 mt-5 items-start">
-        <div className="flex flex-col w-6/12 h-5/6 gap-3 items-center">
-          <div className="flex flex-col rounded-xl bg-gray-700 text-black w-full h-15">
+        <div className="flex flex-col w-6/12 h-5/6 gap-3 items-start">
+          <div className="my-5 text-4xl font-normal text-[#ffffff]">
+            {isEditing ? 'Edit Post' : 'Create'} post
+          </div>
+          <div className="flex flex-col rounded-xl bg-gray-600 text-black w-full h-15">
             <input
               placeholder="Title"
               className="h-full bg-transparent focus:outline-none m-3 text-white text-left"
@@ -104,11 +146,13 @@ export default function EditPostView() {
               value={body}
             />
           </div>
+          {alert && <Alert alertType="danger">{alert}</Alert>}
           <button
-            className="rounded-xl bg-gray-950 p-2 mt-0.5 text-gray-200 border-2 border-gray-500"
+            onClick={submitPost}
             type="submit"
-            onClick={submitPost}>
-            Post!
+            className="px-4 py-2 border-gray-600 border-2 flex flex-row rounded-lg bg-gray-300 text-black hover:bg-black hover:text-white gap-3 transition-all duration-500 ease-in-out">
+            <Icons.Plus className="text-2xl" />
+            <div>Post</div>
           </button>
         </div>
         <div className="relative">

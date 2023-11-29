@@ -84,7 +84,6 @@ export default function SettingsPage() {
     <ChangeServices
       setGithubPar={setGithub}
       setLinkedinPar={setLinkedin}
-      setPhonePar={setPhone}
       onFinish={handleFinish}
       onBack={handleBackStep}
       key={'service-step'}

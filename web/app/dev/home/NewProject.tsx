@@ -52,7 +52,7 @@ const NewProject = ({
   return (
     <div
       ref={modalRef}
-      className="absolute top-0 bottom-0 left-0 right-0 mx-0 my-0 p-10 flex flex-row items-center justify-center z-40 bg-gradient-radial from-black to-transparent to-80%">
+      className="fixed top-0 bottom-0 left-0 right-0 mx-0 my-0 p-10 flex flex-row items-center justify-center z-40 bg-gradient-radial from-black to-transparent to-80%">
       <div
         className="p-5 bg-[#22222253] backdrop-blur-xl relative z-50 animated animatedFadeInUp fadeInUp rounded-xl border-[#373737] border-2 overflow-hidden transition-all duration-500 ease-in-out"
         style={{

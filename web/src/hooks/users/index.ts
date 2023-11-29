@@ -7,6 +7,9 @@ import { fstorage } from '@/firebase/clientApp';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { useState } from 'react';
 
+export const defaultImageURL =
+  'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png';
+
 export async function searchUser(user: FirebaseUser, searchQuery: string) {
   const config = await generateRequestConfig(user);
   return http
@@ -35,10 +38,7 @@ export async function getUser(user: FirebaseUser, userId: string) {
   return http
     .get(`/users/get/${encodeURIComponent(userId)}`, config)
     .then((res) => {
-      if (res.status !== 200) {
-        return null;
-      }
-
+      if (res.status !== 200) return null;
       return res.data as models.User;
     })
     .catch((err) => {
@@ -137,9 +137,6 @@ export function useEditProfile() {
   });
 }
 
-export const defaultImageURL =
-  'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png';
-
 export const photoURLCache: Record<string, string> = {};
 export async function getPhotoURL(id: string) {
   if (photoURLCache[id]) {
@@ -153,11 +150,3 @@ export async function getPhotoURL(id: string) {
   photoURLCache[id] = url;
   return url;
 }
-
-// export function useGetPhotoURL(user: models.User) {
-//   const [url, setUrl] = useState('');
-
-//   const fileRef = ref(fstorage,  + '.png');
-//   setUrl(await getDownloadURL(fileRef));
-//   return url;
-// }

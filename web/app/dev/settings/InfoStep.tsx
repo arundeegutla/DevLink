@@ -26,7 +26,6 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
   const [fnameError, setFnameError] = useState('');
   const [lname, setLName] = useState(lastName);
   const [lnameError, setLnameError] = useState('');
-  const [imageURL, setImageURL] = useState(fbuser.photoURL);
   const [newImageData, setNewImageData] = useState<File>();
 
   const updateFname = (val: string) => {
@@ -56,8 +55,15 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
       displayName: fname + ' ' + lname,
       photoURL: newImageData
         ? await uploadImage(newImageData, fbuser)
-        : imageURL ??
-          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png',
+        : await uploadImage(
+            await urlToFile(
+              fbuser.photoURL ??
+                'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png',
+              fbuser.uid,
+              'image/png'
+            ),
+            fbuser
+          ),
     });
   };
 
@@ -163,5 +169,12 @@ const ImageUpload = ({
 async function uploadImage(file: File, fbuser: User) {
   const fileRef = ref(fstorage, fbuser.uid + '.png');
   await uploadBytes(fileRef, file);
-  return await getDownloadURL(fileRef);
+  const url = await getDownloadURL(fileRef);
+  return url;
+}
+
+async function urlToFile(url: string, filename: string, mimeType: string) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new File([blob], filename, { type: mimeType });
 }

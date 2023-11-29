@@ -223,15 +223,11 @@ export default function SignUp({
           aria-label="Continue with google"
           role="button"
           onClick={signUpGoogle}
-          className="auth-button">
+          className="transition-all duration-500 ease-in-out hover:bg-zinc-800 text-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full">
           <FcGoogle className="h-8 w-auto" />
-        </button>
-        <button
-          aria-label="Continue with google"
-          role="button"
-          onClick={signUpGoogle}
-          className="auth-button">
-          <FaGithub className="h-8 w-auto" />
+          <p className="text-sm font-medium leading-4 px-2.5 ">
+            Continue with Google
+          </p>
         </button>
       </div>
     </div>

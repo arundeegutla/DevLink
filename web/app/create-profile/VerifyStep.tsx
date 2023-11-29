@@ -3,7 +3,7 @@ import { StepProps } from './page';
 import Stepper from '@components/common/Stepper';
 import { errorMsg } from '@/firebase/authErrors';
 import SubmitBtn from '@components/common/SubmitBtn';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { AlertProps } from '@components/common/Alert';
 import Alert from '@components/common/Alert';
 import { useFBUser } from '@context/FBUserContext';
@@ -17,6 +17,28 @@ export function VerifyStep({ onBack, onFinish }: StepProps) {
   });
 
   const [verified, setVerified] = useState(fbuser.emailVerified);
+
+  const sendEmail = () => {
+    sendEmailVerification(fbuser)
+      .then((e) => {
+        setEmailAlert({
+          children: 'Sent Email Verification',
+          alertType: 'good',
+        });
+      })
+      .catch((error) => {
+        var msg =
+          errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
+        setEmailAlert({
+          children: msg ?? 'There was an error sending email',
+          alertType: 'danger',
+        });
+      });
+  };
+
+  if (!fbuser.emailVerified) {
+    sendEmail();
+  }
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -43,23 +65,6 @@ export function VerifyStep({ onBack, onFinish }: StepProps) {
       return;
     }
     onFinish && onFinish();
-  };
-  const sendEmail = async () => {
-    await sendEmailVerification(fbuser)
-      .then((e) => {
-        setEmailAlert({
-          children: 'Sent Email Verification',
-          alertType: 'good',
-        });
-      })
-      .catch((error) => {
-        var msg =
-          errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
-        setEmailAlert({
-          children: msg ?? 'There was an error sending email',
-          alertType: 'danger',
-        });
-      });
   };
 
   return (

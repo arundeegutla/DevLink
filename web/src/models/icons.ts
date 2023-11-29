@@ -5,6 +5,8 @@ import {
   FaAngleRight,
   FaGithub,
   FaLinkedin,
+  FaCheck,
+  FaJenkins,
 } from 'react-icons/fa';
 import {
   FaJsSquare,
@@ -33,6 +35,11 @@ import {
   SiBootstrap,
   SiTailwindcss,
   SiMongodb,
+  SiAtom,
+  SiSublimetext,
+  SiVim,
+  SiVisualstudiocode,
+  SiExpo,
 } from 'react-icons/si';
 
 import {
@@ -55,6 +62,7 @@ import { HiOutlinePlus } from 'react-icons/hi2';
 import { LuSearch } from 'react-icons/lu';
 import { BiSolidMessageSquareDetail } from 'react-icons/bi';
 import { IoEarthOutline, IoSettingsSharp, IoMail } from 'react-icons/io5';
+import { FaGitlab } from 'react-icons/fa6';
 
 export type SkillType = {
   name: string;
@@ -110,6 +118,14 @@ export const Icons = {
   LightBulb: BsLightbulbFill,
   Email: IoMail,
   ArrowUpRight: BsArrowUpRight,
+  Check: FaCheck,
+  GitLab: FaGitlab,
+  Jenkins: FaJenkins,
+  VSCode: SiVisualstudiocode,
+  SublimeText: SiSublimetext,
+  Atom: SiAtom,
+  Vim: SiVim,
+  Expo: SiExpo,
 };
 
 export const skills: SkillType[] = [
@@ -137,4 +153,20 @@ export const skills: SkillType[] = [
   { name: 'Bootstrap', color: '#4527a0', icon: Icons.Bootstrap },
   { name: 'Tailwind CSS', color: '#0097a7', icon: Icons.TailwindCSS },
   { name: 'MongoDB', color: '#004d40', icon: Icons.MongoDB },
+  { name: 'GitHub', color: '#181717', icon: Icons.GitHub },
+  { name: 'GitLab', color: '#FC6D26', icon: Icons.GitLab },
+  { name: 'Jenkins', color: '#D24939', icon: Icons.Jenkins },
+  { name: 'VS Code', color: '#007ACC', icon: Icons.VSCode },
+  { name: 'Sublime Text', color: '#FF9800', icon: Icons.SublimeText },
+  { name: 'Atom', color: '#66595E', icon: Icons.Atom },
+  { name: 'Vim', color: '#019733', icon: Icons.Vim },
+  { name: 'Expo', color: '#4630EB', icon: Icons.Expo },
 ];
+
+export const skillMap: Record<string, SkillType> = skills.reduce(
+  (map, skill) => {
+    map[skill.name] = skill;
+    return map;
+  },
+  {} as Record<string, SkillType>
+);

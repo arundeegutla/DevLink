@@ -12,7 +12,7 @@ export type Group = {
   name: string;
   color: string;
   description: string;
-  owner: condensedUser;
+  owner: string;
   members: condensedUser[];
   userQueue: condensedUser[];
   posts: condensedPost[];
