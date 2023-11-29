@@ -14,6 +14,8 @@ import { auth } from '@/firebase/clientApp';
 import { useRouter } from 'next/navigation';
 import { useFBUser } from '@context/FBUserContext';
 import { Icons } from '@/models/icons';
+import { defaultImageURL, getPhotoURL } from '@/hooks/users';
+import { useEffect, useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dev/home', icon: Icons.DashBoard },
@@ -26,6 +28,13 @@ export default function NavBar() {
   const { fbuser } = useFBUser();
   const currentPath = usePathname();
   const router = useRouter();
+  const [photoUrl, setPhotoUrl] = useState<string>(defaultImageURL);
+
+  useEffect(() => {
+    getPhotoURL(fbuser.uid).then((url) => {
+      setPhotoUrl(url);
+    });
+  }, [fbuser]);
 
   const signOut = () => {
     auth
@@ -70,10 +79,7 @@ export default function NavBar() {
                         width={0}
                         height={0}
                         loading="eager"
-                        src={
-                          fbuser.photoURL ??
-                          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
-                        }
+                        src={photoUrl}
                         className="aspect-square w-8 border-2 border-[#4e4e4e] rounded-xl"
                         alt="test"
                       />

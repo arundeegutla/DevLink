@@ -82,7 +82,9 @@ export default function ProjectView({
   }, [fbuser, project]);
 
   const handleNewPostClick = () => {
-    router.push(`/dev/project/edit_post/${projectId}`);
+    router.push(
+      `/dev/edit_post/?groupName=${project?.name}&groupId=${projectId}`
+    );
   };
 
   if (loading) return <Loading />;
@@ -252,7 +254,7 @@ const PieChart = ({ members }: { members: User[] }) => {
                 labels: {
                   color: 'white',
                   usePointStyle: true,
-                  generateLabels: (chart): LegendItem[] => {
+                  generateLabels: (chart: any): LegendItem[] => {
                     const data = chart.data;
 
                     if (
@@ -510,8 +512,8 @@ const RequestActions = ({
       progress: undefined,
       theme: 'light',
     });
-    toast.onChange((evnt) => {
-      evnt.status === 'removed' && refetch;
+    toast.onChange((evnt: any) => {
+      evnt.status === 'removed' && refetch();
     });
   };
 
@@ -526,8 +528,8 @@ const RequestActions = ({
       progress: undefined,
       theme: 'light',
     });
-    toast.onChange((evnt) => {
-      evnt.status === 'removed' && refetch;
+    toast.onChange((evnt: any) => {
+      evnt.status === 'removed' && refetch();
     });
   };
 
