@@ -1,31 +1,32 @@
 import Image from 'next/image';
 import { User, updateEmail, updateProfile } from 'firebase/auth';
 import { StepProps } from './page';
+import Stepper from '@components/common/Stepper';
 import TextField from '@components/common/TextField';
 import { useRef, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
-import Stepper from '@components/common/Stepper';
 import { useFBUser } from '@context/FBUserContext';
+import { useDLUser } from '@context/DLUserContext';
 
-export default function InfoStep({ onNext, onBack }: StepProps) {
+export default function InfoStep({
+  onNext,
+  onBack,
+  setFirstName,
+  setLastName,
+}: StepProps & {
+  setFirstName: (val: string) => void;
+  setLastName: (val: string) => void;
+}) {
   const { fbuser } = useFBUser();
+  const { user } = useDLUser();
 
-  let displayName = fbuser.displayName ?? '';
-  const nameArray = displayName.split(' ');
-  let firstName = '';
-  let lastName = '';
-  if (nameArray.length === 1) {
-    firstName = nameArray[0];
-  } else if (nameArray.length >= 2) {
-    firstName = nameArray.shift() ?? '';
-    lastName = nameArray.join(' ') ?? '';
-  }
-
-  const [fname, setFName] = useState(firstName);
+  const [fname, setFName] = useState(user.firstName);
   const [fnameError, setFnameError] = useState('');
-  const [lname, setLName] = useState(lastName);
+  const [lname, setLName] = useState(user.lastName);
   const [lnameError, setLnameError] = useState('');
+
+  const [imageURL, setImageURL] = useState(fbuser.photoURL);
   const [newImageData, setNewImageData] = useState<File>();
 
   const updateFname = (val: string) => {
@@ -47,10 +48,12 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
       setLnameError('Required');
       allgood = false;
     }
+
     if (!allgood) return;
+    setFirstName(fname);
+    setLastName(lname);
 
     onNext && onNext();
-
     await updateProfile(fbuser, {
       displayName: fname + ' ' + lname,
       photoURL: newImageData

@@ -23,7 +23,7 @@ export interface StepProps {
 export default function SettingsPage() {
   const router = useRouter();
   const { fbuser } = useFBUser();
-  const { refetch } = useDLUser();
+  const { user, refetch } = useDLUser();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [skills, setSkills] = useState<string[]>([]);
@@ -31,17 +31,8 @@ export default function SettingsPage() {
   const [github, setGithub] = useState<string>('');
   const [linkedin, setLinkedin] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-
-  let displayName = fbuser.displayName ?? '';
-  const nameArray = displayName.split(' ');
-  let firstName = '';
-  let lastName = '';
-  if (nameArray.length === 1) {
-    firstName = nameArray[0];
-  } else if (nameArray.length >= 2) {
-    firstName = nameArray.shift() ?? '';
-    lastName = nameArray.join(' ') ?? '';
-  }
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
 
   const handleFinish = async () => {
     setLoading(true);
@@ -74,7 +65,12 @@ export default function SettingsPage() {
   };
 
   const steps = [
-    <InfoStep onNext={handleNextStep} key={'info-step'} />,
+    <InfoStep
+      setFirstName={setFirstName}
+      setLastName={setLastName}
+      onNext={handleNextStep}
+      key={'info-step'}
+    />,
     <SkillsStep
       retSkills={setSkills}
       onNext={handleNextStep}

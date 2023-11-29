@@ -19,7 +19,7 @@ export default function Home() {
   const { user } = useDLUser();
   const [newProject, showNewProject] = useState(false);
 
-  console.log('Logged in as: ' + fbuser.displayName);
+  console.log('Logged in as: ' + user.firstName);
   return (
     <div className="relative w-full h-full flex flex-col pt-10 pl-3">
       <div className="mb-4 text-4xl font-normal text-[#ffffff">Dashboard</div>
