@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
-import { NativeSyntheticEvent } from 'react-native';
 
 const PANEL_COMMON_STYLE = {
   backgroundColor: 'rgba(217, 217, 217, 0.65)',
@@ -21,33 +19,9 @@ const PANEL_COMMON_STYLE = {
 };
 
 export default function HomePage() {
-  const projectInvitationsScrollView = useRef(null);
-  const [selectedTab, setSelectedTab] = useState('All');
   const navigation = useNavigation();
-  const router = useRouter();
-  const myProjectsScrollView = useRef<ScrollView>(null);
-
-  const handleTabChange = (tab: string) => {
-    setSelectedTab(tab);
-    // Logic to filter and display projects based on the selected tab
-  };
-
-  const handleScroll = (
-    ref: React.MutableRefObject<ScrollView> | null,
-    event: NativeSyntheticEvent<ScrollViewScrollEvent>
-  ) => {
-    if (ref) {
-      const scrollY = event.nativeEvent.contentOffset.y;
-      ref.current?.scrollTo({ y: scrollY, animated: false });
-    }
-  };
-
-  // Function to open the chat for a specific project
-  const handleOpenChat = (projectId: number) => {
-    // Implement logic to open the chat window for the specific project ID
-    console.log(`Opening chat for project with ID: ${projectId}`);
-    // You can add functionality here to open the chat window for the specific project
-  };
+  const myProjectsScrollView = React.useRef(null);
+  const projectInvitationsScrollView = React.useRef(null);
 
   const myProjects = [
     { id: 1, title: 'Project A', description: 'Description for Project A', status: 'In Progress' },
@@ -56,33 +30,12 @@ export default function HomePage() {
     // Add more project items as needed
   ];
 
-  const projectInvitations = [
-    { id: 1, title: 'Invitation 1', description: 'Description for Project 1' },
-    { id: 2, title: 'Invitation 2', description: 'Description for Project 2' },
-    { id: 3, title: 'Invitation 3', description: 'Description for Project 3' },
-    // Add more invitation items as needed
-  ];
+  const handleOpenChat = (projectId) => {
+    console.log(`Opening chat for project with ID: ${projectId}`);
+    // navigation.navigate('Chat', { projectId }); // Uncomment when integrating navigation
+  };
 
-  const filteredProjects = myProjects.filter((project) => {
-    if (selectedTab === 'All') {
-      return true;
-    } else if (selectedTab === 'In Progress') {
-      return project.status === 'In Progress';
-    } else if (selectedTab === 'Completed') {
-      return project.status === 'Completed';
-    } else if (selectedTab === 'Not Started') {
-      return project.status === 'Not Started';
-    }
-    return false;
-  });
-
-  // Function to render each project item with a chat icon
   const renderProjectItem = (project) => {
-    const handleOpenChat = (projectId) => {
-      console.log(`Opening chat for project with ID: ${projectId}`);
-      navigation.navigate('Chat', { projectId });
-    };
-
     return (
       <View key={project.id} style={styles.projectItem}>
         <View style={styles.projectDetails}>
@@ -99,26 +52,25 @@ export default function HomePage() {
     );
   };
 
+  const projectInvitations = [
+    { id: 1, title: 'Invitation 1', description: 'Description for Project 1' },
+    { id: 2, title: 'Invitation 2', description: 'Description for Project 2' },
+    { id: 3, title: 'Invitation 3', description: 'Description for Project 3' },
+    // Add more invitation items as needed
+  ];
+
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome Home!</Text>
         <View style={styles.buttonContainer}>
+          {/* Only the profile button is kept */}
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              // Navigate to the profile creation page using router.push
-              router.push('/dev/home');
-            }}
-          >
-            <Ionicons name="home" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              // Navigate to the profile creation page using router.push
-              router.push('/dev/profile');
+              // Navigate to the profile creation page using navigation.navigate
+              navigation.navigate('Profile'); // Replace 'Profile' with your profile screen name
             }}
           >
             <Ionicons name="person" size={24} color="#FFFFFF" />
@@ -130,41 +82,13 @@ export default function HomePage() {
       <Text style={styles.sectionTitle}>My Projects</Text>
 
       {/* My Projects Panel */}
-      <View style={{ flex: 3 / 5, ...PANEL_COMMON_STYLE }}>
-        {/* Tabs for project statuses */}
-        <View style={styles.tabsContainer}>
-          {['All', 'In Progress', 'Completed', 'Not Started'].map((tab) => (
-            <TouchableOpacity
-              key={tab}
-              style={[styles.tab, selectedTab === tab && styles.selectedTab]}
-              onPress={() => handleTabChange(tab)}
-            >
-              <Text style={styles.tabText}>{tab}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Projects */}
+      <View style={[styles.panel, PANEL_COMMON_STYLE]}>
         <ScrollView
           contentContainerStyle={styles.panelContent}
-          onScroll={(event) => handleScroll(myProjectsScrollView, event)}
           ref={myProjectsScrollView}
         >
           {/* Content for My Projects panel */}
-          {filteredProjects.map((project) => (
-            <View key={project.id} style={styles.projectItem}>
-              <View style={styles.projectDetails}>
-                <Text style={styles.projectTitle}>{project.title}</Text>
-                <Text style={styles.projectDescription}>{project.description}</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.chatBubble}
-                onPress={() => handleOpenChat(project.id)} // Handle opening chat for this project
-              >
-                <Ionicons name="chatbubble-ellipses-outline" size={24} color="#333" />
-              </TouchableOpacity>
-            </View>
-          ))}
+          {myProjects.map((project) => renderProjectItem(project))}
         </ScrollView>
       </View>
 
@@ -172,7 +96,7 @@ export default function HomePage() {
       <Text style={styles.sectionTitle}>Project Invitations</Text>
 
       {/* Project Invitations Panel */}
-      <View style={[styles.panel, { flex: 2 / 5 }, PANEL_COMMON_STYLE]}>
+      <View style={[styles.panel, PANEL_COMMON_STYLE]}>
         <ScrollView
           contentContainerStyle={styles.panelContent}
           ref={projectInvitationsScrollView}
@@ -182,7 +106,7 @@ export default function HomePage() {
             <View key={invitation.id} style={styles.invitationItem}>
               <View>
                 <Text style={styles.invitationTitle}>{invitation.title}</Text>
-                <Text style={styles.invitationDescription}>{invitation.description}</Text> {/* Display description */}
+                <Text style={styles.invitationDescription}>{invitation.description}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.iconButton}>
@@ -225,26 +149,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginLeft: 10,
-  },
-  tabsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 10,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  selectedTab: {
-    backgroundColor: '#26A8D1',
-    borderRadius: 8,
-  },
-  tabText: {
-    color: '#333',
-    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 25,
@@ -306,5 +210,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 5,
+  },
+  panel: {
+    flex: 3 / 5,
   },
 });
