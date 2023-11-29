@@ -8,7 +8,15 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { fstorage } from '@/firebase/clientApp';
 import { useFBUser } from '@context/FBUserContext';
 
-export default function InfoStep({ onNext, onBack }: StepProps) {
+export default function InfoStep({
+  onNext,
+  onBack,
+  setFirstName,
+  setLastName,
+}: StepProps & {
+  setFirstName: (val: string) => void;
+  setLastName: (val: string) => void;
+}) {
   const { fbuser } = useFBUser();
 
   let displayName = fbuser.displayName ?? '';
@@ -49,7 +57,10 @@ export default function InfoStep({ onNext, onBack }: StepProps) {
       setLnameError('Required');
       allgood = false;
     }
+
     if (!allgood) return;
+    setFirstName(fname);
+    setLastName(lname);
 
     onNext && onNext();
 

@@ -24,8 +24,9 @@ export default function CreateProfilePage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [fbuser, authLoading, authErr] = useAuthState(auth);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
-  const [phone, setPhone] = useState<string>('');
   const [github, setGithub] = useState<string>('');
   const [linkedin, setLinkedin] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -50,17 +51,6 @@ export default function CreateProfilePage() {
   } else if (authErr || !fbuser) {
     router.push('/');
     return <Loading />;
-  }
-
-  let displayName = fbuser.displayName ?? '';
-  const nameArray = displayName.split(' ');
-  let firstName = '';
-  let lastName = '';
-  if (nameArray.length === 1) {
-    firstName = nameArray[0];
-  } else if (nameArray.length >= 2) {
-    firstName = nameArray.shift() ?? '';
-    lastName = nameArray.join(' ') ?? '';
   }
 
   const handleFinish = async () => {
@@ -93,7 +83,12 @@ export default function CreateProfilePage() {
   };
 
   const steps = [
-    <InfoStep onNext={handleNextStep} key={'info-step'} />,
+    <InfoStep
+      onNext={handleNextStep}
+      key={'info-step'}
+      setFirstName={setFirstName}
+      setLastName={setLastName}
+    />,
     <SkillsStep
       onNext={handleNextStep}
       onBack={handleBackStep}
