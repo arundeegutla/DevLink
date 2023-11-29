@@ -5,8 +5,10 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["*", "app/*"]
+      "*": ["*", "app/*"],
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
     }
+
   },
   "include": [
     "**/*.ts",
@@ -14,4 +16,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
   ]
+
 }

@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import { useState, useEffect } from 'react';
+
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
+//
 // Simulated hardcoded messages for a project chat
 const hardcodedMessages = [
   { text: 'Hello!', sender: 'user' },
@@ -27,8 +37,9 @@ export default function ProjectChat() {
         {chatMessages.map((chat, index) => (
           <View
             key={index}
-            style={chat.sender === 'user' ? styles.userMessage : styles.otherMessage}
-          >
+            style={
+              chat.sender === 'user' ? styles.userMessage : styles.otherMessage
+            }>
             <Text>{chat.text}</Text>
           </View>
         ))}

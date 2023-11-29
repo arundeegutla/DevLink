@@ -1,59 +1,63 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import * as React from 'react';
+import { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import { useRouter } from 'expo-router';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { auth } from '../../src/firebase/clientApp';
 import {
-  signInWithPopup,
-  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithCredential,
 } from 'firebase/auth';
+import Snackbar from 'react-native-snackbar';
+import { errorMsg } from '../../src/firebase/authErrors';
+import Alert from '../../components/common/Alert';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [authErr, setAuthErr] = useState('');
 
   const router = useRouter();
-  const googleAuth = new GoogleAuthProvider();
-
-  const loginGoogle = async () => {
-    await signInWithPopup(auth, googleAuth)
-      .then((result) => {
-        if (result.user.displayName) {
-          router.push('/dev/home');
-          return;
-        }
-      })
-      .catch((error) => {
-        router.push('/auth');
-      });
-  };
 
   const loginManually = async () => {
     if (!email || !password) return;
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: any) => {
-        router.push('/dev/home');
-      })
-      .catch((error: any) => {
-        return;
-      });
+    console.log('Logging in manually: ' + email + ' ' + password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/dev/home');
+    } catch (error: any) {
+      console.log(error.code);
+      var msg =
+        errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
+      setAuthErr(msg ?? 'Incorrect Username or Password');
+    }
   };
 
   const navigateToRegistration = () => {
-    router.push("/register"); // Navigate to the Registration screen
+    router.push('/register'); // Navigate to the Registration screen
   };
 
   const navigateToForgotPassword = () => {
-    router.push("/forgotPassword");
+    router.push('/forgotPassword');
   };
 
   return (
     <View style={styles.container}>
       {/* Logo at the top-left corner */}
-      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+      <Image
+        source={require('../../assets/images/logo.png')}
+        style={styles.logo}
+      />
 
       <Text style={styles.heading}>Login</Text>
+      {authErr && <Alert alertType="danger">{authErr}</Alert>}
+
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
@@ -78,7 +82,7 @@ export default function LoginPage() {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <Text style={styles.orText}>Login with:</Text>
+      {/* <Text style={styles.orText}>Login with:</Text>
       <View style={styles.socialButtons}>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="github" size={30} color="black" />
@@ -86,9 +90,11 @@ export default function LoginPage() {
         <TouchableOpacity style={styles.socialButton} onPress={loginGoogle}>
           <Icon name="google" size={30} color="#EA4335" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
-      <TouchableOpacity style={styles.signUpButton} onPress={navigateToRegistration}>
+      <TouchableOpacity
+        style={styles.signUpButton}
+        onPress={navigateToRegistration}>
         <Text style={styles.signUpText}>Don't have an Account? Sign Up</Text>
       </TouchableOpacity>
     </View>
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   logo: {
-    width: 120, 
+    width: 120,
     height: 20,
     position: 'absolute',
     top: 15,
