@@ -9,7 +9,8 @@ import GroupChatBlock from "@components/common/GroupChatBlock";
 import ChatMessage from "@components/common/ChatMessage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Group } from "@/hooks/models";
+import { Group, condensedGroup } from "@/hooks/models";
+import { getPhotoURL } from "@/hooks/users";
 import {
   collection,
   doc,
@@ -27,7 +28,7 @@ import { BsArrowUpRight, BsSendFill } from "react-icons/bs";
 // Auth
 import { useFBUser } from "@context/FBUserContext";
 import { useDLUser } from "@context/DLUserContext";
-import { useRouter } from "next/navigation";
+import { useRouter ,useSearchParams } from "next/navigation";
 import { useGetGroup } from "@/hooks/groups";
 
 export default function Inbox() {
@@ -37,12 +38,20 @@ export default function Inbox() {
 
   // Initialize Firestore
   const firestore = getFirestore();
-
+  
+  
   // Make a array of the users groups based on user.groups
   const [groups, setGroups] = useState(user.groups);
   const [selectedGroup, setSelectedGroup] = useState(groups[0] ?? null);
   const [inputValue, setInputValue] = useState("");
   const [loadingMessages, setLoadingMessages] = useState(true);
+  const searchParams = useSearchParams();
+  const [paramGroupId, setParamGroupId] = useState(searchParams.get("groupId"))
+  if (paramGroupId) {
+    const searchParamGroup = groups.find((group) => group.id === paramGroupId) as condensedGroup;
+    setSelectedGroup(searchParamGroup ?? null);
+    setParamGroupId(null);
+  }
 
   const handleSendMessage = async () => {
     if (inputValue.trim() !== "") {
