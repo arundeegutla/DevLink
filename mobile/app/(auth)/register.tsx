@@ -12,7 +12,6 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  updateProfile,
 } from 'firebase/auth';
 
 
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     width: 120, 
     height: 20,
     position: 'absolute',
-    top: 15,
+    top: 35,
     left: 10,
   },
   heading: {

@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { getRedirectResult } from 'firebase/auth';
 import { auth } from '../../src/firebase/clientApp';
 import {
-  signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
@@ -18,18 +19,24 @@ export default function LoginPage() {
   const googleAuth = new GoogleAuthProvider();
 
   const loginGoogle = async () => {
-    await signInWithPopup(auth, googleAuth)
-      .then((result) => {
-        if (result.user.displayName) {
-          router.push('/dev/home');
-          return;
-        }
-      })
-      .catch((error) => {
-        router.push('/auth');
-      });
-  };
+    try {
+      await signInWithRedirect(auth, googleAuth);
 
+      // Directly check the authentication result using getRedirectResult
+      const result = await getRedirectResult(auth);
+
+      // Check if the result is not null and the user is authenticated with a display name
+      if (result && result.user && result.user.displayName) {
+        router.push('/dev/home'); // Redirect to home page if authenticated
+      } else {
+        router.push('/auth'); // Redirect to authentication page if not authenticated
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      router.push('/auth'); // Redirect to authentication page in case of an error
+    }
+  };
+  
   const loginManually = async () => {
     if (!email || !password) return;
     await signInWithEmailAndPassword(auth, email, password)
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     width: 120, 
     height: 20,
     position: 'absolute',
-    top: 15,
+    top: 35,
     left: 10,
   },
   heading: {
