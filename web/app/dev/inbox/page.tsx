@@ -71,6 +71,7 @@ export default function Inbox() {
     { messageKey: string; id: string; content: string }[]
   >([]);
   useEffect(() => {
+    if (selectedGroup === null) return;
     setLoadingMessages(true);
 
     const q = query(
@@ -127,7 +128,7 @@ export default function Inbox() {
               className="w-12 h-12 rounded-full ml-2 mr-4"
               alt="Group Chat Image"
             />
-            <h1 className="text-xl font-semibold mr-2">{selectedGroup.name}</h1>
+            <h1 className="text-xl font-semibold mr-2">{selectedGroup?.name ?? "Join some groups!"}</h1>
           </div>
           {/* Link to project page */}
           <div className="transition-all duration-300 ease-in-out rounded-full p-2 mr-2 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
