@@ -113,47 +113,50 @@ export function useDeletePost() {
 
 export async function getPost(user: FirebaseUser, postId: string) {
   const config = await generateRequestConfig(user);
+  console.log(encodeURIComponent('/posts/get/' + postId));
   return http
-    .get(`/posts/get/${encodeURIComponent(postId)}`, config)
+    .get(`${encodeURIComponent('/posts/get/' + postId)}`, config)
     .then((res) => {
       if (res.status !== 200) {
         return null;
       }
-    return res.data as models.Post;
-  }).catch(err => {
-    return null;
-  });
+      return res.data as models.Post;
+    })
+    .catch((err) => {
+      return null;
+    });
 }
 
 export function useGetPost(user: FirebaseUser, postId: string) {
   return useQuery({
-    queryKey: ["getPost", postId],
-    queryFn: () => getPost(user, postId)
-  })
-}
-
-export async function searchPost(user: FirebaseUser, filter: string[]) {
-  const filterQuery = filter.map(f => `filter=${encodeURIComponent(f)}`).join("&")
-
-  const config = await generateRequestConfig(user);
-  return http.get(
-    `/posts/search?${filterQuery}`,
-    config
-  ).then(res => {
-    if (res.status !== 200) {
-      return null;
-    }
-
-    return res.data as models.Post[];
-  }).catch(err => {
-    return null;
+    queryKey: ['getPost', postId],
+    queryFn: () => getPost(user, postId),
   });
 }
 
+export async function searchPost(user: FirebaseUser, filter: string[]) {
+  const filterQuery = filter
+    .map((f) => `filter=${encodeURIComponent(f)}`)
+    .join('&');
+
+  const config = await generateRequestConfig(user);
+  return http
+    .get(`/posts/search?${filterQuery}`, config)
+    .then((res) => {
+      if (res.status !== 200) {
+        return null;
+      }
+
+      return res.data as models.Post[];
+    })
+    .catch((err) => {
+      return null;
+    });
+}
 
 export function useSearchPost(user: FirebaseUser, filter: string[]) {
   return useQuery({
-    queryKey: ["searchPost", filter],
-    queryFn: () => searchPost(user, filter)
-  })
+    queryKey: ['searchPost', filter],
+    queryFn: () => searchPost(user, filter),
+  });
 }
