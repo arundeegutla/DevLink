@@ -104,7 +104,7 @@ export default function LogIn({
         Login to your account
       </p>
       <p className="text-sm mt-4 font-medium leading-none text-gray-500">
-        Don't have an account?{' '}
+        Dont have an account?{' '}
         <span
           tabIndex={0}
           role="link"
