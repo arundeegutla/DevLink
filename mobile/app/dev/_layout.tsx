@@ -14,10 +14,22 @@ export default function RootLayout({
   return (
     <QueryClientProvider client={queryClient}>
       <FBUserProvider>
-        <DLUserProvider>{<Stack>
-        <Stack.Screen name="(/dev/home)" options={{ headerShown: false }} />
-      </Stack>}</DLUserProvider>
+        <DLUserProvider>
+          <RootLayoutNav />
+          {children}
+        </DLUserProvider>
       </FBUserProvider>
     </QueryClientProvider>
+  );
+}
+
+function RootLayoutNav() {
+  return (
+    <Stack>
+      <Stack.Screen name="home" options={{ headerShown: false }} />
+      <Stack.Screen name="profile" options={{ headerShown: false }} />
+      <Stack.Screen name="chat" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+    </Stack>
   );
 }
