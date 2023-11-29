@@ -126,7 +126,7 @@ export default function SkillsStep({
   );
 }
 
-const Skill = ({
+export const Skill = ({
   isSelected,
   onClick,
   ...skill

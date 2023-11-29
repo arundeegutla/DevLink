@@ -42,14 +42,14 @@ export default function ChatMessage({
     <div
       className={`w-auto max-w-sm flex-col ${
         isOwnMessage ? 'self-end' : 'self-start'
-      } mt-2`}>
+      } mt-5`}>
       <div className="flex">
         {!isOwnMessage && (
           <div className="mr-2 flex-shrink-0 self-end">{getProfilePic()}</div>
         )}
         <h1
           className={`w-auto h-auto min-w-0 break-words ${
-            isOwnMessage ? 'bg-[#218aff]' : 'bg-[#8e8e93]'
+            isOwnMessage ? 'bg-[#218aff]' : 'bg-[#4c4c4d]'
           } rounded-xl p-2 font-medium`}>
           {messageContent}
         </h1>

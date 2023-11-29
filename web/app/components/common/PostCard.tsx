@@ -92,7 +92,7 @@ function hslToHex(h: number, s: number, l: number) {
   return `#${f(0)}${f(8)}${f(4)}`;
 }
 
-function toPastelColor(hex: string, lightness: number): string {
+export function toPastelColor(hex: string, lightness: number): string {
   let c = hex.substring(1); // strip #
   const rgb = [
     parseInt(c.substring(0, 2), 16),
