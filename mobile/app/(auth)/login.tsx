@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 20,
     position: 'absolute',
-    top: 15,
+    top: 50,
     left: 10,
   },
   heading: {

@@ -103,7 +103,7 @@ const Profile = () => {
     auth
       .signOut()
       .then(() => {
-        // Handle successful logout, e.g., redirect to login screen
+        router.push('/');  
       })
       .catch((error) => {
         console.log(error);
