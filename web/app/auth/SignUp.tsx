@@ -208,7 +208,9 @@ export default function SignUp({
         </div>
       </div>
 
-      <SubmitBtn label="Sign Up" onClick={signUpManually} className="mt-3" />
+      <div className="w-full flex items-center">
+        <SubmitBtn label="Sign Up" onClick={signUpManually} className="mt-3" />
+      </div>
 
       <div className="w-full flex items-center justify-between py-5">
         <hr className="w-full bg-gray-400" />

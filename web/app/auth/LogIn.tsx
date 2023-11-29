@@ -104,7 +104,7 @@ export default function LogIn({
         Login to your account
       </p>
       <p className="text-sm mt-4 font-medium leading-none text-gray-500">
-        Dont have account?{' '}
+        Dont have an account?{' '}
         <span
           tabIndex={0}
           role="link"
@@ -158,7 +158,9 @@ export default function LogIn({
         Forgot Password?
       </div>
 
-      <SubmitBtn label="Log In" onClick={loginManually} className="mt-3" />
+      <div className="w-full flex items-center">
+        <SubmitBtn label="Log In" onClick={loginManually} className="mt-3" />
+      </div>
 
       <div className="w-full flex items-center justify-between py-5">
         <hr className="w-full bg-gray-400" />
