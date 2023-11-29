@@ -107,11 +107,13 @@ export default function UserProfile({ user, id }: UserProfile) {
         <div className="w-2/3 h-fit flex flex-col text-3xl font-medium rounded-xl items-start mr-12 p-2 pb-10">
           <h1>Projects</h1>
           <div className="w-full h-full flex flex-row flex-wrap px-1">
-            {user.groups.length > 0
-              ? user.groups.map((group, indx) => {
-                  return <ProjectCard key={indx} {...group} />;
-                })
-              : 'No projects'}
+            {user.groups.length > 0 ? (
+              user.groups.map((group, indx) => {
+                return <ProjectCard key={indx} {...group} />;
+              })
+            ) : (
+              <div className="text-lg text-gray-400">No projects</div>
+            )}
           </div>
         </div>
       </div>
