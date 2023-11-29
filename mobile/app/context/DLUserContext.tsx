@@ -25,6 +25,14 @@ interface DLUserContextProps {
 
 const DLUserContext = createContext<DLUserContextProps | undefined>(undefined);
 
+export const useDLUser = () => {
+  const context = useContext(DLUserContext);
+  if (!context) {
+    throw new Error('useDLUser must be used within a DLUserProvider');
+  }
+  return context;
+};
+
 export const DLUserProvider = ({ children }: { children: ReactNode }) => {
   const { fbuser } = useFBUser();
   const path = usePathname();
