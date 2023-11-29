@@ -1,9 +1,10 @@
-import { usePathname } from 'expo-router';
+import React from 'react';
+import { View } from 'react-native';
 
 export default function Loading() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full">
-      <span className="loader"></span>
-    </div>
+    <View className="flex flex-col items-center justify-center w-full h-full">
+      <View className="loader"></View>
+    </View>
   );
 }

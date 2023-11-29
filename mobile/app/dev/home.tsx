@@ -19,7 +19,6 @@ const PANEL_COMMON_STYLE = {
 const Home = () => {
   const { fbuser } = useFBUser();
   const { user } = useDLUser();
-  const [showNewProject] = useState(false);
   const router = useRouter();
 
   console.log('Logged in as: ' + fbuser.displayName);
@@ -27,24 +26,22 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {/* Logo in the top left corner */}
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+        />
 
-        {/* Profile icon in the top right corner */}
         <TouchableOpacity onPress={() => router.push('/dev/profile')}>
-          <Icon
-            name="user-circle"
-            style={styles.profileIcon}
-          />
+          <Icon name="user-circle" style={styles.profileIcon} />
         </TouchableOpacity>
       </View>
 
       <Text style={styles.headerText}>My Projects</Text>
 
       {!user?.groups || user?.groups.length === 0 ? (
-        <Welcome showNewProject={showNewProject} />
+        <Text style={{ color: '#ffffff' }}>No projects found.</Text>
       ) : (
-        <ProjectList projects={user?.groups} showNewProject={showNewProject} />
+        <ProjectList projects={user?.groups} />
       )}
     </View>
   );

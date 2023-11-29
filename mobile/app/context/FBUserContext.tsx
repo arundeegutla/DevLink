@@ -16,6 +16,7 @@ const FBUserContext = createContext<FBUserContextProps | undefined>(undefined);
 export const FBUserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [fbuser, authLoading, error] = useAuthState(auth);
+  console.log('FBUserProvider');
 
   if (authLoading) {
     return <Loading />;
@@ -23,6 +24,9 @@ export const FBUserProvider = ({ children }: { children: ReactNode }) => {
     router.push('/');
     return <Loading />;
   }
+
+  console.log(fbuser);
+  console.log('Logged in as: fbuser ' + fbuser.displayName);
 
   return (
     <FBUserContext.Provider value={{ fbuser }}>

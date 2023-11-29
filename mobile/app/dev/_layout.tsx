@@ -10,16 +10,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient();
-
+  console.log('RootLayout');
   return (
-    <QueryClientProvider client={queryClient}>
-      <FBUserProvider>
+    <FBUserProvider>
+      <QueryClientProvider client={queryClient}>
         <DLUserProvider>
           <RootLayoutNav />
           {children}
         </DLUserProvider>
-      </FBUserProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </FBUserProvider>
   );
 }
 
@@ -29,7 +29,6 @@ function RootLayoutNav() {
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="profile" options={{ headerShown: false }} />
       <Stack.Screen name="chat" options={{ headerShown: false }} />
-      <Stack.Screen name="login" options={{ headerShown: false }} />
     </Stack>
   );
 }

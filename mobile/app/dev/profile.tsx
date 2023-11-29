@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Image,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useDLUser } from '../context/DLUserContext'; 
-import Loading from '../../components/common/Loading'; 
+import { useDLUser } from '../context/DLUserContext';
+import Loading from '../../components/common/Loading';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../src/firebase/clientApp'; 
-import { useEditProfile, useCreateProfile } from '../../src/hooks/users'; 
+import { auth } from '../../src/firebase/clientApp';
+import { useEditProfile, useCreateProfile } from '../../src/hooks/users';
 import { useRouter } from 'expo-router';
 
 const Profile = () => {
@@ -18,7 +26,9 @@ const Profile = () => {
   const [email, setEmail] = useState(user?.email || '');
   const [githubUrl, setGithubUrl] = useState(user?.github || '');
   const [linkedinUrl, setLinkedinUrl] = useState(user?.linkedin || '');
-  const [skills, setSkills] = useState(user?.skills ? user.skills.join(', ') : '');
+  const [skills, setSkills] = useState(
+    user?.skills ? user.skills.join(', ') : ''
+  );
 
   const editProfileMutation = useEditProfile();
   const createProfileMutation = useCreateProfile();
@@ -50,11 +60,17 @@ const Profile = () => {
         });
 
         if (updateSuccess) {
-          Alert.alert('Profile Updated', 'Your profile has been updated successfully.');
+          Alert.alert(
+            'Profile Updated',
+            'Your profile has been updated successfully.'
+          );
           // Refetch user data after updating the profile
           await refetch();
         } else {
-          Alert.alert('Error', 'Failed to update the profile. Please try again.');
+          Alert.alert(
+            'Error',
+            'Failed to update the profile. Please try again.'
+          );
         }
       } else {
         // Create new profile
@@ -64,11 +80,17 @@ const Profile = () => {
         });
 
         if (createSuccess) {
-          Alert.alert('Profile Created', 'Your profile has been created successfully.');
+          Alert.alert(
+            'Profile Created',
+            'Your profile has been created successfully.'
+          );
           // Refetch user data after creating a new profile
           await refetch();
         } else {
-          Alert.alert('Error', 'Failed to create the profile. Please try again.');
+          Alert.alert(
+            'Error',
+            'Failed to create the profile. Please try again.'
+          );
         }
       }
     } catch (error) {
@@ -99,8 +121,7 @@ const Profile = () => {
     );
   }
   const goHome = () => {
-    
-    router.push('/dev/home'); 
+    router.push('/dev/home');
   };
 
   return (
@@ -183,8 +204,10 @@ const Profile = () => {
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
 
-      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
-
+      <Image
+        source={require('../../assets/images/logo.png')}
+        style={styles.logo}
+      />
     </View>
   );
 };

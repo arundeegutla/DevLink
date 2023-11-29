@@ -4,13 +4,7 @@ import { condensedGroup } from '../../src/hooks/models';
 import { Dispatch, SetStateAction } from 'react';
 import ProjectCard from '../../components/common/ProjectCard';
 
-const ProjectList = ({
-  projects,
-  showNewProject,
-}: {
-  projects: condensedGroup[];
-  showNewProject: Dispatch<SetStateAction<boolean>>;
-}) => {
+const ProjectList = ({ projects }: { projects: condensedGroup[] }) => {
   return (
     <View>
       {/* Add any other content or header here */}

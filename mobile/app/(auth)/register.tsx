@@ -1,61 +1,57 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { auth } from '../../src/firebase/clientApp';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { errorMsg } from '../../src/firebase/authErrors';
 
 import {
-  signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
-  signInWithEmailAndPassword,
-  updateProfile,
 } from 'firebase/auth';
-
+import Alert from '../../components/common/Alert';
 
 export default function RegistrationPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [authErr, setAuthErr] = useState('');
+
   const router = useRouter();
   const googleAuth = new GoogleAuthProvider();
 
   const signUpManually = async () => {
     if (!email || !password) return;
-    const loginAuth = getAuth();
-    createUserWithEmailAndPassword(loginAuth, email, password)
-      .then(() => {
-        router.push('/dev/welcome'); // Redirect after successful registration
-      })
-      .catch(function (error: any) {
-        console.log(error);
-        router.push('/auth');
-      });
-  };
-
-  const signUpGoogle = async () => {
-    await signInWithPopup(auth, googleAuth)
-      .then((result) => {
-        if (result.user.displayName) {
-          router.push('/dev/welcome');
-          return;
-        }
-      })
-      .catch((error) => {
-        router.push('/auth');
-      });
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      router.push('/dev/welcome');
+    } catch (error: any) {
+      var msg =
+        errorMsg[error.code.replace('auth/', '') as keyof typeof errorMsg];
+      setAuthErr(msg);
+    }
   };
 
   const navigateToLogin = () => {
-    router.push("/login"); // Navigate back to the Login screen
+    router.push('/login'); // Navigate back to the Login screen
   };
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+      <Image
+        source={require('../../assets/images/logo.png')}
+        style={styles.logo}
+      />
       <Text style={styles.heading}>Registration</Text>
+      {authErr && <Alert alertType="danger">{authErr}</Alert>}
 
       <Text style={styles.label}>Email</Text>
       <TextInput
@@ -78,7 +74,7 @@ export default function RegistrationPage() {
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
-      <Text style={styles.orText}>Signup with:</Text>
+      {/* <Text style={styles.orText}>Signup with:</Text>
       <View style={styles.socialButtons}>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="github" size={30} color="black" />
@@ -86,7 +82,7 @@ export default function RegistrationPage() {
         <TouchableOpacity style={styles.socialButton} onPress={signUpGoogle}>
           <Icon name="google" size={30} color="#EA4335" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
         <Text style={styles.loginText}>Already have an account? Login</Text>
@@ -103,7 +99,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   logo: {
-    width: 120, 
+    width: 120,
     height: 20,
     position: 'absolute',
     top: 15,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { condensedGroup } from '../../src/hooks/models';
 import { useRouter } from 'expo-router';
 
@@ -14,17 +14,14 @@ export default function ProjectCard(item: condensedGroup) {
 
   return (
     <View
-      style={[
-        styles.cardContainer,
-        hovering && styles.hoveredCardContainer,
-      ]}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-{/* Chat Icon */}
-<TouchableOpacity onPress={handleChatPress} style={styles.chatIcon}>
+      style={[styles.cardContainer, hovering && styles.hoveredCardContainer]}
+      onMagicTap={() => setIsHovering(true)}
+      onTouchMove={() => setIsHovering(true)}
+      onTouchEnd={() => setIsHovering(false)}>
+      <TouchableOpacity onPress={handleChatPress} style={styles.chatIcon}>
         <Text style={styles.chatIconText}>💬</Text>
-      </TouchableOpacity>      <Text style={styles.cardText}>{item.name}</Text>
+      </TouchableOpacity>
+      <Text style={styles.cardText}>{item.name}</Text>
     </View>
   );
 }
