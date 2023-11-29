@@ -1,12 +1,13 @@
 import { condensedGroup } from '@/hooks/models';
 import { Icons } from '@/models/icons';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ProjectCard(item: condensedGroup) {
-  const router = useRouter();
   const [hovering, setIsHovering] = useState(false);
+  const params = new URLSearchParams();
+  params.append('groupId', item.id);
+
   return (
     <Link
       href={`/dev/project/${item.id}`}
@@ -25,7 +26,7 @@ export default function ProjectCard(item: condensedGroup) {
         </div>
         <div className="flex flex-col space-y-2">
           <Link
-            href={`/dev/inbox`}
+            href={`/dev/inbox/?${params.toString()}`}
             className="transition-all duration-300 ease-in-out rounded-full p-3 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
             <Icons.Message className="text-2xl" />
           </Link>

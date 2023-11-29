@@ -7,10 +7,12 @@ export interface InfoBlock {
 }
 
 export default function InfoBlock({ content, href, Icon }: InfoBlock) {
-  return (
-    <a target="_blank" href={href} className="flex flex-row items-center mt-2">
-      <Icon className="text-3xl mr-4 " />
-      {content}
-    </a>
+    <div className="flex items-center">
+      <Icon className="mr-4" />
+      <a href={infoLink} className="group transition duration-300">
+        {infoLink}
+        <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
+      </a>
+    </div>
   );
 }

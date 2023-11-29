@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { User as FirebaseUser } from 'firebase/auth';
 
-import * as models from '@/hooks/models';
-import { http, generateRequestConfig } from '@/hooks/default';
+import * as models from '../models';
+import { http, generateRequestConfig } from '../default';
 
 export async function createGroup(
   user: FirebaseUser,
@@ -149,9 +149,12 @@ export async function getGroup(user: FirebaseUser, groupId: string) {
   return http
     .get(`/groups/get/${encodeURIComponent(groupId)}`, config)
     .then((res) => {
+      if (res.status !== 200) {
+        return null;
+      }
     return res.data as models.Group;
   }).catch(err => {
-    throw err;
+    return null;
   });
 }
 

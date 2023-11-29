@@ -36,6 +36,20 @@ export const getGroupById = async (
         })
       );
 
+      const groupQueueData = await Promise.all(
+        doc.data()?.userQueue.map(async (userRef) => {
+          const userDoc = await userRef.get();
+          if (userDoc.exists) {
+            const userData = userDoc.data() as User;
+            return {
+              id: userDoc.id,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+            } as condensedUser;
+          } else return;
+        })
+      );
+
       const groupPostData = await Promise.all(
         doc.data()?.posts.map(async (postRef) => {
           const postDoc = await postRef.get();
@@ -56,6 +70,7 @@ export const getGroupById = async (
         members: groupMembersData,
         posts: groupPostData,
         owner: doc.data()?.owner.id,
+        userQueue: groupQueueData,
       } as GroupPage;
     } else {
       throw new Error("Group does not exist");
