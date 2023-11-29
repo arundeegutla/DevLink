@@ -36,10 +36,6 @@ export function VerifyStep({ onBack, onFinish }: StepProps) {
       });
   };
 
-  if (!fbuser.emailVerified) {
-    sendEmail();
-  }
-
   useEffect(() => {
     const intervalId = setInterval(async () => {
       if (!verified) {
@@ -89,7 +85,7 @@ export function VerifyStep({ onBack, onFinish }: StepProps) {
           <div className="flex flex-col items-center">
             <SubmitBtn
               onClick={sendEmail}
-              label="Resend Verification"
+              label="Send Verification"
               className="max-w-xs w-48 bg-white text-black hover:bg-black hover:text-white mt-3"
             />
             {emailAlert.children && (
