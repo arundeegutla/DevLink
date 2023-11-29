@@ -21,14 +21,16 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import Link from "next/link";
 
 // Icons
 import { BsArrowUpRight, BsSendFill } from "react-icons/bs";
+import { Icons } from "@/models/icons";
 
 // Auth
 import { useFBUser } from "@context/FBUserContext";
 import { useDLUser } from "@context/DLUserContext";
-import { useRouter ,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useGetGroup } from "@/hooks/groups";
 
 export default function Inbox() {
@@ -38,8 +40,7 @@ export default function Inbox() {
 
   // Initialize Firestore
   const firestore = getFirestore();
-  
-  
+
   // Make a array of the users groups based on user.groups
   const [groups, setGroups] = useState(user.groups);
   const [selectedGroup, setSelectedGroup] = useState(groups[0] ?? null);
@@ -103,12 +104,31 @@ export default function Inbox() {
     return unsubscribe;
   }, [selectedGroup]);
 
+  // Display no chat messages if the users not in a project
+  if (selectedGroup == null) {
+    return (
+      <div className="w-full h-full flex items-center justify-center p-4">
+        <div className="w-full h-full flex items-center justify-center bg-[#252525] rounded-3xl mr-4 border-2 border-[#747474]">
+          <div className="flex flex-col items-center rounded-xl bg-[#1f1f1f] p-8">
+            <h1 className="text-5xl font-medium text-center leading-tight mb-6">Join a Project to Start Messaging</h1>
+            <Link href={'/dev/explore'}>
+              <button className="px-4 py-2 border-gray-600 border-2 flex flex-row rounded-lg bg-gray-300 text-black hover:bg-black hover:text-white gap-3 transition-all duration-500 ease-in-out">
+                <Icons.Explore className="text-2xl" />
+                <div>Explore</div>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="w-full h-full flex flex-row items-center justify-center p-4">
+    <div className="w-full h-full flex items-center justify-center p-4">
+      {/* Group chat block container */}
       <div className="w-1/4 h-full flex flex-col items-center bg-[#252525] p-2 border-[#747474] border-e-2 rounded-l-3xl">
         <h1 className="text-xl font-semibold">Inbox</h1>
         <hr className="my-1 border-t-2 w-full border-[#3b3b3b]" />
-        {/* TODO: Add timestamp for messages ? (idk if this is possible with firebase msging) */}
         <div className="flex flex-col w-full overflow-y-scroll">
           {groups.map((group) => {
             return (
@@ -124,26 +144,19 @@ export default function Inbox() {
           })}
         </div>
       </div>
-      {/* TODO: componentize this so it can be swapped out based on which group is being viewed */}
       <div className="w-3/4 h-full flex flex-col bg-[#252525] mr-4 overflow-hidden rounded-r-3xl">
-        {/* Chat heading container */}
+        {/* Chat header */}
         <div className="w-full h-20 flex items-center justify-between bg-[#1f1f1f] px-2">
           {/* Image + chat name */}
           <div className="flex items-center">
-            <Image
-              width={0}
-              height={0}
-              src="https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781647228231/minecraft-steve-block-stationery-set-9781647228231_hr.jpg"
-              className="w-12 h-12 rounded-full ml-2 mr-4"
-              alt="Group Chat Image"
-            />
-            <h1 className="text-xl font-semibold mr-2">{selectedGroup?.name ?? "Join some groups!"}</h1>
+            <h1 className="text-xl font-semibold ml-4">{selectedGroup.name}</h1>
           </div>
           {/* Link to project page */}
           <div className="transition-all duration-300 ease-in-out rounded-full p-2 mr-2 bg-[#c1c1c12a] text-[#C1C1C1] hover:bg-[#c1c1c1dd] hover:text-[#000000c7]">
             <BsArrowUpRight className="text-xl" />
           </div>
         </div>
+
         {/* Chat body container - contains all the messages in the chat */}
         {(isLoading || loadingMessages) ? <Loading /> :
         <div className="w-full h-full flex flex-col-reverse overflow-y-scroll px-4 py-2">
@@ -160,7 +173,8 @@ export default function Inbox() {
               />
             );
           })}
-        </div> }
+        </div>}
+
         {/* Chat messenger container - contains the text bar where users can send messages */}
         <div className="w-full h-20 flex items-center bg-[#1f1f1f] border-[#747474] border-t-2 p-3">
           <input
