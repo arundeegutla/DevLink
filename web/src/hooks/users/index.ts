@@ -3,6 +3,9 @@ import { User as FirebaseUser } from 'firebase/auth';
 
 import * as models from '@/hooks/models';
 import { http, generateRequestConfig } from '@/hooks/default';
+import { fstorage } from '@/firebase/clientApp';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { useState } from 'react';
 
 export async function searchUser(user: FirebaseUser, searchQuery: string) {
   const config = await generateRequestConfig(user);
