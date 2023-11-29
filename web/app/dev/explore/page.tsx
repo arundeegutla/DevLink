@@ -41,7 +41,6 @@ export default function ExploreView() {
 
       setResults(() => {
         return posts.filter((post) => {
-          if (user.groups.some((g) => g.id === post.owner.id)) return false;
           if (
             !(
               post.body.toLowerCase().includes(searchVal.toLowerCase()) ||
