@@ -137,6 +137,23 @@ export function useEditProfile() {
   });
 }
 
+export const defaultImageURL =
+  'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png';
+
+export const photoURLCache: Record<string, string> = {};
+export async function getPhotoURL(id: string) {
+  if (photoURLCache[id]) {
+    return photoURLCache[id];
+  }
+  const fileRef = ref(fstorage, id + '.png');
+  const url = await getDownloadURL(fileRef).catch(() => {
+    return defaultImageURL;
+  });
+  console.log(url);
+  photoURLCache[id] = url;
+  return url;
+}
+
 // export function useGetPhotoURL(user: models.User) {
 //   const [url, setUrl] = useState('');
 
