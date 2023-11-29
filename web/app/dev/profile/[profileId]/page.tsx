@@ -9,16 +9,33 @@ import Loading from '@components/common/Loading';
 import UserProfile from '@components/common/UserProfile';
 
 // Auth
-import { auth } from '@/firebase/clientApp';
 import { useFBUser } from '@context/FBUserContext';
-import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDLUser } from '@context/DLUserContext';
 
-export default function Profile() {
-  const router = useRouter();
+import { useEffect, useState } from 'react';
+import { User } from '@/hooks/models';
+import { getUser } from '@/hooks/users';
+import Error from '@components/common/Error';
 
-  const { user } = useDLUser();
+export default function Profile({ params }: { params: { profileId: string } }) {
+  const profileId = params.profileId;
+  const { fbuser } = useFBUser();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
 
-  return <UserProfile user={user!} />;
+  useEffect(() => {
+    const fetchUser = async () => {
+      const u = await getUser(fbuser, profileId);
+      if (!u) setError(true);
+      else setUser(u);
+      setLoading(false);
+    };
+    fetchUser();
+  }, [fbuser, profileId]);
+
+  if (loading) return <Loading />;
+  else if (error || !user) return <Error message={`Can't find user`} />;
+
+  console.log(user);
+  return <UserProfile user={user} id={profileId} />;
 }

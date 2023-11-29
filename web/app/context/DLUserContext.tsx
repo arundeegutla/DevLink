@@ -6,20 +6,11 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/firebase/clientApp';
-import { getUser, useGetUser } from '@/hooks/users';
+import { useGetUser } from '@/hooks/users';
 import Loading from '@components/common/Loading';
-import { User } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import * as models from '@/hooks/models';
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryObserverResult,
-  RefetchOptions,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useFBUser } from './FBUserContext';
 
 interface DLUserContextProps {
@@ -33,9 +24,9 @@ const DLUserContext = createContext<DLUserContextProps | undefined>(undefined);
 
 export const DLUserProvider = ({ children }: { children: ReactNode }) => {
   const { fbuser } = useFBUser();
-  const path = usePathname();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+
   const {
     data: user,
     isFetching,

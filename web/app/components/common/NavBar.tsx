@@ -89,7 +89,7 @@ export default function NavBar() {
           {/* bottom */}
           <div className="flex flex-col items-center mb-2 w-full p-2 flex-1 justify-end mx-auto">
             <hr className="my-1 border-t w-full border-[#3b3b3b]" />
-            <div
+            {/* <div
               className={`navlink ${
                 currentPath.includes('feedback')
                   ? 'active text-[#dedede]'
@@ -99,7 +99,7 @@ export default function NavBar() {
                 <Icons.Earth className="text-[1.5rem]" />
               </div>
               Feedback
-            </div>
+            </div> */}
 
             <Link href={'/dev/settings'} className="w-full">
               <div

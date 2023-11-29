@@ -105,7 +105,6 @@ export default function CreateProfilePage() {
       onBack={handleBackStep}
       setLinkedinPar={setLinkedin}
       setGithubPar={setGithub}
-      setPhonePar={setPhone}
       key={'service-step'}
     />,
     <VerifyStep

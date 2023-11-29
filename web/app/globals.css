@@ -253,7 +253,6 @@ input[type='search']::-webkit-search-results-decoration {
 
 .auth-button {
   transition: 0.5s ease;
-  @apply text-black hover:bg-zinc-800 hover:text-white hover:px-5 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center mr-3;
 }
 
 .black-blur {

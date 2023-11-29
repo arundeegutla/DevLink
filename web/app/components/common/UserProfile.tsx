@@ -1,3 +1,4 @@
+'use client';
 // External Components
 import Tilt from 'react-parallax-tilt';
 import InfoBlock from './InfoBlock';
@@ -7,20 +8,31 @@ import { FaUser, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { User } from '@/hooks/models';
 import Image from 'next/image';
 import { Icons } from '@/models/icons';
+import { useEffect, useState } from 'react';
+import { defaultImageURL, getPhotoURL } from '@/hooks/users';
 
 export interface UserProfile {
   user: User;
+  id: string;
 }
 
-export default function UserProfile({ user }: UserProfile) {
+export default function UserProfile({ user, id }: UserProfile) {
+  const [imageURL, setImageURL] = useState<string>(defaultImageURL);
+
+  useEffect(() => {
+    const getImage = async () => {
+      const url = await getPhotoURL(id);
+      setImageURL(url);
+    };
+    getImage();
+  }, [id]);
+
   const getProfilePic = () => {
     return (
       <Image
         width={0}
         height={0}
-        src={
-          'https://www.tech101.in/wp-content/uploads/2018/07/blank-profile-picture.png'
-        }
+        src={imageURL}
         className="h-36 w-36 border border-[#4e4e4e] rounded-full"
         alt="Profile Picture"
       />
@@ -41,14 +53,27 @@ export default function UserProfile({ user }: UserProfile) {
             <h1 className="text-5xl font-semibold">
               {user.firstName + ' ' + user.lastName}
             </h1>
-            <h3 className="text-2xl font-medium mt-2">FRONT END</h3>
           </div>
         </div>
         {/* Info block to hold user's information */}
         <div className="w-1/3 h-full flex flex-col justify-evenly bg-[#1f1f1f] rounded-xl p-4">
-          <InfoBlock infoLink="put ur email here" Icon={Icons.Email} />
-          <InfoBlock infoLink="put ur linkedin here" Icon={Icons.LinkedIn} />
-          <InfoBlock infoLink="put ur github here" Icon={Icons.GitHub} />
+          <InfoBlock
+            href={`mailto: ${user.email}`}
+            content={user.email ?? 'No email'}
+            Icon={Icons.Email}
+          />
+          <InfoBlock
+            href={user.linkedin ?? 'https://www.linkedin.com'}
+            content={user.linkedin ?? 'linkedin.com'}
+            Icon={Icons.LinkedIn}
+          />
+          <InfoBlock
+            href={
+              'https://github.com/' + (user.github?.replaceAll('@', '') ?? '')
+            }
+            content={user.github ?? 'www.github.com'}
+            Icon={Icons.GitHub}
+          />
         </div>
       </div>
       {/* Bottom div for posts/projects view and skills section */}
