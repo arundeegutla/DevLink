@@ -15,6 +15,27 @@ Welcome to **DevLink** - where software developers unite to connect, collaborate
 
 DevLink is not just another social networking platform; it's the ultimate hub for software developers of all backgrounds. Whether you're a coding wizard, a tech enthusiast, or just getting started, DevLink offers a space to connect, collaborate, and create remarkable software projects.
 
+## Getting Started
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+First, run the development server:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Tech Stack and Tools
+1. Firebase - backend and authentication
+2. Express.js - API Framework
+3. Next.js - Frontend Framework
+4. Node.js - Packages and libraries
+5. Tailwind - Styling
+6. Google Cloud - Hosting
+7. Tanstack Query - Data fetching  
+
 ## Features
 
 ### 🔗 Connect
