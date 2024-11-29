@@ -24,9 +24,10 @@ export default async function handler(
 ) {
   const { slug } = req.query;
   const method = req.method;
+  const test = Array.isArray(slug) ? slug[0] : slug;
 
   try {
-    switch (slug[0]) {
+    switch (test) {
       case 'createPost':
         if (method === 'POST') {
           await createInitialPostHandler(req, res);

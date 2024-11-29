@@ -23,9 +23,10 @@ export default async function handler(
 ) {
   const { slug } = req.query;
   const method = req.method;
+  const test = Array.isArray(slug) ? slug[0] : slug;
 
   try {
-    switch (slug[0]) {
+    switch (test) {
       case 'createGroup':
         if (method === 'POST') {
           await createInitialGroupHandler(req, res);
