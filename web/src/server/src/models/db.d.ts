@@ -1,5 +1,13 @@
-import { DocumentReference } from "@google-cloud/firestore";
-import { type } from "os";
+import { DocumentReference } from '@google-cloud/firestore';
+import { type } from 'os';
+import { NextApiRequest } from 'next';
+
+declare module 'next' {
+  interface NextApiRequest {
+    user?: any; // Add the 'user' property to NextApiRequest
+    userRef?: any; // Add the 'userRef' property to NextApiRequest
+  }
+}
 
 export type User = {
   email?: string;
@@ -12,8 +20,8 @@ export type User = {
 };
 
 export type UserPage = User & {
- groups: condensedGroup[];
-}
+  groups: condensedGroup[];
+};
 
 export type GroupPage = Group & {
   members: condensedUser[];
@@ -35,14 +43,14 @@ export type condensedGroup = {
 };
 
 export type PostPage = Post & {
-  owner: condensedGroup
+  owner: condensedGroup;
 };
 
 export type condensedUser = {
   id: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export type Group = {
   name: string;

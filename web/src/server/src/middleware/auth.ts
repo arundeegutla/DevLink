@@ -1,25 +1,28 @@
-import { Request, Response, NextFunction } from 'express';
-import { fb } from "../config/firebaseInit";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { fb } from '../config/firebaseInit';
 import { getUserDoc } from '../services/user';
 
-export const authenticateJWT = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-  
-    if (authHeader) {
-      const idToken = authHeader.split(" ")[1];
-      fb
-        .auth()
-        .verifyIdToken(idToken)
-        .then(async function (decodedToken) {
-            res.locals.user = decodedToken;
-            res.locals.userRef = await getUserDoc(decodedToken.uid);
-          return next();
-        })
-        .catch(function (error) {
-          console.log(error);
-          return res.sendStatus(403);
-        });
-    } else {
-      res.sendStatus(401);
+export const authenticateJWT = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader) {
+    const idToken = authHeader.split(' ')[1];
+
+    try {
+      const decodedToken = await fb.auth().verifyIdToken(idToken);
+      (req as any).user = decodedToken;
+      (req as any).userRef = await getUserDoc(decodedToken.uid);
+
+      next(); // Proceed to the next handler.
+    } catch (error) {
+      console.error('JWT Authentication Error:', error);
+      return res.status(403).json({ error: 'Forbidden' });
     }
-  };
+  } else {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+};

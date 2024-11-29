@@ -41,7 +41,7 @@ export async function createInitialPostHandler(
     }
 
     const groupOwner = await getGroupOwner(groupId);
-    const userUid = req.headers['user-uid'];
+    const userUid = req.user.uid;
     if (userUid !== groupOwner) {
       res.status(403).json({ error: 'User is not owner of group' });
       return;
@@ -91,7 +91,7 @@ export async function deleteExistingPostHandler(
   }
 
   try {
-    const userUid = req.headers['user-uid'];
+    const userUid = req.user.uid;
     const postOwner = await getPostUserOwner(postId);
 
     if (userUid !== postOwner) {

@@ -11,6 +11,7 @@ import {
 import { addGrouptoUser } from '@/server/src/services/user';
 import { validateNewGroup, validateEdit } from '@/server/src/utils/group';
 import { Group } from '@/server/src/models/db';
+import { DocumentReference } from '@google-cloud/firestore';
 
 // Utility function for error handling
 const handleError = (res: NextApiResponse, error: any) => {
@@ -29,7 +30,7 @@ export async function createInitialGroupHandler(
 ) {
   const { name = '', description = '', color = '#FFFFFF' }: Group = req.body;
 
-  const userDoc = req.headers['user-ref'];
+  const userDoc: DocumentReference | undefined = req.userRef;
   if (!userDoc) {
     res.status(403).json({ error: 'User profile not created' });
     return;
@@ -48,7 +49,7 @@ export async function createInitialGroupHandler(
   try {
     validateNewGroup(group);
     const newGroup = await createGroup(group);
-    await addGrouptoUser(newGroup, req.headers['user-uid'] as string);
+    await addGrouptoUser(newGroup, req.user.uid);
     res.status(201).json({ message: 'Group created!' });
   } catch (error) {
     handleError(res, error);
@@ -69,7 +70,7 @@ export async function editExistingGroupHandler(
 
   try {
     const groupOwner = await getGroupOwner(groupId!);
-    if (req.headers['user-uid'] !== groupOwner) {
+    if (req.user.uid !== groupOwner) {
       res.status(403).json({ error: 'User is not owner of group' });
       return;
     }
@@ -97,12 +98,12 @@ export async function requestToJoinGroupHandler(
 
   try {
     const groupOwner = await getGroupOwner(groupId);
-    if (req.headers['user-uid'] === groupOwner) {
+    if (req.user.uid === groupOwner) {
       res.status(403).json({ error: 'User is owner of group' });
       return;
     }
 
-    const userRef = req.headers['user-ref'];
+    const userRef = req.userRef;
     if (!userRef) {
       res.status(403).json({ error: 'User profile not created' });
       return;
@@ -132,7 +133,7 @@ export async function handleGroupJoinRequestHandler(
 
   try {
     const groupOwner = await getGroupOwner(groupId);
-    if (req.headers['user-uid'] !== groupOwner) {
+    if (req.user.uid !== groupOwner) {
       res.status(403).json({ error: 'User is not owner of group' });
       return;
     }

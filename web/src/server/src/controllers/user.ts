@@ -16,12 +16,10 @@ type Data = {
 
 // Utility function for error handling
 const handleError = (res: NextApiResponse<Data>, error: any) => {
-  console.error(error);
-  if (error instanceof Error) {
+  if (error instanceof Error)
     return res.status(400).json({ error: error.message });
-  } else {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
+
+  return res.status(500).json({ error: 'Internal Server Error' });
 };
 
 // Handler for retrieving a user by ID
@@ -92,7 +90,7 @@ export async function createUserProfileHandler(
 
   try {
     validateNewUser(user);
-    const uid = req.headers['user-uid']; // Adjust based on how you're passing the UID
+    const uid = req.user.uid; // Adjust based on how you're passing the UID
     if (!uid || Array.isArray(uid)) {
       return res.status(400).json({ error: 'Missing user UID' });
     }
@@ -121,9 +119,10 @@ export async function editUserProfileHandler(
     ...(skills && { skills }),
   };
 
+
   try {
     validateEdit(user);
-    const uid = req.headers['user-uid']; // Adjust based on how you're passing the UID
+    const uid = req.user.uid; // Adjust based on how you're passing the UID
     if (!uid || Array.isArray(uid)) {
       return res.status(400).json({ error: 'Missing user UID' });
       return;
