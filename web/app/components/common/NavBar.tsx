@@ -26,7 +26,7 @@ const navigation = [
 
 export default function NavBar() {
   const { fbuser } = useFBUser();
-  const currentPath = usePathname();
+  const currentPath = usePathname()!;
   const router = useRouter();
   const [photoUrl, setPhotoUrl] = useState<string>(defaultImageURL);
 
@@ -68,11 +68,10 @@ export default function NavBar() {
             {navigation.map((item, indx) => (
               <Link href={item.href} key={indx} className="w-full">
                 <div
-                  className={`navlink ${
-                    currentPath.includes(item.href)
+                  className={`navlink ${currentPath.includes(item.href)
                       ? 'active text-[#dedede]'
                       : 'text-[#adadad]'
-                  } `}>
+                    } `}>
                   <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
                     {item.isProfile ? (
                       <Image
@@ -109,11 +108,10 @@ export default function NavBar() {
 
             <Link href={'/dev/settings'} className="w-full">
               <div
-                className={`navlink ${
-                  currentPath.includes('settings')
+                className={`navlink ${currentPath.includes('settings')
                     ? 'active text-[#dedede]'
                     : 'text-[#adadad]'
-                } `}>
+                  } `}>
                 <div className="w-8 h-8 flex flex-row items-center justify-center mr-2">
                   <Icons.Settings className="text-[1.5rem]" />
                 </div>
