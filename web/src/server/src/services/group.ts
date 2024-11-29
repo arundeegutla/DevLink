@@ -1,13 +1,13 @@
-import { group } from "console";
-import { db } from "../config/firebaseInit";
-import { Group, User, condensedUser, Post, GroupPage } from "../models/db";
-import { DocumentReference, FieldValue } from "@google-cloud/firestore";
-import { addGrouptoUser } from "./user";
+import { group } from 'console';
+import { db } from '../config/firebaseInit';
+import { Group, User, condensedUser, Post, GroupPage } from '../models/db';
+import { DocumentReference, FieldValue } from '@google-cloud/firestore';
+import { addGrouptoUser } from './user';
 
 export const groupWithIdExists = async (groupId: string): Promise<boolean> => {
   try {
     const docRef: DocumentReference = await db
-      .collection("Groups")
+      .collection('Groups')
       .doc(groupId);
     const data = await docRef.get();
     return data.exists ? true : false;
@@ -20,10 +20,10 @@ export const getGroupById = async (
   groupId: string
 ): Promise<GroupPage | undefined> => {
   try {
-    const doc = await db.collection("Groups").doc(groupId).get();
+    const doc = await db.collection('Groups').doc(groupId).get();
     if (doc.exists) {
       const groupMembersData = await Promise.all(
-        doc.data()?.members.map(async (userRef) => {
+        doc.data()?.members.map(async (userRef: { get: () => any }) => {
           const userDoc = await userRef.get();
           if (userDoc.exists) {
             const userData = userDoc.data() as User;
@@ -37,7 +37,7 @@ export const getGroupById = async (
       );
 
       const groupQueueData = await Promise.all(
-        doc.data()?.userQueue.map(async (userRef) => {
+        doc.data()?.userQueue.map(async (userRef: { get: () => any }) => {
           const userDoc = await userRef.get();
           if (userDoc.exists) {
             const userData = userDoc.data() as User;
@@ -51,7 +51,7 @@ export const getGroupById = async (
       );
 
       const groupPostData = await Promise.all(
-        doc.data()?.posts.map(async (postRef) => {
+        doc.data()?.posts.map(async (postRef: { get: () => any }) => {
           const postDoc = await postRef.get();
           if (postDoc.exists) {
             const postData = postDoc.data() as Post;
@@ -73,10 +73,10 @@ export const getGroupById = async (
         userQueue: groupQueueData,
       } as GroupPage;
     } else {
-      throw new Error("Group does not exist");
+      throw new Error('Group does not exist');
     }
   } catch (error) {
-    console.log("Error getting document:", error);
+    console.log('Error getting document:', error);
     throw error;
   }
 };
@@ -86,22 +86,22 @@ export const acceptUser = async (
   groupId: string
 ): Promise<void | undefined> => {
   try {
-    const groupDoc = await db.collection("Groups").doc(groupId).get();
+    const groupDoc = await db.collection('Groups').doc(groupId).get();
     if (groupDoc.exists) {
       const groupData = groupDoc.data() as Group;
       await db
-        .collection("Groups")
+        .collection('Groups')
         .doc(groupId)
         .update({
-          members: FieldValue.arrayUnion(db.collection("Users").doc(userId)),
-          userQueue: FieldValue.arrayRemove(db.collection("Users").doc(userId)),
+          members: FieldValue.arrayUnion(db.collection('Users').doc(userId)),
+          userQueue: FieldValue.arrayRemove(db.collection('Users').doc(userId)),
         });
     } else {
-      throw Error("No such group");
+      throw Error('No such group');
     }
     addGrouptoUser(groupId, userId);
   } catch (error) {
-    console.log("Error getting document:", error);
+    console.log('Error getting document:', error);
     throw error;
   }
 };
@@ -111,20 +111,20 @@ export const rejectUser = async (
   groupId: string
 ): Promise<void | undefined> => {
   try {
-    const groupDoc = await db.collection("Groups").doc(groupId).get();
+    const groupDoc = await db.collection('Groups').doc(groupId).get();
     if (groupDoc.exists) {
       const groupData = groupDoc.data() as Group;
       await db
-        .collection("Groups")
+        .collection('Groups')
         .doc(groupId)
         .update({
-          userQueue: FieldValue.arrayRemove(db.collection("Users").doc(userId)),
+          userQueue: FieldValue.arrayRemove(db.collection('Users').doc(userId)),
         });
     } else {
-      throw Error("No such group");
+      throw Error('No such group');
     }
   } catch (error) {
-    console.log("Error getting document:", error);
+    console.log('Error getting document:', error);
     throw error;
   }
 };
@@ -134,60 +134,60 @@ export const requestGroupJoin = async (
   userReference: DocumentReference
 ): Promise<string | undefined> => {
   try {
-    const groupDoc = await db.collection("Groups").doc(groupId).get();
+    const groupDoc = await db.collection('Groups').doc(groupId).get();
     if (groupDoc.exists) {
       const groupData = groupDoc.data() as Group;
 
-      let errMsg: string = "";
+      let errMsg: string = '';
       groupData.userQueue.forEach((user) => {
         if (user.isEqual(userReference)) {
-          errMsg = "User already in queue";
+          errMsg = 'User already in queue';
         }
       });
       groupData.members.forEach((user) => {
         if (user.isEqual(userReference)) {
-          errMsg = "User already a member";
+          errMsg = 'User already a member';
         }
       });
-      if (errMsg !== "") return errMsg;
+      if (errMsg !== '') return errMsg;
 
       await db
-        .collection("Groups")
+        .collection('Groups')
         .doc(groupId)
         .update({
           userQueue: FieldValue.arrayUnion(userReference),
         });
     } else {
-      throw Error("No such group");
+      throw Error('No such group');
     }
   } catch (error) {
-    console.log("Error getting document:", error);
+    console.log('Error getting document:', error);
     throw error;
   }
-  return "";
+  return '';
 };
 
 export const getGroupOwner = async (groupId: string): Promise<string> => {
   try {
-    const doc = await db.collection("Groups").doc(groupId).get();
+    const doc = await db.collection('Groups').doc(groupId).get();
     if (doc.exists) {
       const groupData = doc.data() as Group;
       return groupData.owner.id;
     } else {
-      return "";
+      return '';
     }
   } catch (error) {
-    console.log("Error getting document:", error);
+    console.log('Error getting document:', error);
     throw error;
   }
 };
 
 export const createGroup = async (group: Group): Promise<string> => {
   try {
-    const res = await db.collection("Groups").add(group);
+    const res = await db.collection('Groups').add(group);
     return res.id;
   } catch (error) {
-    console.log("Error creating document", error);
+    console.log('Error creating document', error);
     throw error;
   }
 };
@@ -197,7 +197,7 @@ export const editGroup = async (
   groupId: string
 ): Promise<void | undefined> => {
   try {
-    await db.collection("Groups").doc(groupId).update(group);
+    await db.collection('Groups').doc(groupId).update(group);
   } catch (error) {
     console.log(`Error editing document for ${groupId}:`, error);
     throw error;

@@ -7,8 +7,6 @@ import { errorMiddleware } from './middleware/error';
 import { env } from './config/env';
 import { dbTest } from './services/test';
 import { authenticateJWT } from './middleware/auth';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 
 const options = {

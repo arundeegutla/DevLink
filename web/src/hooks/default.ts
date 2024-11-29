@@ -2,7 +2,7 @@ import axios from 'axios';
 import { User } from 'firebase/auth';
 
 export const http = axios.create({
-  baseURL: 'https://api.thedevlink.com',
+  baseURL: '/api',
   headers: {
     'Content-type': 'application/json',
   },

@@ -10,7 +10,7 @@ import { BiLogOut } from 'react-icons/bi';
 import { twMerge } from 'tailwind-merge';
 
 export default function HomeBar({ className }: { className?: string }) {
-  const current = usePathname();
+  const current = usePathname()!;
   const router = useRouter();
   const signOut = () => {
     auth
