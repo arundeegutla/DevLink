@@ -6,6 +6,7 @@ import {
   retreivePostDataHandler,
   searchExistingPostHandler,
 } from '@/server/src/controllers/post';
+import { authenticateJWT } from '@/server/src/middleware/auth';
 
 // Utility function for consistent error handling
 const handleError = (res: NextApiResponse, error: any) => {
@@ -18,10 +19,7 @@ const handleError = (res: NextApiResponse, error: any) => {
 };
 
 // API Route Handler
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const { slug } = req.query;
   const method = req.method;
   const test = Array.isArray(slug) ? slug[0] : slug;
@@ -74,4 +72,8 @@ export default async function handler(
   } catch (error) {
     handleError(res, error);
   }
+}
+
+export default async function API(req: NextApiRequest, res: NextApiResponse) {
+  authenticateJWT(req, res, () => handler(req, res));
 }
